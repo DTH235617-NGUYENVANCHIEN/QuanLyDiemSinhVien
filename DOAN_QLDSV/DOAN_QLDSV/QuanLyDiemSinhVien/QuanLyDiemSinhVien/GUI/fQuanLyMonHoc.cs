@@ -29,7 +29,7 @@ namespace QuanLyDiemSinhVien.GUI
         private void MoNut(bool t)
         {
             txtMamonhoc.Enabled = !t;
-            cboMon.Enabled = !t;
+            txtTenMH.Enabled = !t;
             nudSotinchi.Enabled = !t;
 
             btnThem.Enabled = t;
@@ -49,46 +49,19 @@ namespace QuanLyDiemSinhVien.GUI
                 conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
                 conn.Open();
             }
-            string sqlTaiKhoan = @"SELECT M.*,T.TenMH
-                                 FROM MONHOC M, TENMONHOC T
-                                 WHERE M.MaMH= T.MaMH"; // Use a valid SQL SELECT statement
+            string sqlTaiKhoan = @"SELECT * FROM MONHOC"; // Use a valid SQL SELECT statement
             SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, conn);
             DataTable data = new DataTable();
-            dgvMonhoc.AutoGenerateColumns = false;//xóa các cột dư
+
             dataAdapter.Fill(data); // Fill the DataTable directly
             dgvMonhoc.DataSource = data; // Set the DataTable as the DataSource
-            cboMon.DisplayMember = "TenMH";
-            cboMon.ValueMember = "MaMH";
-
-
-            string LoaiTKsql = @"SELECT * FROM TENMONHOC";
-            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, conn);
-            DataTable tableLoaiSach = new DataTable();
-            loaiTKAdapter.Fill(tableLoaiSach);
-            cboMon.DataSource = tableLoaiSach;
-
-
             MoNut(true);
-            cboMon.DataBindings.Clear();
             txtMamonhoc.DataBindings.Clear();
+            txtTenMH.DataBindings.Clear();
             nudSotinchi.DataBindings.Clear();
-
-            //cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);
-            //txtTen.DataBindings.Add("Text", dgvTaikhoan.DataSource, "TenDangNhap", false, DataSourceUpdateMode.Never);
-            //txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
-            cboMon.DataBindings.Add("SelectedValue", dgvMonhoc.DataSource, "MaMH", false, DataSourceUpdateMode.Never);
             txtMamonhoc.DataBindings.Add("Text", dgvMonhoc.DataSource, "MaMH", false, DataSourceUpdateMode.Never);
+            txtTenMH.DataBindings.Add("Text", dgvMonhoc.DataSource, "TenMH", false, DataSourceUpdateMode.Never);
             nudSotinchi.DataBindings.Add("Value", dgvMonhoc.DataSource, "SoTC", false, DataSourceUpdateMode.Never);
-
-
-
-
-
-
-
-
-
-
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -96,53 +69,36 @@ namespace QuanLyDiemSinhVien.GUI
             Mamonhoc = "";
             //Xoa trang
             txtMamonhoc.Text = "";
-            cboMon.Text = "";
+            txtTenMH.Text = "";
             nudSotinchi.Value = 0;
 
             MoNut(false);
+            txtMamonhoc.Focus();
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            // Lấy STT của dòng đang được chọn trong DataGridView
-            // Giả định dgvMonhoc có tên cột chứa STT là "STT"
-            object sttValue = null;
-            if (dgvMonhoc.CurrentRow != null)
-            {
-                sttValue = dgvMonhoc.CurrentRow.Cells["STT"].Value;
-            }
-
-            if (sttValue == null || sttValue == DBNull.Value)
-            {
-                MessageBox.Show("Vui lòng chọn một môn học để xóa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Xác nhận xóa (Dùng tên môn học đang hiển thị trên cboMon)
+            // Xác nhận (Dùng TenMH cho thân thiện)
             DialogResult kq;
-            kq = MessageBox.Show("Bạn có muốn xóa môn học: " + cboMon.Text + " không?", "Xóa",
+            kq = MessageBox.Show("Bạn có muốn xóa môn học: " + txtTenMH.Text + " không?", "Xóa",
                                  MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (kq == DialogResult.Yes)
             {
                 try
                 {
-                    // Truy vấn SQL đã đúng: Xóa theo STT
-                    string sql = @"DELETE FROM MONHOC WHERE STT = @STT";
+                    // Dùng MaMH (lấy từ TextBox) để làm điều kiện Xóa
+                    string sql = @"DELETE FROM MONHOC WHERE MaMH = @MaMH";
                     SqlCommand cmd = new SqlCommand(sql, conn);
-
-                    // SỬA LỖI: Thêm tham số @STT với giá trị lấy từ dòng đang chọn
-                    cmd.Parameters.Add("@STT", SqlDbType.Int).Value = sttValue;
-
+                    cmd.Parameters.Add("@MaMH", SqlDbType.VarChar, 20).Value = txtMamonhoc.Text;
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show("Xóa môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Tải lại form
                     fQuanLyMonHoc_Load(sender, e);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi khi xóa dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lỗi khi xóa: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -155,52 +111,78 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            // Kiểm tra dữ liệu
-            if (cboMon.Text.Trim() == "")
-                MessageBox.Show("Chưa chọn môn!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else if (txtMamonhoc.Text.Trim() == "")
-                MessageBox.Show("Ten không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else if (nudSotinchi.Value == 0)
-                MessageBox.Show("Số tín chỉ không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string maMH = txtMamonhoc.Text.Trim();
+            string tenMH = txtTenMH.Text.Trim();
+            int soTC = (int)nudSotinchi.Value;
+
+
+            // --- KIỂM TRA DỮ LIỆU ---
+            if (maMH == "")
+                MessageBox.Show("Mã môn học không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (tenMH == "")
+                MessageBox.Show("Tên môn học không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (soTC <= 0)
+                MessageBox.Show("Số tín chỉ phải lớn hơn 0!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Kiểm tra xem Số tín chỉ có phải là SỐ hay không
 
             else
             {
+                // --- DỮ LIỆU HỢP LỆ -> TIẾN HÀNH LƯU ---
                 try
                 {
-                    // Thêm mới
+                    // THÊM MỚI (vì biến trạng thái rỗng)
                     if (Mamonhoc == "")
                     {
-                        string sql = @"INSERT INTO MONHOC
-                        VALUES( @MaMH, @SoTC)";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
-                        
-                        cmd.Parameters.Add("@MaMH", SqlDbType.VarChar, 20).Value = txtMamonhoc.Text;
-                        cmd.Parameters.Add("@", SqlDbType.VarChar, 20).Value = cboMon.SelectedValue;
-                        cmd.Parameters.Add("@SoTC", SqlDbType.Int).Value = nudSotinchi.Value;
+                        string sql = @"INSERT INTO MONHOC (MaMH, TenMH, SoTC) 
+                                     VALUES (@MaMH, @TenMH, @SoTC)";
 
-                        cmd.ExecuteNonQuery();
+                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        {
+                            cmd.Parameters.Add("@MaMH", SqlDbType.VarChar, 20).Value = maMH;
+                            cmd.Parameters.Add("@TenMH", SqlDbType.NVarChar, 100).Value = tenMH;
+                            cmd.Parameters.Add("@SoTC", SqlDbType.Int).Value = soTC;
+
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Thêm môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
-                    else // Sửa
+                    else // SỬA (vì biến trạng thái có chứa MaMH cũ)
                     {
-                        string sql = @"UPDATE TaiKhoan
-                                    SET TenDangNhap = @TenDangNhapMoi,
-                                    MatKhau = @MatKhau,
-                                    MaQuyen = @MaQuyen
-                                    WHERE TenDangNhap = @TenDangNhapCu";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
-                        cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = txtMamonhoc.Text;
-                        cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = Mamonhoc;
-                        cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = .Text;
-                        cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
+                        string sql = @"UPDATE MONHOC
+                                     SET MaMH = @MaMH_Moi,
+                                         TenMH = @TenMH,
+                                         SoTC = @SoTC
+                                     WHERE MaMH = @MaMH_Cu";
 
-                        cmd.ExecuteNonQuery();
+                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        {
+                            cmd.Parameters.Add("@MaMH_Moi", SqlDbType.VarChar, 20).Value = maMH;
+                            cmd.Parameters.Add("@TenMH", SqlDbType.NVarChar, 100).Value = tenMH;
+                            cmd.Parameters.Add("@SoTC", SqlDbType.Int).Value = soTC;
+                            cmd.Parameters.Add("@MaMH_Cu", SqlDbType.VarChar, 20).Value = Mamonhoc; // Lấy MaMH gốc từ biến
+
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Cập nhật môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
-                    // Tải lại form
-                    fQuanLyTaiKhoan_Load(sender, e);
+
+                    // Tải lại form (cho cả 2 trường hợp Thêm/Sửa)
+                    fQuanLyMonHoc_Load(sender, e);
+                }
+                catch (SqlException ex)
+                {
+                    // Bắt lỗi CSDL (thân thiện hơn)
+                    if (ex.Message.Contains("UNIQUE KEY constraint"))
+                        MessageBox.Show("Mã môn học '" + maMH + "' đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else if (ex.Message.Contains("CHECK constraint"))
+                        MessageBox.Show("Số tín chỉ phải lớn hơn 0!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else
+                        MessageBox.Show("Lỗi SQL: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    // Bắt các lỗi chung khác
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -210,7 +192,8 @@ namespace QuanLyDiemSinhVien.GUI
             fQuanLyMonHoc_Load(sender, e);
         }
 
-        private void btnThoat_Click(object sender, EventArgs e)
+      
+        private void btnThoat_Click_1(object sender, EventArgs e)
         {
             this.Close();
         }

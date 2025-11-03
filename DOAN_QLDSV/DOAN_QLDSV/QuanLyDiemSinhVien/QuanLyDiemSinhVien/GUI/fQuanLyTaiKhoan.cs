@@ -153,9 +153,10 @@ namespace QuanLyDiemSinhVien.GUI
            
 
             MoNut(true);
-            cobQuyen.DataBindings.Clear();
+            
             txtTen.DataBindings.Clear();
             txtPass.DataBindings.Clear();
+            
            
 
             cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);

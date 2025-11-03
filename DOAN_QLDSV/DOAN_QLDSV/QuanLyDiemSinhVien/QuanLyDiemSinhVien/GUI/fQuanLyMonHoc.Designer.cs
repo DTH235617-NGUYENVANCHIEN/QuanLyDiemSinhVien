@@ -32,7 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             panel1 = new Panel();
-            cboMon = new ComboBox();
+            txtTenMH = new TextBox();
             btnTailai = new Button();
             nudSotinchi = new NumericUpDown();
             label3 = new Label();
@@ -58,7 +58,7 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(cboMon);
+            panel1.Controls.Add(txtTenMH);
             panel1.Controls.Add(btnTailai);
             panel1.Controls.Add(nudSotinchi);
             panel1.Controls.Add(label3);
@@ -77,13 +77,12 @@
             panel1.Size = new Size(833, 180);
             panel1.TabIndex = 2;
             // 
-            // cboMon
+            // txtTenMH
             // 
-            cboMon.FormattingEnabled = true;
-            cboMon.Location = new Point(407, 32);
-            cboMon.Name = "cboMon";
-            cboMon.Size = new Size(182, 33);
-            cboMon.TabIndex = 25;
+            txtTenMH.Location = new Point(421, 31);
+            txtTenMH.Name = "txtTenMH";
+            txtTenMH.Size = new Size(150, 31);
+            txtTenMH.TabIndex = 25;
             // 
             // btnTailai
             // 
@@ -154,6 +153,7 @@
             btnThoat.TabStop = false;
             btnThoat.Text = "Thoát";
             btnThoat.UseVisualStyleBackColor = true;
+            btnThoat.Click += btnThoat_Click_1;
             // 
             // btnLuu
             // 
@@ -314,10 +314,10 @@
         private DataGridView dgvMonhoc;
         private NumericUpDown nudSotinchi;
         private Button btnTailai;
-        private ComboBox cboMon;
         private DataGridViewTextBoxColumn STT;
         private DataGridViewTextBoxColumn MaMH;
         private DataGridViewTextBoxColumn TenMH;
         private DataGridViewTextBoxColumn SoTC;
+        private TextBox txtTenMH;
     }
 }

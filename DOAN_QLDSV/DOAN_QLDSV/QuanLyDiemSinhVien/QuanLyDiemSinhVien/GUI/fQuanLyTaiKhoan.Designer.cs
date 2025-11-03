@@ -233,6 +233,7 @@
             dgvTaikhoan.Size = new Size(752, 324);
             dgvTaikhoan.TabIndex = 1;
             dgvTaikhoan.TabStop = false;
+            dgvTaikhoan.SelectionChanged += dgvTaikhoan_SelectionChanged;
             // 
             // TenDangNhap
             // 

@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 string sql = @"DELETE FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap";
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add("@TenDangNhap", SqlDbType.NVarChar,20).Value = txtTen.Text;
+                cmd.Parameters.Add("@TenDangNhap", SqlDbType.NVarChar, 20).Value = txtTen.Text;
                 cmd.ExecuteNonQuery();
                 // Tải lại form
                 fQuanLyTaiKhoan_Load(sender, e);
@@ -75,7 +76,20 @@ namespace QuanLyDiemSinhVien.GUI
             MoNut(false);
 
         }
-
+        // Hàm băm mật khẩu (dùng SHA256)
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2")); // Chuyển sang dạng hexa
+                }
+                return builder.ToString();
+            }
+        }
         private void btnLuu_Click(object sender, EventArgs e)
         {
             // Kiểm tra dữ liệu
@@ -96,7 +110,7 @@ namespace QuanLyDiemSinhVien.GUI
                         VALUES(@TenDangNhap, @MatKhau, @MaQuyen)";
                         SqlCommand cmd = new SqlCommand(sql, conn);
                         cmd.Parameters.Add("@TenDangNhap", SqlDbType.VarChar, 20).Value = txtTen.Text;
-                        cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = txtPass.Text;
+                        cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = HashPassword(txtPass.Text);
                         cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
 
                         cmd.ExecuteNonQuery();
@@ -111,7 +125,7 @@ namespace QuanLyDiemSinhVien.GUI
                         SqlCommand cmd = new SqlCommand(sql, conn);
                         cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = txtTen.Text;
                         cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = login;
-                        cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = txtPass.Text;
+                        cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = HashPassword(txtPass.Text);
                         cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
 
                         cmd.ExecuteNonQuery();
@@ -150,19 +164,19 @@ namespace QuanLyDiemSinhVien.GUI
             DataTable tableLoaiSach = new DataTable();
             loaiTKAdapter.Fill(tableLoaiSach);
             cobQuyen.DataSource = tableLoaiSach;
-           
+
 
             MoNut(true);
-            
+            cobQuyen.DataBindings.Clear();
             txtTen.DataBindings.Clear();
             txtPass.DataBindings.Clear();
-            
-           
+
+
 
             cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);
             txtTen.DataBindings.Add("Text", dgvTaikhoan.DataSource, "TenDangNhap", false, DataSourceUpdateMode.Never);
-            txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
-            
+            //txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
+
 
 
 
@@ -177,6 +191,14 @@ namespace QuanLyDiemSinhVien.GUI
         private void btnTailai_Click(object sender, EventArgs e)
         {
             fQuanLyTaiKhoan_Load(sender, e);
+        }
+
+        private void dgvTaikhoan_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvTaikhoan.CurrentRow != null)
+            {
+               txtPass.Text= HashPassword(txtPass.Text); ; // Luôn xóa pass khi chọn dòng
+            }
         }
     }
 }

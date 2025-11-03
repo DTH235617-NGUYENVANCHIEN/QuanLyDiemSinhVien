@@ -28,14 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
             panel3 = new Panel();
             rdoNu = new RadioButton();
             rdoNam = new RadioButton();
             dateTimePicker1 = new DateTimePicker();
             label6 = new Label();
-            txtTenlop = new TextBox();
             label3 = new Label();
             label4 = new Label();
             txtTenkhoa = new TextBox();
@@ -54,6 +53,7 @@
             NgaySinh = new DataGridViewTextBoxColumn();
             GioiTinh = new DataGridViewTextBoxColumn();
             TenLop = new DataGridViewTextBoxColumn();
+            cobLop = new ComboBox();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
             panel2.SuspendLayout();
@@ -62,10 +62,10 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(cobLop);
             panel1.Controls.Add(panel3);
             panel1.Controls.Add(dateTimePicker1);
             panel1.Controls.Add(label6);
-            panel1.Controls.Add(txtTenlop);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(txtTenkhoa);
@@ -80,7 +80,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(974, 150);
+            panel1.Size = new Size(923, 150);
             panel1.TabIndex = 0;
             // 
             // panel3
@@ -133,15 +133,6 @@
             label6.TabIndex = 37;
             label6.Text = "Ngày sinh:";
             // 
-            // txtTenlop
-            // 
-            txtTenlop.Location = new Point(431, 56);
-            txtTenlop.Margin = new Padding(4, 3, 4, 3);
-            txtTenlop.MaxLength = 255;
-            txtTenlop.Name = "txtTenlop";
-            txtTenlop.Size = new Size(163, 35);
-            txtTenlop.TabIndex = 34;
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -168,7 +159,7 @@
             txtTenkhoa.Margin = new Padding(4, 3, 4, 3);
             txtTenkhoa.MaxLength = 255;
             txtTenkhoa.Name = "txtTenkhoa";
-            txtTenkhoa.Size = new Size(163, 35);
+            txtTenkhoa.Size = new Size(182, 35);
             txtTenkhoa.TabIndex = 30;
             // 
             // label2
@@ -261,22 +252,22 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 150);
             panel2.Name = "panel2";
-            panel2.Size = new Size(974, 283);
+            panel2.Size = new Size(923, 283);
             panel2.TabIndex = 1;
+            panel2.Paint += panel2_Paint;
             // 
             // dataGridView1
             // 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { MaSV, HoTen, NgaySinh, GioiTinh, TenLop });
             dataGridView1.Dock = DockStyle.Fill;
@@ -288,50 +279,68 @@
             dataGridView1.RowHeadersWidth = 62;
             dataGridView1.RowTemplate.Height = 30;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(974, 283);
-            dataGridView1.TabIndex = 1;
+            dataGridView1.Size = new Size(923, 283);
+            dataGridView1.TabIndex = 3;
             dataGridView1.TabStop = false;
             // 
             // MaSV
             // 
+            MaSV.DataPropertyName = "MaSV";
             MaSV.HeaderText = "MÃ SINH VIÊN";
             MaSV.MinimumWidth = 8;
             MaSV.Name = "MaSV";
             MaSV.ReadOnly = true;
+            MaSV.Width = 250;
             // 
             // HoTen
             // 
+            HoTen.DataPropertyName = "HoTen";
             HoTen.HeaderText = "HỌ TÊN";
             HoTen.MinimumWidth = 8;
             HoTen.Name = "HoTen";
             HoTen.ReadOnly = true;
+            HoTen.Width = 150;
             // 
             // NgaySinh
             // 
+            NgaySinh.DataPropertyName = "NgaySinh";
             NgaySinh.HeaderText = "NGÀY SINH";
             NgaySinh.MinimumWidth = 8;
             NgaySinh.Name = "NgaySinh";
             NgaySinh.ReadOnly = true;
+            NgaySinh.Width = 200;
             // 
             // GioiTinh
             // 
+            GioiTinh.DataPropertyName = "GioiTinh";
             GioiTinh.HeaderText = "GIỚI TÍNH";
             GioiTinh.MinimumWidth = 8;
             GioiTinh.Name = "GioiTinh";
             GioiTinh.ReadOnly = true;
+            GioiTinh.Width = 170;
             // 
             // TenLop
             // 
+            TenLop.DataPropertyName = "TenLop";
             TenLop.HeaderText = "TÊN LỚP";
             TenLop.MinimumWidth = 8;
             TenLop.Name = "TenLop";
             TenLop.ReadOnly = true;
+            TenLop.Width = 150;
+            // 
+            // cobLop
+            // 
+            cobLop.FormattingEnabled = true;
+            cobLop.Location = new Point(431, 57);
+            cobLop.Name = "cobLop";
+            cobLop.Size = new Size(182, 35);
+            cobLop.TabIndex = 42;
             // 
             // fQuanLySinhVien
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(974, 433);
+            ClientSize = new Size(923, 433);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -352,9 +361,7 @@
 
         private Panel panel1;
         private Panel panel2;
-        private DataGridView dataGridView1;
         private Label label6;
-        private TextBox txtTenlop;
         private Label label3;
         private Label label4;
         private TextBox txtTenkhoa;
@@ -370,10 +377,12 @@
         private RadioButton rdoNu;
         private RadioButton rdoNam;
         private DateTimePicker dateTimePicker1;
+        private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn MaSV;
         private DataGridViewTextBoxColumn HoTen;
         private DataGridViewTextBoxColumn NgaySinh;
         private DataGridViewTextBoxColumn GioiTinh;
         private DataGridViewTextBoxColumn TenLop;
+        private ComboBox cobLop;
     }
 }

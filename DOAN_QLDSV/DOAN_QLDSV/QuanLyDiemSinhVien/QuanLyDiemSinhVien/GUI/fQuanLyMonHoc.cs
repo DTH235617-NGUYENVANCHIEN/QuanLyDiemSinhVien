@@ -188,8 +188,8 @@ namespace QuanLyDiemSinhVien.GUI
                                     MaQuyen = @MaQuyen
                                     WHERE TenDangNhap = @TenDangNhapCu";
                         SqlCommand cmd = new SqlCommand(sql, conn);
-                        cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = txtTen.Text;
-                        cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = login;
+                        cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = txtMamonhoc.Text;
+                        cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = Mamonhoc;
                         cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = txtPass.Text;
                         cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
 

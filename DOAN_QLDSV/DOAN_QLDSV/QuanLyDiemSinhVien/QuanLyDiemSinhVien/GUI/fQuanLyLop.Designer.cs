@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
             cobGiaovien = new ComboBox();
             btnTailai = new Button();
@@ -74,7 +74,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(672, 214);
+            panel1.Size = new Size(673, 214);
             panel1.TabIndex = 0;
             // 
             // cobGiaovien
@@ -104,6 +104,7 @@
             cboLoaikhoa.Name = "cboLoaikhoa";
             cboLoaikhoa.Size = new Size(202, 35);
             cboLoaikhoa.TabIndex = 38;
+            cboLoaikhoa.SelectedValueChanged += cboLoaikhoa_SelectedValueChanged;
             // 
             // lbl1
             // 
@@ -230,21 +231,21 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 214);
             panel2.Name = "panel2";
-            panel2.Size = new Size(672, 238);
+            panel2.Size = new Size(673, 238);
             panel2.TabIndex = 1;
             // 
             // dgvLop
             // 
             dgvLop.AllowUserToAddRows = false;
             dgvLop.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvLop.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvLop.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvLop.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLop.Columns.AddRange(new DataGridViewColumn[] { MaLop, TenLop, TenKhoa, HoTen });
             dgvLop.Dock = DockStyle.Fill;
@@ -256,7 +257,7 @@
             dgvLop.RowHeadersWidth = 62;
             dgvLop.RowTemplate.Height = 30;
             dgvLop.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvLop.Size = new Size(672, 238);
+            dgvLop.Size = new Size(673, 238);
             dgvLop.TabIndex = 1;
             dgvLop.TabStop = false;
             // 
@@ -300,7 +301,7 @@
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(672, 452);
+            ClientSize = new Size(673, 452);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);

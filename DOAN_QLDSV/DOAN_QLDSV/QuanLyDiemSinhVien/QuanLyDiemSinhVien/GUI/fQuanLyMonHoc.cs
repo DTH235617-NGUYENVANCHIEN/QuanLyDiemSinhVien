@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.Logging;
 using Microsoft.Win32.SafeHandles;
+using QuanLyDiemSinhVien.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fQuanLyMonHoc : Form
     {
-        SqlConnection conn = new SqlConnection();
+        //SqlConnection conn = new SqlConnection();
         String Mamonhoc = "";
         public fQuanLyMonHoc()
         {
@@ -44,13 +45,9 @@ namespace QuanLyDiemSinhVien.GUI
         {
 
 
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
-                conn.Open();
-            }
+            KetnoiSQL.MoKetNoi();
             string sqlTaiKhoan = @"SELECT * FROM MONHOC"; // Use a valid SQL SELECT statement
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, conn);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, KetnoiSQL.conn);
             DataTable data = new DataTable();
 
             dataAdapter.Fill(data); // Fill the DataTable directly

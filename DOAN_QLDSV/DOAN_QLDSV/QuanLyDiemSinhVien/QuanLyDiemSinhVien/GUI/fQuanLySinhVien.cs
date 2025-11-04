@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.Logging;
+using QuanLyDiemSinhVien.BLL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,6 +45,19 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void fQuanLySinhVien_Load(object sender, EventArgs e)
         {
+            if (CurrentUser.TenQuyen == "Teacher")
+            {
+                // Ẩn tất cả các nút Thêm, Sửa, Xóa, Lưu
+                btnThem.Visible = false;
+                btnXoa.Visible = false;
+                btnSua.Visible = false;
+                btnLuu.Visible = false;
+                btnTailai.Visible = false; // Ẩn luôn nút Tải lại/Hủy
+            }
+            else if (CurrentUser.TenQuyen == "Admin")
+            {
+                // Admin thì không cần làm gì, các nút vẫn như cũ
+            }
             if (conn.State == ConnectionState.Closed)
             {
                 conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";

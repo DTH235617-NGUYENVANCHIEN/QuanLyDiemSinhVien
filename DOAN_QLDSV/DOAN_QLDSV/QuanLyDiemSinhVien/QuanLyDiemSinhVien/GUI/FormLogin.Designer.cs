@@ -57,7 +57,7 @@
             // 
             // txtTen
             // 
-            txtTen.Location = new Point(18, 93);
+            txtTen.Location = new Point(18, 84);
             txtTen.MaxLength = 255;
             txtTen.Name = "txtTen";
             txtTen.Size = new Size(575, 35);

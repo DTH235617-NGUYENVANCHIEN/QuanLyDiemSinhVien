@@ -41,7 +41,19 @@ namespace QuanLyDiemSinhVien.GUI
         {
 
         }
-
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
         private void btnThem_Click(object sender, EventArgs e)
         {
             login = "";
@@ -74,22 +86,11 @@ namespace QuanLyDiemSinhVien.GUI
         {
             login = txtTen.Text;
             MoNut(false);
+            txtTen.Focus();
 
         }
         // Hàm băm mật khẩu (dùng SHA256)
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2")); // Chuyển sang dạng hexa
-                }
-                return builder.ToString();
-            }
-        }
+        
         private void btnLuu_Click(object sender, EventArgs e)
         {
             // Kiểm tra dữ liệu
@@ -175,7 +176,7 @@ namespace QuanLyDiemSinhVien.GUI
 
             cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);
             txtTen.DataBindings.Add("Text", dgvTaikhoan.DataSource, "TenDangNhap", false, DataSourceUpdateMode.Never);
-            //txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
+            txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
 
 
 
@@ -195,10 +196,8 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void dgvTaikhoan_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvTaikhoan.CurrentRow != null)
-            {
-               txtPass.Text= HashPassword(txtPass.Text); ; // Luôn xóa pass khi chọn dòng
-            }
+
+          
         }
     }
 }

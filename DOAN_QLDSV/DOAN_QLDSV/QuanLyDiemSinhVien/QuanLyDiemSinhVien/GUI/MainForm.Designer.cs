@@ -50,6 +50,8 @@
             đổiMậtKhẩuToolStripMenuItem = new ToolStripMenuItem();
             đăngXuấtToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
+            btnQLDSV = new Button();
+            btnXemDiem = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -57,7 +59,7 @@
             // 
             btnQLKhoa.BackColor = Color.FromArgb(224, 224, 224);
             btnQLKhoa.ForeColor = Color.Blue;
-            btnQLKhoa.Location = new Point(140, 117);
+            btnQLKhoa.Location = new Point(55, 127);
             btnQLKhoa.Margin = new Padding(4, 3, 4, 3);
             btnQLKhoa.Name = "btnQLKhoa";
             btnQLKhoa.Size = new Size(159, 63);
@@ -65,12 +67,13 @@
             btnQLKhoa.TabStop = false;
             btnQLKhoa.Text = "QL KHOA";
             btnQLKhoa.UseVisualStyleBackColor = false;
+            btnQLKhoa.Click += btnQLKhoa_Click;
             // 
             // btnQLLop
             // 
             btnQLLop.BackColor = Color.FromArgb(224, 224, 224);
             btnQLLop.ForeColor = Color.Blue;
-            btnQLLop.Location = new Point(387, 117);
+            btnQLLop.Location = new Point(278, 127);
             btnQLLop.Margin = new Padding(4, 3, 4, 3);
             btnQLLop.Name = "btnQLLop";
             btnQLLop.Size = new Size(159, 63);
@@ -84,7 +87,7 @@
             // 
             btnQLSV.BackColor = Color.FromArgb(224, 224, 224);
             btnQLSV.ForeColor = Color.Blue;
-            btnQLSV.Location = new Point(634, 117);
+            btnQLSV.Location = new Point(501, 127);
             btnQLSV.Margin = new Padding(4, 3, 4, 3);
             btnQLSV.Name = "btnQLSV";
             btnQLSV.Size = new Size(159, 63);
@@ -92,12 +95,13 @@
             btnQLSV.TabStop = false;
             btnQLSV.Text = "QL SINH VIÊN";
             btnQLSV.UseVisualStyleBackColor = false;
+            btnQLSV.Click += btnQLSV_Click;
             // 
             // btnbtnQLMonhoc
             // 
             btnbtnQLMonhoc.BackColor = Color.FromArgb(224, 224, 224);
             btnbtnQLMonhoc.ForeColor = Color.Blue;
-            btnbtnQLMonhoc.Location = new Point(140, 239);
+            btnbtnQLMonhoc.Location = new Point(724, 127);
             btnbtnQLMonhoc.Margin = new Padding(4, 3, 4, 3);
             btnbtnQLMonhoc.Name = "btnbtnQLMonhoc";
             btnbtnQLMonhoc.Size = new Size(159, 63);
@@ -105,12 +109,13 @@
             btnbtnQLMonhoc.TabStop = false;
             btnbtnQLMonhoc.Text = "QL MÔN HỌC";
             btnbtnQLMonhoc.UseVisualStyleBackColor = false;
+            btnbtnQLMonhoc.Click += btnbtnQLMonhoc_Click;
             // 
             // btnQLGV
             // 
             btnQLGV.BackColor = Color.FromArgb(224, 224, 224);
             btnQLGV.ForeColor = Color.Blue;
-            btnQLGV.Location = new Point(387, 239);
+            btnQLGV.Location = new Point(55, 257);
             btnQLGV.Margin = new Padding(4, 3, 4, 3);
             btnQLGV.Name = "btnQLGV";
             btnQLGV.Size = new Size(159, 63);
@@ -118,12 +123,13 @@
             btnQLGV.TabStop = false;
             btnQLGV.Text = "QL GIÁO VIÊN";
             btnQLGV.UseVisualStyleBackColor = false;
+            btnQLGV.Click += btnQLGV_Click;
             // 
             // btnQLTaikhoan
             // 
             btnQLTaikhoan.BackColor = Color.FromArgb(224, 224, 224);
             btnQLTaikhoan.ForeColor = Color.Blue;
-            btnQLTaikhoan.Location = new Point(634, 239);
+            btnQLTaikhoan.Location = new Point(278, 257);
             btnQLTaikhoan.Margin = new Padding(4, 3, 4, 3);
             btnQLTaikhoan.Name = "btnQLTaikhoan";
             btnQLTaikhoan.Size = new Size(159, 63);
@@ -131,6 +137,7 @@
             btnQLTaikhoan.TabStop = false;
             btnQLTaikhoan.Text = "QL TÀI KHOẢN";
             btnQLTaikhoan.UseVisualStyleBackColor = false;
+            btnQLTaikhoan.Click += btnQLTaikhoan_Click;
             // 
             // btnThongtin
             // 
@@ -144,6 +151,7 @@
             btnThongtin.TabStop = false;
             btnThongtin.Text = "THÔNG TIN TÀI KHOẢN";
             btnThongtin.UseVisualStyleBackColor = false;
+            btnThongtin.Click += btnThongtin_Click;
             // 
             // btnDangXuat
             // 
@@ -157,6 +165,7 @@
             btnDangXuat.TabStop = false;
             btnDangXuat.Text = "ĐĂNG XUẤT";
             btnDangXuat.UseVisualStyleBackColor = false;
+            btnDangXuat.Click += btnDangXuat_Click;
             // 
             // btnDoiPass
             // 
@@ -170,6 +179,7 @@
             btnDoiPass.TabStop = false;
             btnDoiPass.Text = "ĐỔI MẬT KHẨU";
             btnDoiPass.UseVisualStyleBackColor = false;
+            btnDoiPass.Click += btnDoiPass_Click;
             // 
             // label1
             // 
@@ -272,12 +282,42 @@
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
+            // btnQLDSV
+            // 
+            btnQLDSV.BackColor = Color.FromArgb(224, 224, 224);
+            btnQLDSV.ForeColor = Color.Blue;
+            btnQLDSV.Location = new Point(501, 257);
+            btnQLDSV.Margin = new Padding(4, 3, 4, 3);
+            btnQLDSV.Name = "btnQLDSV";
+            btnQLDSV.Size = new Size(159, 63);
+            btnQLDSV.TabIndex = 12;
+            btnQLDSV.TabStop = false;
+            btnQLDSV.Text = "QL ĐIỂM SV";
+            btnQLDSV.UseVisualStyleBackColor = false;
+            btnQLDSV.Click += btnQLDSV_Click;
+            // 
+            // btnXemDiem
+            // 
+            btnXemDiem.BackColor = Color.FromArgb(224, 224, 224);
+            btnXemDiem.ForeColor = Color.Blue;
+            btnXemDiem.Location = new Point(724, 257);
+            btnXemDiem.Margin = new Padding(4, 3, 4, 3);
+            btnXemDiem.Name = "btnXemDiem";
+            btnXemDiem.Size = new Size(159, 63);
+            btnXemDiem.TabIndex = 13;
+            btnXemDiem.TabStop = false;
+            btnXemDiem.Text = "XEM ĐIỂM";
+            btnXemDiem.UseVisualStyleBackColor = false;
+            btnXemDiem.Click += btnXemDiem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 255);
             ClientSize = new Size(936, 468);
+            Controls.Add(btnXemDiem);
+            Controls.Add(btnQLDSV);
             Controls.Add(label1);
             Controls.Add(btnDoiPass);
             Controls.Add(btnDangXuat);
@@ -296,6 +336,7 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
+            Load += MainForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -325,5 +366,7 @@
         private ToolStripMenuItem đổiMậtKhẩuToolStripMenuItem;
         private ToolStripMenuItem đăngXuấtToolStripMenuItem;
         private MenuStrip menuStrip1;
+        private Button btnQLDSV;
+        private Button btnXemDiem;
     }
 }

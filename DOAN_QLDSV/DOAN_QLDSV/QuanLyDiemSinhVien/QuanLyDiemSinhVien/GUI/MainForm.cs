@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyDiemSinhVien.BLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,9 +18,17 @@ namespace QuanLyDiemSinhVien.GUI
             InitializeComponent();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void OpenChildForm(Form formToOpen)
         {
+            // Ẩn form chính đi
+            this.Hide();
 
+            // Hiển thị form con. 
+            // Dùng ShowDialog() để nó chạy độc lập và phải tắt nó mới quay lại Main được.
+            formToOpen.ShowDialog();
+
+            // Sau khi form con (formToOpen) bị tắt, hiển thị lại form chính
+            this.Show();
         }
 
         private void quảnLýKhoaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -68,6 +77,110 @@ namespace QuanLyDiemSinhVien.GUI
             this.Hide();
             f.ShowDialog();
             this.Show();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            this.Text = "Hệ thống quản lý - Chào: " + CurrentUser.Username;
+
+            // PHÂN QUYỀN
+            if (CurrentUser.TenQuyen != null && CurrentUser.TenQuyen == "Student")
+            {
+                // Nếu là Sinh viên, ẩn hết các nút quản lý
+                btnQLKhoa.Visible = false;
+                btnQLLop.Visible = false;
+                btnQLSV.Visible = false;
+                btnbtnQLMonhoc.Visible = false;
+                btnQLGV.Visible = false;
+                btnQLTaikhoan.Visible = false;
+                btnQLDSV.Visible = false;
+
+                // Chỉ để lại các nút này
+                btnXemDiem.Visible = true;
+                btnThongtin.Visible = true;
+                btnDoiPass.Visible = true;
+                btnDangXuat.Visible = true;
+            }
+            else if (CurrentUser.TenQuyen != null && CurrentUser.TenQuyen == "Teacher")
+            {
+                // Nếu là Giáo viên
+                btnQLKhoa.Visible = false;
+                btnQLLop.Visible = false;
+                btnQLGV.Visible = false;
+                btnQLTaikhoan.Visible = false;
+
+                // Được phép quản lý Sinh viên, Môn học, Điểm
+                btnQLSV.Visible = true;
+                btnbtnQLMonhoc.Visible = true;
+                btnQLDSV.Visible = true;
+                btnThongtin.Visible = true;
+                btnDoiPass.Visible = true;
+                btnDangXuat.Visible = true;
+            }
+            else if (CurrentUser.TenQuyen == "Admin")
+            {
+                // Admin thì thấy hết (không cần ẩn gì cả)
+            }
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fQuanLyLop());
+        }
+
+        private void btnQLKhoa_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fQuanLyKhoa());
+        }
+
+        private void btnQLSV_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fQuanLySinhVien());
+        }
+
+        private void btnbtnQLMonhoc_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fQuanLyMonHoc());
+        }
+
+        private void btnQLGV_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fQuanLyGiaoVien());
+        }
+
+        private void btnQLTaikhoan_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fQuanLyTaiKhoan());
+        }
+
+        private void btnQLDSV_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fDiemSinhVien());
+        }
+
+        private void btnXemDiem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fBangDiemSV());
+        }
+
+        private void btnThongtin_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fThongTinChiTiet());
+        }
+
+        private void btnDoiPass_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fDoiMatKhau());
+        }
+
+        private void btnDangXuat_Click(object sender, EventArgs e)
+        {
+            DialogResult kq = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (kq == DialogResult.Yes)
+            {
+                // Đóng form Main (sẽ quay về FormLogin nếu bạn lập trình đúng)
+                this.Close();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.Logging;
 using Microsoft.Win32.SafeHandles;
+using QuanLyDiemSinhVien.BLL;
 using QuanLyDiemSinhVien.DAL;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,15 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void fQuanLyMonHoc_Load(object sender, EventArgs e)
         {
-
+            if (CurrentUser.TenQuyen == "Teacher")
+            {
+                // Ẩn tất cả các nút Thêm, Sửa, Xóa, Lưu
+                btnThem.Visible = false;
+                btnXoa.Visible = false;
+                btnSua.Visible = false;
+                btnLuu.Visible = false;
+                btnTailai.Visible = false; // Ẩn luôn nút Tải lại/Hủy
+            }
 
             KetnoiSQL.MoKetNoi();
             string sqlTaiKhoan = @"SELECT * FROM MONHOC"; // Use a valid SQL SELECT statement
@@ -86,7 +95,7 @@ namespace QuanLyDiemSinhVien.GUI
                 {
                     // Dùng MaMH (lấy từ TextBox) để làm điều kiện Xóa
                     string sql = @"DELETE FROM MONHOC WHERE MaMH = @MaMH";
-                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
                     cmd.Parameters.Add("@MaMH", SqlDbType.VarChar, 20).Value = txtMamonhoc.Text;
                     cmd.ExecuteNonQuery();
 
@@ -133,7 +142,7 @@ namespace QuanLyDiemSinhVien.GUI
                         string sql = @"INSERT INTO MONHOC (MaMH, TenMH, SoTC) 
                                      VALUES (@MaMH, @TenMH, @SoTC)";
 
-                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        using (SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn))
                         {
                             cmd.Parameters.Add("@MaMH", SqlDbType.VarChar, 20).Value = maMH;
                             cmd.Parameters.Add("@TenMH", SqlDbType.NVarChar, 100).Value = tenMH;
@@ -151,7 +160,7 @@ namespace QuanLyDiemSinhVien.GUI
                                          SoTC = @SoTC
                                      WHERE MaMH = @MaMH_Cu";
 
-                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        using (SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn))
                         {
                             cmd.Parameters.Add("@MaMH_Moi", SqlDbType.VarChar, 20).Value = maMH;
                             cmd.Parameters.Add("@TenMH", SqlDbType.NVarChar, 100).Value = tenMH;

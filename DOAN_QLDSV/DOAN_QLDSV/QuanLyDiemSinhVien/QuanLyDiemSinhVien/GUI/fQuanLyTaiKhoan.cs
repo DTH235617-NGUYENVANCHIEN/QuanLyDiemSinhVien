@@ -46,11 +46,11 @@ namespace QuanLyDiemSinhVien.GUI
         {
             login = "";
             //Xoa trang
-
             txtTen.Text = "";
             txtPass.Text = "";
             cobQuyen.Text = "";
             MoNut(false);
+            txtTen.Focus();
 
         }
 

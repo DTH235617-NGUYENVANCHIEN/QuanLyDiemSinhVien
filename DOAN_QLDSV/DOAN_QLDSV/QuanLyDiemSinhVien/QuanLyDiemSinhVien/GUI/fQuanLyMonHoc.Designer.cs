@@ -288,6 +288,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "fQuanLyMonHoc";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "fQuanLyMonHoc";
             Load += fQuanLyMonHoc_Load;
             panel1.ResumeLayout(false);

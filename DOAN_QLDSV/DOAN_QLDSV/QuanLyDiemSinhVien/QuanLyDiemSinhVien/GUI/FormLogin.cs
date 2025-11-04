@@ -24,47 +24,38 @@ namespace QuanLyDiemSinhVien
 
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
-            // Lấy dữ liệu từ TextBox (giả sử tên là txtTenDangNhap và txtMatKhau)
             string tenDangNhap = txtTen.Text.Trim();
             string matKhau = txtPass.Text.Trim();
 
-            // Kiểm tra rỗng
             if (string.IsNullOrWhiteSpace(tenDangNhap) || string.IsNullOrWhiteSpace(matKhau))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // BĂM MẬT KHẨU
-            // Chúng ta phải băm mật khẩu người dùng nhập vào 
-            // để so sánh với mật khẩu đã băm trong CSDL.
+            // 1. Băm mật khẩu nhập vào
             string matKhauHashed = HashPassword(matKhau);
 
             try
             {
-                // Gọi BUS để kiểm tra
+                // 2. Gửi Tên đăng nhập VÀ Mật khẩu ĐÃ BĂM vào BUS
                 bool dangNhapThanhCong = taiKhoanBUS.KiemTraDangNhap(tenDangNhap, matKhauHashed);
 
                 if (dangNhapThanhCong)
                 {
-                    // ĐĂNG NHẬP THÀNH CÔNG
                     MessageBox.Show("Đăng nhập thành công! Quyền của bạn là: " + CurrentUser.TenQuyen, "Thông báo");
 
-                    // Ẩn form login và mở Main Form
                     this.Hide();
                     MainForm frmMain = new MainForm();
                     frmMain.ShowDialog();
 
-                    // --- QUAN TRỌNG: XỬ LÝ KHI ĐĂNG XUẤT ---
-                    // Sau khi MainForm đóng (tức là người dùng đăng xuất),
-                    // chúng ta sẽ xóa phiên làm việc và hiển thị lại FormLogin.
-                    CurrentUser.Clear(); // Xóa thông tin người dùng
+                    // Xử lý sau khi đăng xuất
+                    CurrentUser.Clear();
                     this.Show();
-                    txtPass.Text = ""; // Xóa mật khẩu cũ
+                    txtPass.Text = "";
                 }
                 else
                 {
-                    // ĐĂNG NHẬP THẤT BẠI
                     MessageBox.Show("Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -87,15 +78,9 @@ namespace QuanLyDiemSinhVien
                 {
                     builder.Append(bytes[i].ToString("x2"));
                 }
-                // Vì CSDL của bạn là VARCHAR(128), chúng ta nên cắt băm
-                // (Mặc dù SHA256 là 64 ký tự hex, nhưng để an toàn,
-                // ta nên dùng chung 1 chuẩn)
-                // Tuy nhiên, CSDL của bạn là 128, vậy là đủ cho SHA-512.
-                // Tạm thời, ta dùng SHA256 (64 ký tự).
                 return builder.ToString();
             }
         }
-        
 
         private void btnThoat_Click(object sender, EventArgs e)
         {

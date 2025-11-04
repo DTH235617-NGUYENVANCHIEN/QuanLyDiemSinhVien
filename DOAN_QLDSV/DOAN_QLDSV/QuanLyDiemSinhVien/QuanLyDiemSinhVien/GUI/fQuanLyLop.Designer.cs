@@ -307,6 +307,7 @@
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 3, 4, 3);
             Name = "fQuanLyLop";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Quản Lý Lớp";
             Load += fQuanLyLop_Load;
             panel1.ResumeLayout(false);

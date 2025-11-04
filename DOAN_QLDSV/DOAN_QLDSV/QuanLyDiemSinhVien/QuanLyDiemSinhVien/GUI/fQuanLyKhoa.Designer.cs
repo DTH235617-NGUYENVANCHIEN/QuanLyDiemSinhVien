@@ -32,6 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            btnTailai = new Button();
             txtTenkhoa = new TextBox();
             label2 = new Label();
             txtMakhoa = new TextBox();
@@ -45,7 +46,6 @@
             dgvKhoa = new DataGridView();
             MaKhoa = new DataGridViewTextBoxColumn();
             TenKhoa = new DataGridViewTextBoxColumn();
-            btnTailai = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvKhoa).BeginInit();
@@ -69,6 +69,18 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(695, 180);
             panel1.TabIndex = 0;
+            // 
+            // btnTailai
+            // 
+            btnTailai.Location = new Point(274, 129);
+            btnTailai.Margin = new Padding(4, 3, 4, 3);
+            btnTailai.Name = "btnTailai";
+            btnTailai.Size = new Size(146, 37);
+            btnTailai.TabIndex = 22;
+            btnTailai.TabStop = false;
+            btnTailai.Text = "Tải lại";
+            btnTailai.UseVisualStyleBackColor = true;
+            btnTailai.Click += btnTailai_Click;
             // 
             // txtTenkhoa
             // 
@@ -228,18 +240,6 @@
             TenKhoa.ReadOnly = true;
             TenKhoa.Width = 350;
             // 
-            // btnTailai
-            // 
-            btnTailai.Location = new Point(274, 129);
-            btnTailai.Margin = new Padding(4, 3, 4, 3);
-            btnTailai.Name = "btnTailai";
-            btnTailai.Size = new Size(146, 37);
-            btnTailai.TabIndex = 22;
-            btnTailai.TabStop = false;
-            btnTailai.Text = "Tải lại";
-            btnTailai.UseVisualStyleBackColor = true;
-            btnTailai.Click += btnTailai_Click;
-            // 
             // fQuanLyKhoa
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
@@ -250,6 +250,7 @@
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 3, 4, 3);
             Name = "fQuanLyKhoa";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Quản Lý Khoa";
             Load += fQuanLyKhoa_Load;
             panel1.ResumeLayout(false);

@@ -72,7 +72,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 269);
+            label2.Location = new Point(13, 184);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(110, 27);
@@ -82,7 +82,7 @@
             // txtQuyen
             // 
             txtQuyen.Enabled = false;
-            txtQuyen.Location = new Point(191, 269);
+            txtQuyen.Location = new Point(191, 272);
             txtQuyen.Margin = new Padding(4);
             txtQuyen.MaxLength = 255;
             txtQuyen.Name = "txtQuyen";
@@ -92,7 +92,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(13, 184);
+            label3.Location = new Point(13, 272);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(169, 27);
@@ -117,6 +117,7 @@
             btnDong.TabIndex = 7;
             btnDong.Text = "Đóng";
             btnDong.UseVisualStyleBackColor = true;
+            btnDong.Click += btnDong_Click;
             // 
             // fThongTinChiTiet
             // 
@@ -136,6 +137,7 @@
             Name = "fThongTinChiTiet";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Thông Tin Chi Tiết";
+            Load += fThongTinChiTiet_Load;
             ResumeLayout(false);
             PerformLayout();
         }

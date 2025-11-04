@@ -283,6 +283,7 @@
             Margin = new Padding(4);
             Name = "fBangDiemSV";
             Text = "Bảng Điểm Sinh Viên:";
+            Load += fBangDiemSV_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

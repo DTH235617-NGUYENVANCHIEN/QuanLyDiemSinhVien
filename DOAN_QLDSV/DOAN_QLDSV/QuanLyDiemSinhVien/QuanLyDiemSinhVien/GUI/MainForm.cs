@@ -13,6 +13,7 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class MainForm : Form
     {
+        
         public MainForm()
         {
             InitializeComponent();
@@ -95,11 +96,21 @@ namespace QuanLyDiemSinhVien.GUI
                 btnQLTaikhoan.Visible = false;
                 btnQLDSV.Visible = false;
 
+                quảnLýKhoaToolStripMenuItem.Visible = false;
+                quảnLýLớpToolStripMenuItem.Visible = false;
+                quảnLýSinhViênToolStripMenuItem.Visible = false;
+                quảnLýMônHọcToolStripMenuItem.Visible = false;
+                quảnLýGiáoViênToolStripMenuItem.Visible = false;
+                quảnLýTàiKhoảnToolStripMenuItem.Visible = false;
+                qLĐIÊMSVToolStripMenuItem.Visible = false; // Ẩn "Quản lý điểm"
+
                 // Chỉ để lại các nút này
                 btnXemDiem.Visible = true;
                 btnThongtin.Visible = true;
                 btnDoiPass.Visible = true;
                 btnDangXuat.Visible = true;
+
+                xEMĐIỂMToolStripMenuItem.Visible = true; // Hiện "Xem điểm"
             }
             else if (CurrentUser.TenQuyen != null && CurrentUser.TenQuyen == "Teacher")
             {
@@ -108,6 +119,12 @@ namespace QuanLyDiemSinhVien.GUI
                 btnQLLop.Visible = false;
                 btnQLGV.Visible = false;
                 btnQLTaikhoan.Visible = false;
+
+                quảnLýKhoaToolStripMenuItem.Visible = false;
+                quảnLýLớpToolStripMenuItem.Visible = false;
+                quảnLýGiáoViênToolStripMenuItem.Visible = false;
+                quảnLýTàiKhoảnToolStripMenuItem.Visible = false;
+                xEMĐIỂMToolStripMenuItem.Visible = false; // Ẩn "Xem Điểm"
 
                 // Được phép quản lý Sinh viên, Môn học, Điểm
                 btnQLSV.Visible = true;
@@ -119,8 +136,11 @@ namespace QuanLyDiemSinhVien.GUI
             }
             else if (CurrentUser.TenQuyen == "Admin")
             {
-                // Admin thì thấy hết (không cần ẩn gì cả)
+                xEMĐIỂMToolStripMenuItem.Visible = false;
+                btnXemDiem.Visible = false;
             }
+          
+
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -182,5 +202,39 @@ namespace QuanLyDiemSinhVien.GUI
                 this.Close();
             }
         }
+
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult kq = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (kq == DialogResult.Yes)
+            {
+                // Đóng form Main (sẽ quay về FormLogin nếu bạn lập trình đúng)
+                this.Close();
+            }
+        }
+
+        private void đổiMậtKhẩuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fDoiMatKhau());
+        }
+
+        private void thôngTinChiTiếtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fThongTinChiTiet());
+        }
+
+        private void qLĐIÊMSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fDiemSinhVien());
+        }
+
+        private void xEMĐIỂMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new fBangDiemSV());
+        }
+
+        
+      
     }
 }

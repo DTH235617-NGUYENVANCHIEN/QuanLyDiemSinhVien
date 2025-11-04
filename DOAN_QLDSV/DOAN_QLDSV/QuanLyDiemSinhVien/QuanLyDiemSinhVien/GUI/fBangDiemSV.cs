@@ -26,5 +26,10 @@ namespace QuanLyDiemSinhVien.GUI
         {
 
         }
+
+        private void fBangDiemSV_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

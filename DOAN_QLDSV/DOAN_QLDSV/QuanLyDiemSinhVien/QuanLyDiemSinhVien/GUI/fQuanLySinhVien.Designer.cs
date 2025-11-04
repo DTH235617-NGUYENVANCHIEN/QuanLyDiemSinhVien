@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            cobLop = new ComboBox();
             panel3 = new Panel();
             rdoNu = new RadioButton();
             rdoNam = new RadioButton();
@@ -53,7 +54,6 @@
             NgaySinh = new DataGridViewTextBoxColumn();
             GioiTinh = new DataGridViewTextBoxColumn();
             TenLop = new DataGridViewTextBoxColumn();
-            cobLop = new ComboBox();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
             panel2.SuspendLayout();
@@ -83,6 +83,14 @@
             panel1.Size = new Size(923, 150);
             panel1.TabIndex = 0;
             // 
+            // cobLop
+            // 
+            cobLop.FormattingEnabled = true;
+            cobLop.Location = new Point(431, 57);
+            cobLop.Name = "cobLop";
+            cobLop.Size = new Size(182, 27);
+            cobLop.TabIndex = 42;
+            // 
             // panel3
             // 
             panel3.Controls.Add(rdoNu);
@@ -97,7 +105,7 @@
             rdoNu.AutoSize = true;
             rdoNu.Location = new Point(80, 3);
             rdoNu.Name = "rdoNu";
-            rdoNu.Size = new Size(83, 31);
+            rdoNu.Size = new Size(57, 23);
             rdoNu.TabIndex = 43;
             rdoNu.TabStop = true;
             rdoNu.Text = "Nam";
@@ -108,7 +116,7 @@
             rdoNam.AutoSize = true;
             rdoNam.Location = new Point(3, 3);
             rdoNam.Name = "rdoNam";
-            rdoNam.Size = new Size(83, 31);
+            rdoNam.Size = new Size(57, 23);
             rdoNam.TabIndex = 42;
             rdoNam.TabStop = true;
             rdoNam.Text = "Nam";
@@ -120,7 +128,7 @@
             dateTimePicker1.Format = DateTimePickerFormat.Short;
             dateTimePicker1.Location = new Point(753, 8);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(163, 35);
+            dateTimePicker1.Size = new Size(163, 26);
             dateTimePicker1.TabIndex = 40;
             // 
             // label6
@@ -129,7 +137,7 @@
             label6.Location = new Point(631, 14);
             label6.Margin = new Padding(5, 0, 5, 0);
             label6.Name = "label6";
-            label6.Size = new Size(114, 27);
+            label6.Size = new Size(72, 19);
             label6.TabIndex = 37;
             label6.Text = "Ngày sinh:";
             // 
@@ -139,7 +147,7 @@
             label3.Location = new Point(340, 61);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(92, 27);
+            label3.Size = new Size(58, 19);
             label3.TabIndex = 35;
             label3.Text = "Tên lớp:";
             // 
@@ -149,7 +157,7 @@
             label4.Location = new Point(14, 61);
             label4.Margin = new Padding(5, 0, 5, 0);
             label4.Name = "label4";
-            label4.Size = new Size(103, 27);
+            label4.Size = new Size(62, 19);
             label4.TabIndex = 33;
             label4.Text = "Giới tính:";
             // 
@@ -159,7 +167,7 @@
             txtTenkhoa.Margin = new Padding(4, 3, 4, 3);
             txtTenkhoa.MaxLength = 255;
             txtTenkhoa.Name = "txtTenkhoa";
-            txtTenkhoa.Size = new Size(182, 35);
+            txtTenkhoa.Size = new Size(182, 26);
             txtTenkhoa.TabIndex = 30;
             // 
             // label2
@@ -168,7 +176,7 @@
             label2.Location = new Point(340, 16);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(83, 27);
+            label2.Size = new Size(53, 19);
             label2.TabIndex = 31;
             label2.Text = "Họ tên:";
             // 
@@ -178,7 +186,7 @@
             txtMakhoa.Margin = new Padding(5, 3, 5, 3);
             txtMakhoa.MaxLength = 255;
             txtMakhoa.Name = "txtMakhoa";
-            txtMakhoa.Size = new Size(163, 35);
+            txtMakhoa.Size = new Size(163, 26);
             txtMakhoa.TabIndex = 28;
             // 
             // label1
@@ -187,7 +195,7 @@
             label1.Location = new Point(14, 16);
             label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(142, 27);
+            label1.Size = new Size(88, 19);
             label1.TabIndex = 29;
             label1.Text = "Mã sinh viên:";
             // 
@@ -201,6 +209,7 @@
             btnThoat.TabStop = false;
             btnThoat.Text = "Thoát";
             btnThoat.UseVisualStyleBackColor = true;
+            btnThoat.Click += btnThoat_Click;
             // 
             // btnLuu
             // 
@@ -328,17 +337,9 @@
             TenLop.ReadOnly = true;
             TenLop.Width = 150;
             // 
-            // cobLop
-            // 
-            cobLop.FormattingEnabled = true;
-            cobLop.Location = new Point(431, 57);
-            cobLop.Name = "cobLop";
-            cobLop.Size = new Size(182, 35);
-            cobLop.TabIndex = 42;
-            // 
             // fQuanLySinhVien
             // 
-            AutoScaleDimensions = new SizeF(13F, 27F);
+            AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(923, 433);
             Controls.Add(panel2);

@@ -21,7 +21,7 @@ namespace QuanLyDiemSinhVien.GUI
         }
 
 
-       
+
 
         private void fQuanLySinhVien_Load(object sender, EventArgs e)
         {
@@ -30,17 +30,22 @@ namespace QuanLyDiemSinhVien.GUI
                 conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
                 conn.Open();
             }
-            
-        
+
+
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
-        } 
+        }
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

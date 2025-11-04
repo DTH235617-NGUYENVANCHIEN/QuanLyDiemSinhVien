@@ -35,7 +35,7 @@
             txtQuyen = new TextBox();
             label3 = new Label();
             label4 = new Label();
-            button1 = new Button();
+            btnDong = new Button();
             SuspendLayout();
             // 
             // label1
@@ -109,21 +109,21 @@
             label4.TabIndex = 6;
             label4.Text = "Thông Tin Chi Tiết";
             // 
-            // button1
+            // btnDong
             // 
-            button1.Location = new Point(157, 327);
-            button1.Name = "button1";
-            button1.Size = new Size(112, 34);
-            button1.TabIndex = 7;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
+            btnDong.Location = new Point(157, 327);
+            btnDong.Name = "btnDong";
+            btnDong.Size = new Size(112, 34);
+            btnDong.TabIndex = 7;
+            btnDong.Text = "Đóng";
+            btnDong.UseVisualStyleBackColor = true;
             // 
             // fThongTinChiTiet
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(473, 373);
-            Controls.Add(button1);
+            Controls.Add(btnDong);
             Controls.Add(label4);
             Controls.Add(txtQuyen);
             Controls.Add(label3);
@@ -149,6 +149,6 @@
         private TextBox txtQuyen;
         private Label label3;
         private Label label4;
-        private Button button1;
+        private Button btnDong;
     }
 }

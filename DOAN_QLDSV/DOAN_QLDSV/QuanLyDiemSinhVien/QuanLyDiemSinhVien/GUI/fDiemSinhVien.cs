@@ -88,12 +88,11 @@ namespace QuanLyDiemSinhVien.GUI
             SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlDiem, conn);
             DataTable data = new DataTable();
             dataAdapter.Fill(data);
+            dgvDiem.AutoGenerateColumns = false;
             dgvDiem.DataSource = data;
             LoadSinhVien();
             LoadMonHoc();
 
-            cbHocKy.Items.Clear();
-            cbHocKy.Items.AddRange(new object[] { "1", "2", "3" });
             cbTenSV.DataBindings.Clear();
             cbMonHoc.DataBindings.Clear();
             cbHocKy.DataBindings.Clear();
@@ -101,6 +100,8 @@ namespace QuanLyDiemSinhVien.GUI
             txtDiemthanhphan.DataBindings.Clear();
             txtDiemthi.DataBindings.Clear();
 
+            // Thêm binding mới
+            // (Phải đảm bảo 'data' (dgvDiem.DataSource) có dữ liệu thì binding mới hoạt động)
             cbTenSV.DataBindings.Add("SelectedValue", dgvDiem.DataSource, "MaSV", false, DataSourceUpdateMode.Never);
             cbMonHoc.DataBindings.Add("SelectedValue", dgvDiem.DataSource, "MaMH", false, DataSourceUpdateMode.Never);
             cbHocKy.DataBindings.Add("Text", dgvDiem.DataSource, "HocKy", false, DataSourceUpdateMode.Never);
@@ -108,6 +109,7 @@ namespace QuanLyDiemSinhVien.GUI
             txtDiemthanhphan.DataBindings.Add("Text", dgvDiem.DataSource, "DiemThanhPhan", false, DataSourceUpdateMode.Never);
             txtDiemthi.DataBindings.Add("Text", dgvDiem.DataSource, "DiemThi", false, DataSourceUpdateMode.Never);
         }
+        
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
@@ -138,7 +140,7 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void btnThem_Click(object sender, EventArgs e)
         {
-            
+            isAdding = true;
             MoNut(false);
 
             cbTenSV.SelectedIndex = -1;
@@ -196,6 +198,11 @@ namespace QuanLyDiemSinhVien.GUI
 
             isAdding = false; // Thiết lập trạng thái Sửa
             MoNut(false); // Mở các control nhập liệu
+
+            cbTenSV.Enabled = false;
+            cbMonHoc.Enabled = false;
+            cbHocKy.Enabled = false;
+            txtNamhoc.Enabled = false;
 
             // Lưu Khóa Chính CŨ vào biến để sử dụng khi UPDATE
             MaSV_Cu = dgvDiem.CurrentRow.Cells["MaSV"].Value.ToString();

@@ -44,19 +44,18 @@
             btnSua = new Button();
             btnXoa = new Button();
             btnThem = new Button();
-            panel2 = new Panel();
             dgvLop = new DataGridView();
             MaLop = new DataGridViewTextBoxColumn();
             TenLop = new DataGridViewTextBoxColumn();
             TenKhoa = new DataGridViewTextBoxColumn();
             HoTen = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
-            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLop).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.BackColor = Color.FromArgb(192, 255, 192);
             panel1.Controls.Add(cobGiaovien);
             panel1.Controls.Add(btnTailai);
             panel1.Controls.Add(cboLoaikhoa);
@@ -79,6 +78,7 @@
             // 
             // cobGiaovien
             // 
+            cobGiaovien.Anchor = AnchorStyles.Top;
             cobGiaovien.FormattingEnabled = true;
             cobGiaovien.Location = new Point(141, 121);
             cobGiaovien.Name = "cobGiaovien";
@@ -87,7 +87,8 @@
             // 
             // btnTailai
             // 
-            btnTailai.Location = new Point(506, 84);
+            btnTailai.Anchor = AnchorStyles.Top;
+            btnTailai.Location = new Point(506, 94);
             btnTailai.Margin = new Padding(4, 3, 4, 3);
             btnTailai.Name = "btnTailai";
             btnTailai.Size = new Size(146, 37);
@@ -99,6 +100,7 @@
             // 
             // cboLoaikhoa
             // 
+            cboLoaikhoa.Anchor = AnchorStyles.Top;
             cboLoaikhoa.FormattingEnabled = true;
             cboLoaikhoa.Location = new Point(141, 70);
             cboLoaikhoa.Name = "cboLoaikhoa";
@@ -108,6 +110,7 @@
             // 
             // lbl1
             // 
+            lbl1.Anchor = AnchorStyles.Top;
             lbl1.AutoSize = true;
             lbl1.Location = new Point(25, 121);
             lbl1.Margin = new Padding(4, 0, 4, 0);
@@ -118,6 +121,7 @@
             // 
             // lbl
             // 
+            lbl.Anchor = AnchorStyles.Top;
             lbl.AutoSize = true;
             lbl.Location = new Point(9, 70);
             lbl.Margin = new Padding(5, 0, 5, 0);
@@ -128,6 +132,7 @@
             // 
             // txtTenlop
             // 
+            txtTenlop.Anchor = AnchorStyles.Top;
             txtTenlop.Location = new Point(141, 172);
             txtTenlop.Margin = new Padding(4, 3, 4, 3);
             txtTenlop.MaxLength = 255;
@@ -137,6 +142,7 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
             label2.Location = new Point(25, 172);
             label2.Margin = new Padding(4, 0, 4, 0);
@@ -144,10 +150,10 @@
             label2.Size = new Size(92, 27);
             label2.TabIndex = 33;
             label2.Text = "Tên lớp:";
-            label2.Click += label2_Click;
             // 
             // txtMalop
             // 
+            txtMalop.Anchor = AnchorStyles.Top;
             txtMalop.Location = new Point(141, 17);
             txtMalop.Margin = new Padding(5, 3, 5, 3);
             txtMalop.MaxLength = 255;
@@ -157,6 +163,7 @@
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
             label1.Location = new Point(30, 17);
             label1.Margin = new Padding(5, 0, 5, 0);
@@ -167,7 +174,8 @@
             // 
             // btnThoat
             // 
-            btnThoat.Location = new Point(506, 162);
+            btnThoat.Anchor = AnchorStyles.Top;
+            btnThoat.Location = new Point(506, 172);
             btnThoat.Margin = new Padding(4, 3, 4, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(146, 37);
@@ -179,7 +187,8 @@
             // 
             // btnLuu
             // 
-            btnLuu.Location = new Point(351, 167);
+            btnLuu.Anchor = AnchorStyles.Top;
+            btnLuu.Location = new Point(351, 172);
             btnLuu.Margin = new Padding(4, 3, 4, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(146, 37);
@@ -191,7 +200,8 @@
             // 
             // btnSua
             // 
-            btnSua.Location = new Point(352, 84);
+            btnSua.Anchor = AnchorStyles.Top;
+            btnSua.Location = new Point(352, 94);
             btnSua.Margin = new Padding(4, 3, 4, 3);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(146, 37);
@@ -203,6 +213,7 @@
             // 
             // btnXoa
             // 
+            btnXoa.Anchor = AnchorStyles.Top;
             btnXoa.Location = new Point(506, 15);
             btnXoa.Margin = new Padding(4, 3, 4, 3);
             btnXoa.Name = "btnXoa";
@@ -215,6 +226,7 @@
             // 
             // btnThem
             // 
+            btnThem.Anchor = AnchorStyles.Top;
             btnThem.Location = new Point(352, 15);
             btnThem.Margin = new Padding(4, 3, 4, 3);
             btnThem.Name = "btnThem";
@@ -225,19 +237,11 @@
             btnThem.UseVisualStyleBackColor = true;
             btnThem.Click += btnThem_Click;
             // 
-            // panel2
-            // 
-            panel2.Controls.Add(dgvLop);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 214);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(673, 238);
-            panel2.TabIndex = 1;
-            // 
             // dgvLop
             // 
             dgvLop.AllowUserToAddRows = false;
             dgvLop.AllowUserToDeleteRows = false;
+            dgvLop.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -249,7 +253,7 @@
             dgvLop.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLop.Columns.AddRange(new DataGridViewColumn[] { MaLop, TenLop, TenKhoa, HoTen });
             dgvLop.Dock = DockStyle.Fill;
-            dgvLop.Location = new Point(0, 0);
+            dgvLop.Location = new Point(0, 214);
             dgvLop.MultiSelect = false;
             dgvLop.Name = "dgvLop";
             dgvLop.ReadOnly = true;
@@ -268,7 +272,6 @@
             MaLop.MinimumWidth = 8;
             MaLop.Name = "MaLop";
             MaLop.ReadOnly = true;
-            MaLop.Width = 150;
             // 
             // TenLop
             // 
@@ -277,7 +280,6 @@
             TenLop.MinimumWidth = 8;
             TenLop.Name = "TenLop";
             TenLop.ReadOnly = true;
-            TenLop.Width = 150;
             // 
             // TenKhoa
             // 
@@ -286,7 +288,6 @@
             TenKhoa.MinimumWidth = 8;
             TenKhoa.Name = "TenKhoa";
             TenKhoa.ReadOnly = true;
-            TenKhoa.Width = 170;
             // 
             // HoTen
             // 
@@ -295,24 +296,23 @@
             HoTen.MinimumWidth = 8;
             HoTen.Name = "HoTen";
             HoTen.ReadOnly = true;
-            HoTen.Width = 200;
             // 
             // fQuanLyLop
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(673, 452);
-            Controls.Add(panel2);
+            Controls.Add(dgvLop);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 3, 4, 3);
             Name = "fQuanLyLop";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Quản Lý Lớp";
+            FormClosing += fQuanLyLop_FormClosing;
             Load += fQuanLyLop_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvLop).EndInit();
             ResumeLayout(false);
         }
@@ -320,7 +320,6 @@
         #endregion
 
         private Panel panel1;
-        private Panel panel2;
         private DataGridView dgvLop;
         private TextBox txtTenlop;
         private Label label2;

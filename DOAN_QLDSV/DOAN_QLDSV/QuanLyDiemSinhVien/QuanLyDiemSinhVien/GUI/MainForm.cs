@@ -13,10 +13,11 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class MainForm : Form
     {
-        
+
         public MainForm()
         {
             InitializeComponent();
+         
         }
 
         private void OpenChildForm(Form formToOpen)
@@ -139,7 +140,7 @@ namespace QuanLyDiemSinhVien.GUI
                 xEMĐIỂMToolStripMenuItem.Visible = false;
                 btnXemDiem.Visible = false;
             }
-          
+
 
         }
         private void button2_Click(object sender, EventArgs e)
@@ -234,7 +235,9 @@ namespace QuanLyDiemSinhVien.GUI
             OpenChildForm(new fBangDiemSV());
         }
 
-        
-      
+        private void hệThốngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -65,9 +65,15 @@ namespace QuanLyDiemSinhVien
             }
         }
 
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
         // 3. HÀM BĂM MẬT KHẨU (HASH PASSWORD)
         // (Đây là hàm bạn đã dùng trong code mẫu `fQuanLyTaiKhoan`)
         // Dùng SHA-256
+
         private string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -82,15 +88,8 @@ namespace QuanLyDiemSinhVien
             }
         }
 
-        private void btnThoat_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void FormLogin_Load(object sender, EventArgs e)
         {
-            
-            
 
         }
     }

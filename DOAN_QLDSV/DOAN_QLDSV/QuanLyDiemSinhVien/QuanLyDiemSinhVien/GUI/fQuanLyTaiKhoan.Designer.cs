@@ -45,18 +45,17 @@
             label2 = new Label();
             txtTen = new TextBox();
             label1 = new Label();
-            panel2 = new Panel();
             dgvTaikhoan = new DataGridView();
             TenDangNhap = new DataGridViewTextBoxColumn();
             MatKhau = new DataGridViewTextBoxColumn();
             TenQuyen = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
-            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvTaikhoan).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.BackColor = Color.FromArgb(192, 255, 192);
             panel1.Controls.Add(btnTailai);
             panel1.Controls.Add(btnThoat);
             panel1.Controls.Add(btnLuu);
@@ -78,7 +77,8 @@
             // 
             // btnTailai
             // 
-            btnTailai.Location = new Point(500, 118);
+            btnTailai.Anchor = AnchorStyles.Top;
+            btnTailai.Location = new Point(476, 117);
             btnTailai.Name = "btnTailai";
             btnTailai.Size = new Size(112, 34);
             btnTailai.TabIndex = 11;
@@ -89,7 +89,8 @@
             // 
             // btnThoat
             // 
-            btnThoat.Location = new Point(627, 118);
+            btnThoat.Anchor = AnchorStyles.Top;
+            btnThoat.Location = new Point(617, 118);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(112, 34);
             btnThoat.TabIndex = 10;
@@ -100,7 +101,8 @@
             // 
             // btnLuu
             // 
-            btnLuu.Location = new Point(369, 118);
+            btnLuu.Anchor = AnchorStyles.Top;
+            btnLuu.Location = new Point(617, 64);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(112, 34);
             btnLuu.TabIndex = 9;
@@ -111,7 +113,8 @@
             // 
             // btnSua
             // 
-            btnSua.Location = new Point(627, 78);
+            btnSua.Anchor = AnchorStyles.Top;
+            btnSua.Location = new Point(617, 14);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(112, 34);
             btnSua.TabIndex = 8;
@@ -122,7 +125,8 @@
             // 
             // btnXoa
             // 
-            btnXoa.Location = new Point(500, 78);
+            btnXoa.Anchor = AnchorStyles.Top;
+            btnXoa.Location = new Point(476, 64);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(112, 34);
             btnXoa.TabIndex = 7;
@@ -133,7 +137,8 @@
             // 
             // btnThem
             // 
-            btnThem.Location = new Point(369, 78);
+            btnThem.Anchor = AnchorStyles.Top;
+            btnThem.Location = new Point(476, 14);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(112, 34);
             btnThem.TabIndex = 6;
@@ -144,24 +149,27 @@
             // 
             // cobQuyen
             // 
+            cobQuyen.Anchor = AnchorStyles.Top;
             cobQuyen.FormattingEnabled = true;
-            cobQuyen.Location = new Point(167, 89);
+            cobQuyen.Location = new Point(167, 56);
             cobQuyen.Name = "cobQuyen";
-            cobQuyen.Size = new Size(182, 35);
+            cobQuyen.Size = new Size(281, 35);
             cobQuyen.TabIndex = 2;
             // 
             // txtPass
             // 
-            txtPass.Location = new Point(562, 25);
+            txtPass.Anchor = AnchorStyles.Top;
+            txtPass.Location = new Point(167, 117);
             txtPass.MaxLength = 255;
             txtPass.Name = "txtPass";
-            txtPass.Size = new Size(150, 35);
+            txtPass.Size = new Size(281, 35);
             txtPass.TabIndex = 1;
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(4, 97);
+            label3.Location = new Point(7, 120);
             label3.Name = "label3";
             label3.Size = new Size(157, 27);
             label3.TabIndex = 3;
@@ -169,47 +177,40 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(446, 28);
+            label2.Location = new Point(12, 69);
             label2.Name = "label2";
             label2.Size = new Size(110, 27);
             label2.TabIndex = 2;
             label2.Text = "Mật khẩu:";
-            label2.Click += label2_Click;
             // 
             // txtTen
             // 
-            txtTen.Location = new Point(167, 28);
+            txtTen.Anchor = AnchorStyles.Top;
+            txtTen.Location = new Point(167, 6);
             txtTen.Margin = new Padding(4, 3, 4, 3);
             txtTen.MaxLength = 255;
             txtTen.Name = "txtTen";
-            txtTen.Size = new Size(182, 35);
+            txtTen.Size = new Size(281, 35);
             txtTen.TabIndex = 0;
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(4, 28);
+            label1.Location = new Point(4, 14);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(160, 27);
             label1.TabIndex = 0;
             label1.Text = "Tên đăng nhập:";
             // 
-            // panel2
-            // 
-            panel2.Controls.Add(dgvTaikhoan);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 162);
-            panel2.Margin = new Padding(4, 3, 4, 3);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(752, 324);
-            panel2.TabIndex = 1;
-            // 
             // dgvTaikhoan
             // 
             dgvTaikhoan.AllowUserToAddRows = false;
             dgvTaikhoan.AllowUserToDeleteRows = false;
+            dgvTaikhoan.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -221,7 +222,7 @@
             dgvTaikhoan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvTaikhoan.Columns.AddRange(new DataGridViewColumn[] { TenDangNhap, MatKhau, TenQuyen });
             dgvTaikhoan.Dock = DockStyle.Fill;
-            dgvTaikhoan.Location = new Point(0, 0);
+            dgvTaikhoan.Location = new Point(0, 162);
             dgvTaikhoan.Margin = new Padding(4, 3, 4, 3);
             dgvTaikhoan.MultiSelect = false;
             dgvTaikhoan.Name = "dgvTaikhoan";
@@ -233,7 +234,6 @@
             dgvTaikhoan.Size = new Size(752, 324);
             dgvTaikhoan.TabIndex = 1;
             dgvTaikhoan.TabStop = false;
-            dgvTaikhoan.SelectionChanged += dgvTaikhoan_SelectionChanged;
             // 
             // TenDangNhap
             // 
@@ -244,7 +244,6 @@
             TenDangNhap.MinimumWidth = 8;
             TenDangNhap.Name = "TenDangNhap";
             TenDangNhap.ReadOnly = true;
-            TenDangNhap.Width = 250;
             // 
             // MatKhau
             // 
@@ -255,7 +254,6 @@
             MatKhau.MinimumWidth = 8;
             MatKhau.Name = "MatKhau";
             MatKhau.ReadOnly = true;
-            MatKhau.Width = 250;
             // 
             // TenQuyen
             // 
@@ -266,24 +264,23 @@
             TenQuyen.MinimumWidth = 8;
             TenQuyen.Name = "TenQuyen";
             TenQuyen.ReadOnly = true;
-            TenQuyen.Width = 250;
             // 
             // fQuanLyTaiKhoan
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(752, 486);
-            Controls.Add(panel2);
+            Controls.Add(dgvTaikhoan);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 3, 4, 3);
             Name = "fQuanLyTaiKhoan";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "fQuanLyTaiKhoan";
+            FormClosing += fQuanLyTaiKhoan_FormClosing;
             Load += fQuanLyTaiKhoan_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvTaikhoan).EndInit();
             ResumeLayout(false);
         }
@@ -291,7 +288,6 @@
         #endregion
 
         private Panel panel1;
-        private Panel panel2;
         private DataGridView dgvTaikhoan;
         private ComboBox cobQuyen;
         private TextBox txtPass;

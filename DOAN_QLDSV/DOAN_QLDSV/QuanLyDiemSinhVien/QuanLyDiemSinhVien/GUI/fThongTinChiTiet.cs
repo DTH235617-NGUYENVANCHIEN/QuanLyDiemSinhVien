@@ -1,4 +1,5 @@
 ﻿using QuanLyDiemSinhVien.BLL;
+using QuanLyDiemSinhVien.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,13 +15,13 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fThongTinChiTiet : Form
     {
-        // Chuỗi kết nối, giống như form fQuanLyKhoa của bạn
-        SqlConnection conn = new SqlConnection(@"server=.; Database=QLDSV;Integrated Security=True");
+
 
 
         public fThongTinChiTiet()
         {
             InitializeComponent();
+            this.FormClosing += new FormClosingEventHandler(this.fThongTinChiTiet_FormClosing);
 
         }
 
@@ -33,26 +34,26 @@ namespace QuanLyDiemSinhVien.GUI
                 this.Close();
                 return;
             }
-
+            KetnoiSQL.MoKetNoi();
             LoadThongTinTaiKhoan();
+        }  
+        private void fThongTinChiTiet_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            KetnoiSQL.DongKetNoi();
         }
         private void LoadThongTinTaiKhoan()
         {
             try
             {
-                if (conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
+                // SỬA: Bỏ 'conn.Open()' vì kết nối đã được mở ở Form_Load
 
                 string sql = @"SELECT T.TenDangNhap, L.TenQuyen 
                                FROM TAIKHOAN T 
                                JOIN LOAITAIKHOAN L ON T.MaQuyen = L.MaQuyen 
                                WHERE T.TenDangNhap = @TenDangNhap";
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-
-                // THAY ĐỔI: Dùng CurrentUser.Username
+                // SỬA: Dùng KetnoiSQL.conn
+                SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
                 cmd.Parameters.AddWithValue("@TenDangNhap", CurrentUser.Username);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -60,9 +61,6 @@ namespace QuanLyDiemSinhVien.GUI
                     if (reader.Read())
                     {
                         txtTenDangNhap.Text = reader["TenDangNhap"].ToString();
-                        // Lưu ý: Tên TextBox của bạn trong file .cs là txtQuyen,
-                        // nhưng trong hình ảnh nó là "Loại Tài Khoản". 
-                        // Tôi giữ nguyên tên txtQuyen theo code của bạn.
                         txtQuyen.Text = reader["TenQuyen"].ToString();
                         txtMatKhau.Text = "**********";
                     }
@@ -77,18 +75,14 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 MessageBox.Show("Lỗi khi tải thông tin: " + ex.Message);
             }
-            finally
-            {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-            }
+            // SỬA: Bỏ khối 'finally' và 'conn.Close()'
         }
 
         private void btnDong_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+     
     }
 }

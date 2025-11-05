@@ -206,14 +206,14 @@
             hệThốngToolStripMenuItem.ForeColor = Color.Black;
             hệThốngToolStripMenuItem.Image = Properties.Resources.user_search_1_32;
             hệThốngToolStripMenuItem.Name = "hệThốngToolStripMenuItem";
-            hệThốngToolStripMenuItem.Size = new Size(140, 31);
+            hệThốngToolStripMenuItem.Size = new Size(118, 28);
             hệThốngToolStripMenuItem.Text = "&Hệ thống";
             // 
             // quảnLýKhoaToolStripMenuItem
             // 
             quảnLýKhoaToolStripMenuItem.Image = Properties.Resources.edit_16;
             quảnLýKhoaToolStripMenuItem.Name = "quảnLýKhoaToolStripMenuItem";
-            quảnLýKhoaToolStripMenuItem.Size = new Size(341, 36);
+            quảnLýKhoaToolStripMenuItem.Size = new Size(281, 26);
             quảnLýKhoaToolStripMenuItem.Text = "&Quản lý Khoa";
             quảnLýKhoaToolStripMenuItem.Click += quảnLýKhoaToolStripMenuItem_Click;
             // 
@@ -221,7 +221,7 @@
             // 
             quảnLýLớpToolStripMenuItem.Image = Properties.Resources.edit_16;
             quảnLýLớpToolStripMenuItem.Name = "quảnLýLớpToolStripMenuItem";
-            quảnLýLớpToolStripMenuItem.Size = new Size(341, 36);
+            quảnLýLớpToolStripMenuItem.Size = new Size(281, 26);
             quảnLýLớpToolStripMenuItem.Text = "&Quản lý Lớp";
             quảnLýLớpToolStripMenuItem.Click += quảnLýLớpToolStripMenuItem_Click;
             // 
@@ -229,7 +229,7 @@
             // 
             quảnLýSinhViênToolStripMenuItem.Image = Properties.Resources.edit_16;
             quảnLýSinhViênToolStripMenuItem.Name = "quảnLýSinhViênToolStripMenuItem";
-            quảnLýSinhViênToolStripMenuItem.Size = new Size(341, 36);
+            quảnLýSinhViênToolStripMenuItem.Size = new Size(281, 26);
             quảnLýSinhViênToolStripMenuItem.Text = "&Quản lý Sinh Viên";
             quảnLýSinhViênToolStripMenuItem.Click += quảnLýSinhViênToolStripMenuItem_Click;
             // 
@@ -237,7 +237,7 @@
             // 
             quảnLýMônHọcToolStripMenuItem.Image = Properties.Resources.edit_16;
             quảnLýMônHọcToolStripMenuItem.Name = "quảnLýMônHọcToolStripMenuItem";
-            quảnLýMônHọcToolStripMenuItem.Size = new Size(341, 36);
+            quảnLýMônHọcToolStripMenuItem.Size = new Size(281, 26);
             quảnLýMônHọcToolStripMenuItem.Text = "&Quản lý Môn Học";
             quảnLýMônHọcToolStripMenuItem.Click += quảnLýMônHọcToolStripMenuItem_Click;
             // 
@@ -245,7 +245,7 @@
             // 
             quảnLýGiáoViênToolStripMenuItem.Image = Properties.Resources.edit_16;
             quảnLýGiáoViênToolStripMenuItem.Name = "quảnLýGiáoViênToolStripMenuItem";
-            quảnLýGiáoViênToolStripMenuItem.Size = new Size(341, 36);
+            quảnLýGiáoViênToolStripMenuItem.Size = new Size(281, 26);
             quảnLýGiáoViênToolStripMenuItem.Text = "&Quản lý Giáo Viên";
             quảnLýGiáoViênToolStripMenuItem.Click += quảnLýGiáoViênToolStripMenuItem_Click;
             // 
@@ -253,7 +253,7 @@
             // 
             quảnLýTàiKhoảnToolStripMenuItem.Image = Properties.Resources.edit_16;
             quảnLýTàiKhoảnToolStripMenuItem.Name = "quảnLýTàiKhoảnToolStripMenuItem";
-            quảnLýTàiKhoảnToolStripMenuItem.Size = new Size(341, 36);
+            quảnLýTàiKhoảnToolStripMenuItem.Size = new Size(281, 26);
             quảnLýTàiKhoảnToolStripMenuItem.Text = "&Quản lý Tài Khoản";
             quảnLýTàiKhoảnToolStripMenuItem.Click += quảnLýTàiKhoảnToolStripMenuItem_Click;
             // 
@@ -261,7 +261,7 @@
             // 
             qLĐIÊMSVToolStripMenuItem.Image = Properties.Resources.edit_16;
             qLĐIÊMSVToolStripMenuItem.Name = "qLĐIÊMSVToolStripMenuItem";
-            qLĐIÊMSVToolStripMenuItem.Size = new Size(341, 36);
+            qLĐIÊMSVToolStripMenuItem.Size = new Size(281, 26);
             qLĐIÊMSVToolStripMenuItem.Text = "&Quản lý điểm Sinh Viên";
             qLĐIÊMSVToolStripMenuItem.Click += qLĐIÊMSVToolStripMenuItem_Click;
             // 
@@ -269,7 +269,7 @@
             // 
             xEMĐIỂMToolStripMenuItem.Image = Properties.Resources.edit_16;
             xEMĐIỂMToolStripMenuItem.Name = "xEMĐIỂMToolStripMenuItem";
-            xEMĐIỂMToolStripMenuItem.Size = new Size(341, 36);
+            xEMĐIỂMToolStripMenuItem.Size = new Size(281, 26);
             xEMĐIỂMToolStripMenuItem.Text = "&Xem Điểm ";
             xEMĐIỂMToolStripMenuItem.Click += xEMĐIỂMToolStripMenuItem_Click;
             // 
@@ -280,7 +280,7 @@
             tàiKhoảnToolStripMenuItem.ForeColor = Color.Black;
             tàiKhoảnToolStripMenuItem.Image = Properties.Resources.folder_2_32;
             tàiKhoảnToolStripMenuItem.Name = "tàiKhoảnToolStripMenuItem";
-            tàiKhoảnToolStripMenuItem.Size = new Size(235, 31);
+            tàiKhoảnToolStripMenuItem.Size = new Size(198, 28);
             tàiKhoảnToolStripMenuItem.Text = "Quản lý &Tài Khoản";
             // 
             // thôngTinChiTiếtToolStripMenuItem
@@ -288,7 +288,7 @@
             thôngTinChiTiếtToolStripMenuItem.Image = Properties.Resources.users_1_32;
             thôngTinChiTiếtToolStripMenuItem.Name = "thôngTinChiTiếtToolStripMenuItem";
             thôngTinChiTiếtToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F8;
-            thôngTinChiTiếtToolStripMenuItem.Size = new Size(359, 36);
+            thôngTinChiTiếtToolStripMenuItem.Size = new Size(294, 26);
             thôngTinChiTiếtToolStripMenuItem.Text = "&Thông tin chi tiết";
             thôngTinChiTiếtToolStripMenuItem.Click += thôngTinChiTiếtToolStripMenuItem_Click;
             // 
@@ -297,7 +297,7 @@
             đổiMậtKhẩuToolStripMenuItem.Image = Properties.Resources.key_16;
             đổiMậtKhẩuToolStripMenuItem.Name = "đổiMậtKhẩuToolStripMenuItem";
             đổiMậtKhẩuToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F10;
-            đổiMậtKhẩuToolStripMenuItem.Size = new Size(359, 36);
+            đổiMậtKhẩuToolStripMenuItem.Size = new Size(294, 26);
             đổiMậtKhẩuToolStripMenuItem.Text = "&Đổi mật khẩu ";
             đổiMậtKhẩuToolStripMenuItem.Click += đổiMậtKhẩuToolStripMenuItem_Click;
             // 
@@ -306,7 +306,7 @@
             đăngXuấtToolStripMenuItem.Image = Properties.Resources.logout_16;
             đăngXuấtToolStripMenuItem.Name = "đăngXuấtToolStripMenuItem";
             đăngXuấtToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
-            đăngXuấtToolStripMenuItem.Size = new Size(359, 36);
+            đăngXuấtToolStripMenuItem.Size = new Size(294, 26);
             đăngXuấtToolStripMenuItem.Text = "&Đăng xuất";
             đăngXuấtToolStripMenuItem.Click += đăngXuấtToolStripMenuItem_Click;
             // 
@@ -318,7 +318,7 @@
             menuStrip1.Location = new Point(0, 101);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(8, 2, 0, 2);
-            menuStrip1.Size = new Size(936, 30);
+            menuStrip1.Size = new Size(936, 32);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -329,7 +329,7 @@
             trợGiúpToolStripMenuItem.ForeColor = Color.Black;
             trợGiúpToolStripMenuItem.Image = Properties.Resources.help_16;
             trợGiúpToolStripMenuItem.Name = "trợGiúpToolStripMenuItem";
-            trợGiúpToolStripMenuItem.Size = new Size(139, 31);
+            trợGiúpToolStripMenuItem.Size = new Size(122, 28);
             trợGiúpToolStripMenuItem.Text = "&Trợ Giúp";
             // 
             // hướngDẫnSửDụngToolStripMenuItem
@@ -337,7 +337,7 @@
             hướngDẫnSửDụngToolStripMenuItem.Image = Properties.Resources.book_1_32;
             hướngDẫnSửDụngToolStripMenuItem.Name = "hướngDẫnSửDụngToolStripMenuItem";
             hướngDẫnSửDụngToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F1;
-            hướngDẫnSửDụngToolStripMenuItem.Size = new Size(394, 36);
+            hướngDẫnSửDụngToolStripMenuItem.Size = new Size(320, 26);
             hướngDẫnSửDụngToolStripMenuItem.Text = "&Hướng dẫn sử dụng";
             // 
             // thôngTinPhầnMềnToolStripMenuItem
@@ -345,7 +345,7 @@
             thôngTinPhầnMềnToolStripMenuItem.Image = Properties.Resources.folder_3_32;
             thôngTinPhầnMềnToolStripMenuItem.Name = "thôngTinPhầnMềnToolStripMenuItem";
             thôngTinPhầnMềnToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F2;
-            thôngTinPhầnMềnToolStripMenuItem.Size = new Size(394, 36);
+            thôngTinPhầnMềnToolStripMenuItem.Size = new Size(320, 26);
             thôngTinPhầnMềnToolStripMenuItem.Text = "Thông tin &phần mền";
             // 
             // btnQLDSV
@@ -393,9 +393,9 @@
             flowLayoutPanel1.Controls.Add(btnDangXuat);
             flowLayoutPanel1.Dock = DockStyle.Left;
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(0, 136);
+            flowLayoutPanel1.Location = new Point(0, 133);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(151, 766);
+            flowLayoutPanel1.Size = new Size(151, 769);
             flowLayoutPanel1.TabIndex = 16;
             flowLayoutPanel1.WrapContents = false;
             // 
@@ -420,6 +420,7 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(936, 88);
             panel1.TabIndex = 0;
+            panel1.Paint += panel1_Paint;
             // 
             // panel4
             // 
@@ -451,18 +452,9 @@
             label1.ForeColor = Color.FromArgb(0, 0, 64);
             label1.Location = new Point(246, 21);
             label1.Name = "label1";
-            label1.Size = new Size(493, 48);
+            label1.Size = new Size(416, 41);
             label1.TabIndex = 19;
             label1.Text = "Quản Lí Điểm Sinh Viên";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(12, 618);
-            label2.Name = "label2";
-            label2.Size = new Size(365, 22);
-            label2.TabIndex = 0;
-            label2.Text = "Cảm ơn bạn đã sử dụng dịch vụ của chúng tui";
             // 
             // panel3
             // 
@@ -472,23 +464,15 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(936, 10);
             panel3.TabIndex = 22;
-            // label2
             // 
-            label2.AutoSize = true;
+            // panel5
+            // 
             panel5.BackColor = Color.FromArgb(192, 255, 192);
             panel5.Dock = DockStyle.Fill;
-            panel5.Location = new Point(151, 136);
+            panel5.Location = new Point(151, 133);
             panel5.Name = "panel5";
-            panel5.Size = new Size(785, 766);
+            panel5.Size = new Size(785, 769);
             panel5.TabIndex = 24;
-            pictureBox1.Dock = DockStyle.Bottom;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(0, 146);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(787, 525);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
             // 
             // MainForm
             // 

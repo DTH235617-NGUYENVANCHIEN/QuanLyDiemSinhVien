@@ -17,7 +17,7 @@ namespace QuanLyDiemSinhVien.GUI
         public MainForm()
         {
             InitializeComponent();
-         
+
         }
 
         private void OpenChildForm(Form childForm)
@@ -238,6 +238,11 @@ namespace QuanLyDiemSinhVien.GUI
         }
 
         private void hệThốngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

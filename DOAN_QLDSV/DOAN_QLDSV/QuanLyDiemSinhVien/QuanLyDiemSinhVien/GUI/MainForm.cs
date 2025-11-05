@@ -13,20 +13,21 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class MainForm : Form
     {
-        
+
         public MainForm()
         {
             InitializeComponent();
         }
 
-        private void OpenChildForm(Form formToOpen)
+        private void OpenChildForm(Form childForm)
         {
             // Ẩn form chính đi
             this.Hide();
 
             // Hiển thị form con. 
             // Dùng ShowDialog() để nó chạy độc lập và phải tắt nó mới quay lại Main được.
-            formToOpen.ShowDialog();
+            childForm.Enabled = true;
+            childForm.ShowDialog();
 
             // Sau khi form con (formToOpen) bị tắt, hiển thị lại form chính
             this.Show();
@@ -139,9 +140,10 @@ namespace QuanLyDiemSinhVien.GUI
                 xEMĐIỂMToolStripMenuItem.Visible = false;
                 btnXemDiem.Visible = false;
             }
-          
+
 
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             OpenChildForm(new fQuanLyLop());
@@ -234,7 +236,14 @@ namespace QuanLyDiemSinhVien.GUI
             OpenChildForm(new fBangDiemSV());
         }
 
-        
-      
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

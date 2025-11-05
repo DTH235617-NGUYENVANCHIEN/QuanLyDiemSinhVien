@@ -48,7 +48,6 @@
             btnSua = new Button();
             btnXoa = new Button();
             btnThem = new Button();
-            panel2 = new Panel();
             dgvSinhVien = new DataGridView();
             MaSV = new DataGridViewTextBoxColumn();
             HoTen = new DataGridViewTextBoxColumn();
@@ -57,12 +56,12 @@
             TenLop = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
-            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSinhVien).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.BackColor = Color.FromArgb(192, 255, 192);
             panel1.Controls.Add(btnTailai);
             panel1.Controls.Add(cobLop);
             panel1.Controls.Add(panel3);
@@ -87,6 +86,7 @@
             // 
             // btnTailai
             // 
+            btnTailai.Anchor = AnchorStyles.Top;
             btnTailai.Location = new Point(631, 107);
             btnTailai.Margin = new Padding(4, 3, 4, 3);
             btnTailai.Name = "btnTailai";
@@ -99,17 +99,19 @@
             // 
             // cobLop
             // 
+            cobLop.Anchor = AnchorStyles.Top;
             cobLop.FormattingEnabled = true;
-            cobLop.Location = new Point(439, 61);
+            cobLop.Location = new Point(431, 65);
             cobLop.Name = "cobLop";
             cobLop.Size = new Size(182, 35);
             cobLop.TabIndex = 42;
             // 
             // panel3
             // 
+            panel3.Anchor = AnchorStyles.Top;
             panel3.Controls.Add(rdoNu);
             panel3.Controls.Add(rdoNam);
-            panel3.Location = new Point(139, 57);
+            panel3.Location = new Point(168, 65);
             panel3.Name = "panel3";
             panel3.Size = new Size(163, 35);
             panel3.TabIndex = 41;
@@ -138,17 +140,19 @@
             // 
             // dtaTime
             // 
+            dtaTime.Anchor = AnchorStyles.Top;
             dtaTime.CustomFormat = "dd/MM/yyyy";
             dtaTime.Format = DateTimePickerFormat.Short;
-            dtaTime.Location = new Point(753, 8);
+            dtaTime.Location = new Point(753, 16);
             dtaTime.Name = "dtaTime";
             dtaTime.Size = new Size(163, 35);
             dtaTime.TabIndex = 40;
             // 
             // label6
             // 
+            label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Location = new Point(631, 14);
+            label6.Location = new Point(631, 16);
             label6.Margin = new Padding(5, 0, 5, 0);
             label6.Name = "label6";
             label6.Size = new Size(114, 27);
@@ -157,8 +161,9 @@
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(340, 61);
+            label3.Location = new Point(335, 65);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(92, 27);
@@ -167,8 +172,9 @@
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(14, 61);
+            label4.Location = new Point(31, 65);
             label4.Margin = new Padding(5, 0, 5, 0);
             label4.Name = "label4";
             label4.Size = new Size(103, 27);
@@ -177,7 +183,8 @@
             // 
             // txtTen
             // 
-            txtTen.Location = new Point(431, 8);
+            txtTen.Anchor = AnchorStyles.Top;
+            txtTen.Location = new Point(431, 16);
             txtTen.Margin = new Padding(4, 3, 4, 3);
             txtTen.MaxLength = 255;
             txtTen.Name = "txtTen";
@@ -186,6 +193,7 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
             label2.Location = new Point(340, 16);
             label2.Margin = new Padding(4, 0, 4, 0);
@@ -196,7 +204,8 @@
             // 
             // txtMaSV
             // 
-            txtMaSV.Location = new Point(155, 11);
+            txtMaSV.Anchor = AnchorStyles.Top;
+            txtMaSV.Location = new Point(168, 16);
             txtMaSV.Margin = new Padding(5, 3, 5, 3);
             txtMaSV.MaxLength = 255;
             txtMaSV.Name = "txtMaSV";
@@ -205,8 +214,9 @@
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(14, 16);
+            label1.Location = new Point(31, 16);
             label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
             label1.Size = new Size(142, 27);
@@ -215,6 +225,7 @@
             // 
             // btnThoat
             // 
+            btnThoat.Anchor = AnchorStyles.Top;
             btnThoat.Location = new Point(766, 107);
             btnThoat.Margin = new Padding(4, 3, 4, 3);
             btnThoat.Name = "btnThoat";
@@ -227,6 +238,7 @@
             // 
             // btnLuu
             // 
+            btnLuu.Anchor = AnchorStyles.Top;
             btnLuu.Location = new Point(205, 107);
             btnLuu.Margin = new Padding(4, 3, 4, 3);
             btnLuu.Name = "btnLuu";
@@ -239,6 +251,7 @@
             // 
             // btnSua
             // 
+            btnSua.Anchor = AnchorStyles.Top;
             btnSua.Location = new Point(492, 107);
             btnSua.Margin = new Padding(4, 3, 4, 3);
             btnSua.Name = "btnSua";
@@ -251,6 +264,7 @@
             // 
             // btnXoa
             // 
+            btnXoa.Anchor = AnchorStyles.Top;
             btnXoa.Location = new Point(353, 107);
             btnXoa.Margin = new Padding(4, 3, 4, 3);
             btnXoa.Name = "btnXoa";
@@ -263,6 +277,7 @@
             // 
             // btnThem
             // 
+            btnThem.Anchor = AnchorStyles.Top;
             btnThem.Location = new Point(59, 107);
             btnThem.Margin = new Padding(4, 3, 4, 3);
             btnThem.Name = "btnThem";
@@ -273,20 +288,11 @@
             btnThem.UseVisualStyleBackColor = true;
             btnThem.Click += btnThem_Click;
             // 
-            // panel2
-            // 
-            panel2.Controls.Add(dgvSinhVien);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 150);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(923, 283);
-            panel2.TabIndex = 1;
-            panel2.Paint += panel2_Paint;
-            // 
             // dgvSinhVien
             // 
             dgvSinhVien.AllowUserToAddRows = false;
             dgvSinhVien.AllowUserToDeleteRows = false;
+            dgvSinhVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -298,7 +304,7 @@
             dgvSinhVien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvSinhVien.Columns.AddRange(new DataGridViewColumn[] { MaSV, HoTen, NgaySinh, GioiTinh, TenLop });
             dgvSinhVien.Dock = DockStyle.Fill;
-            dgvSinhVien.Location = new Point(0, 0);
+            dgvSinhVien.Location = new Point(0, 150);
             dgvSinhVien.MultiSelect = false;
             dgvSinhVien.Name = "dgvSinhVien";
             dgvSinhVien.ReadOnly = true;
@@ -318,7 +324,6 @@
             MaSV.MinimumWidth = 8;
             MaSV.Name = "MaSV";
             MaSV.ReadOnly = true;
-            MaSV.Width = 250;
             // 
             // HoTen
             // 
@@ -327,7 +332,6 @@
             HoTen.MinimumWidth = 8;
             HoTen.Name = "HoTen";
             HoTen.ReadOnly = true;
-            HoTen.Width = 150;
             // 
             // NgaySinh
             // 
@@ -336,7 +340,6 @@
             NgaySinh.MinimumWidth = 8;
             NgaySinh.Name = "NgaySinh";
             NgaySinh.ReadOnly = true;
-            NgaySinh.Width = 200;
             // 
             // GioiTinh
             // 
@@ -345,7 +348,6 @@
             GioiTinh.MinimumWidth = 8;
             GioiTinh.Name = "GioiTinh";
             GioiTinh.ReadOnly = true;
-            GioiTinh.Width = 170;
             // 
             // TenLop
             // 
@@ -354,26 +356,25 @@
             TenLop.MinimumWidth = 8;
             TenLop.Name = "TenLop";
             TenLop.ReadOnly = true;
-            TenLop.Width = 150;
             // 
             // fQuanLySinhVien
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(923, 433);
-            Controls.Add(panel2);
+            Controls.Add(dgvSinhVien);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 3, 4, 3);
             Name = "fQuanLySinhVien";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "fQuanLySinhVien";
+            FormClosing += fQuanLySinhVien_FormClosing;
             Load += fQuanLySinhVien_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvSinhVien).EndInit();
             ResumeLayout(false);
         }
@@ -381,7 +382,6 @@
         #endregion
 
         private Panel panel1;
-        private Panel panel2;
         private Label label6;
         private Label label3;
         private Label label4;

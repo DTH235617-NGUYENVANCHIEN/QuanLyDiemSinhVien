@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.Logging;
+using QuanLyDiemSinhVien.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,11 +15,164 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fQuanLyGiaoVien : Form
     {
-        SqlConnection conn = new SqlConnection();
+
         String magv = "";
         public fQuanLyGiaoVien()
         {
             InitializeComponent();
+            // Thêm sự kiện FormClosing để đóng kết nối
+            this.FormClosing += new FormClosingEventHandler(this.fQuanLyGiaoVien_FormClosing);
+        }
+        private void fQuanLyGiaoVien_Load(object sender, EventArgs e)
+        {
+            // SỬA: Mở kết nối 1 lần khi Form Load
+            KetnoiSQL.MoKetNoi();
+            TaiLaiDuLieu_GV();
+
+        } 
+        private void fQuanLyGiaoVien_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // SỬA: Đóng kết nối khi Form tắt
+            KetnoiSQL.DongKetNoi();
+        } 
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            magv = "";
+            //Xoa trang
+            txtMaGV.Text = "";
+            txtHotengv.Text = "";
+            dtTime.Value = DateTime.Now;
+            cboLoaikhoa.Text = "";
+            MoNut(false);
+        }
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            magv = txtMaGV.Text;
+            MoNut(false);
+        }
+
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            DialogResult kq;
+            kq = MessageBox.Show("Bạn có muốn xóa " + txtHotengv.Text + " không?", "Xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (kq == DialogResult.Yes)
+            {
+                string sql = @"DELETE FROM GIAOVIEN WHERE MaGV = @MaGV";
+                SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
+                cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
+                cmd.ExecuteNonQuery();
+                // Tải lại form
+                TaiLaiDuLieu_GV();
+            }
+
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            DateTime ngayHienTai = DateTime.Now.Date;
+            DateTime ngayDaChon = dtTime.Value.Date;
+
+            // Kiểm tra dữ liệu (Giữ nguyên)
+            if (cboLoaikhoa.Text.Trim() == "")
+                MessageBox.Show("Chưa chọn khoa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (txtMaGV.Text.Trim() == "")
+                MessageBox.Show("Ma không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (txtHotengv.Text.Trim() == "")
+                MessageBox.Show("Tên không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else if (ngayDaChon == ngayHienTai)
+                MessageBox.Show("Ngay sinh chưa đổi(đang là ngày hôm nay)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                try
+                {
+                    // Thêm mới
+                    if (magv == "")
+                    {
+                        // SỬA: Dùng KetnoiSQL.conn
+                        string sql = @"INSERT INTO GIAOVIEN 
+                                     VALUES (@MaGV, @HoTen, @NgaySinh, @MaKhoa)";
+                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
+                        cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
+                        cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
+                        cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
+                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    else // Sửa
+                    {
+                        // SỬA: Dùng KetnoiSQL.conn
+                        string sql = @"UPDATE GIAOVIEN
+                                     SET MaGV = @MaGVMoi,
+                                         HoTen = @HoTen,
+                                         NgaySinh = @NgaySinh,
+                                         MaKhoa = @MaKhoa
+                                     WHERE MaGV = @MaGVCu";
+                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
+                        cmd.Parameters.Add("@MaGVMoi", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
+                        cmd.Parameters.Add("@MaGVCu", SqlDbType.VarChar, 20).Value = magv;
+                        cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
+                        cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
+                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    // Tải lại form
+                    TaiLaiDuLieu_GV();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void btnTailai_Click(object sender, EventArgs e)
+        {
+            TaiLaiDuLieu_GV();
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        private void TaiLaiDuLieu_GV()
+        {
+            // Hàm này giả định kết nối ĐÃ MỞ
+
+            // 1. Tải dữ liệu GIAOVIEN cho DataGridView
+            string sqlTaiKhoan = @"SELECT G.*,K.TenKhoa 
+                                   FROM GIAOVIEN G, KHOA K
+                                   WHERE G.MaKhoa=K.MaKhoa";
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, KetnoiSQL.conn);
+            DataTable data = new DataTable();
+            dataAdapter.Fill(data);
+            dgvGiaovien.AutoGenerateColumns = false;
+            dgvGiaovien.DataSource = data;
+
+            // 2. Tải dữ liệu KHOA cho ComboBox
+            string LoaiTKsql = @"SELECT * FROM KHOA";
+            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, KetnoiSQL.conn);
+            DataTable tableLoaiSach = new DataTable();
+            loaiTKAdapter.Fill(tableLoaiSach);
+            cboLoaikhoa.DataSource = tableLoaiSach;
+            cboLoaikhoa.DisplayMember = "TenKhoa";
+            cboLoaikhoa.ValueMember = "MaKhoa";
+
+            // 3. Đặt trạng thái nút
+            MoNut(true);
+
+            // 4. Data Bindings
+            cboLoaikhoa.DataBindings.Clear();
+            txtMaGV.DataBindings.Clear();
+            txtHotengv.DataBindings.Clear();
+            dtTime.DataBindings.Clear();
+
+            cboLoaikhoa.DataBindings.Add("SelectedValue", dgvGiaovien.DataSource, "MaKhoa", false, DataSourceUpdateMode.Never);
+            txtMaGV.DataBindings.Add("Text", dgvGiaovien.DataSource, "MaGV", false, DataSourceUpdateMode.Never);
+            txtHotengv.DataBindings.Add("Text", dgvGiaovien.DataSource, "HoTen", false, DataSourceUpdateMode.Never);
+            dtTime.DataBindings.Add("Text", dgvGiaovien.DataSource, "NgaySinh", false, DataSourceUpdateMode.Never);
         }
         private void MoNut(bool t)
         {
@@ -34,150 +188,7 @@ namespace QuanLyDiemSinhVien.GUI
             btnLuu.Enabled = !t;
 
         }
-        private void btnSua_Click(object sender, EventArgs e)
-        {
-            magv = txtMaGV.Text;
-            MoNut(false);
-        }
 
-        private void fQuanLyGiaoVien_Load(object sender, EventArgs e)
-        {
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
-                conn.Open();
-            }
-            string sqlTaiKhoan = @"SELECT G.*,K.TenKhoa 
-                                 FROM GIAOVIEN G, KHOA K
-                                 WHERE G.MaKhoa=K.MaKhoa"; // Use a valid SQL SELECT statement
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, conn);
-            DataTable data = new DataTable();
-            dataAdapter.Fill(data); // Fill the DataTable directly
-            dgvGiaovien.AutoGenerateColumns = false;//xóa các cột dư
-            dgvGiaovien.DataSource = data; // Set the DataTable as the DataSource
-            cboLoaikhoa.DisplayMember = "TenKhoa";
-            cboLoaikhoa.ValueMember = "MaKhoa";
-
-            //dgvGiaovien.Columns["MaKhoa"].Visible = false;
-
-
-            string LoaiTKsql = @"SELECT * FROM KHOA";
-            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, conn);
-            DataTable tableLoaiSach = new DataTable();
-            loaiTKAdapter.Fill(tableLoaiSach);
-            cboLoaikhoa.DataSource = tableLoaiSach;
-
-
-
-            MoNut(true);
-            cboLoaikhoa.DataBindings.Clear();
-            txtMaGV.DataBindings.Clear();
-            txtHotengv.DataBindings.Clear();
-            dtTime.DataBindings.Clear();
-
-
-            cboLoaikhoa.DataBindings.Add("SelectedValue", dgvGiaovien.DataSource, "MaKhoa", false, DataSourceUpdateMode.Never);
-            txtMaGV.DataBindings.Add("Text", dgvGiaovien.DataSource, "MaGV", false, DataSourceUpdateMode.Never);
-            txtHotengv.DataBindings.Add("Text", dgvGiaovien.DataSource, "HoTen", false, DataSourceUpdateMode.Never);
-            dtTime.DataBindings.Add("Text", dgvGiaovien.DataSource, "NgaySinh", false, DataSourceUpdateMode.Never);
-
-        }
-
-        private void btnThem_Click(object sender, EventArgs e)
-        {
-            magv = "";
-            //Xoa trang
-            txtMaGV.Text = "";
-            txtHotengv.Text = "";
-            dtTime.Value = DateTime.Now;
-            cboLoaikhoa.Text = "";
-            MoNut(false);
-        }
-
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            DialogResult kq;
-            kq = MessageBox.Show("Bạn có muốn xóa " + txtHotengv.Text + " không?", "Xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (kq == DialogResult.Yes)
-            {
-                string sql = @"DELETE FROM GIAOVIEN WHERE MaGV = @MaGV";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
-                cmd.ExecuteNonQuery();
-                // Tải lại form
-                fQuanLyGiaoVien_Load(sender, e);
-            }
-
-        }
-
-        private void btnLuu_Click(object sender, EventArgs e)
-        {
-            DateTime ngayHienTai = DateTime.Now.Date;
-            DateTime ngayDaChon = dtTime.Value.Date;
-            // Kiểm tra dữ liệu
-            if (cboLoaikhoa.Text.Trim() == "")
-                MessageBox.Show("Chưa chọn khoa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else if (txtMaGV.Text.Trim() == "")
-                MessageBox.Show("Ma không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else if (txtHotengv.Text.Trim() == "")
-                MessageBox.Show("Tên không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else if (ngayDaChon == ngayHienTai)
-                MessageBox.Show("Ngay sinh chưa đổi(đang là ngày hôm nay)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-            {
-                try
-                {
-                    // Thêm mới
-                    if (magv== "")
-                    {
-                        string sql = @"INSERT INTO GIAOVIEN 
-                        VALUES (@MaGV, @HoTen, @NgaySinh, @MaKhoa)";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
-                        cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
-                        cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
-                        cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
-                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar,20).Value = cboLoaikhoa.SelectedValue;
-
-                        cmd.ExecuteNonQuery();
-                    }
-                    else // Sửa
-                    {
-                        string sql = @"UPDATE GIAOVIEN
-                                     SET MaGV = @MaGVMoi,
-                                     HoTen = @HoTen,
-                                     NgaySinh = @NgaySinh,
-                                     MaKhoa = @MaKhoa
-                                     WHERE MaGV = @MaGVCu";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
-                        cmd.Parameters.Add("@MaGVMoi", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
-                        cmd.Parameters.Add("@MaGVCu", SqlDbType.VarChar, 20).Value = magv;
-                        cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
-                        cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
-                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
-
-
-                    
-
-                        cmd.ExecuteNonQuery();
-                    }
-                    // Tải lại form
-                    fQuanLyGiaoVien_Load(sender, e);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-
-        private void btnTailai_Click(object sender, EventArgs e)
-        {
-            fQuanLyGiaoVien_Load(sender, e);
-        }
-
-        private void btnThoat_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+       
     }
 }

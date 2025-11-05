@@ -1,4 +1,5 @@
 ﻿using QuanLyDiemSinhVien.BLL;
+using QuanLyDiemSinhVien.DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,16 +16,15 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fDoiMatKhau : Form
     {
-        SqlConnection conn = new SqlConnection(@"server=.; Database=QLDSV;Integrated Security=True");
 
-        
+
         public fDoiMatKhau()
         {
             InitializeComponent();
             // THAY ĐỔI: Đặt tiêu đề form dựa trên CurrentUser
             this.Text = "Đổi Mật Khẩu cho: " + CurrentUser.Username;
         }
-   
+
 
         // --- HÀM MÃ HÓA SHA-256 ---
         // Hàm này tạo ra chuỗi hash giống hệt trong CSDL của bạn
@@ -45,19 +45,14 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-        private void fDoiMatKhau_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnCapNhat_Click(object sender, EventArgs e)
-        {
-            // 1. Lấy dữ liệu (Giữ nguyên)
+        {// 1. Lấy dữ liệu
             string matKhauCu = txtMatKhauCu.Text;
             string matKhauMoi = txtMatKhauMoi.Text;
             string nhapLaiMatKhau = txtNhapLaiMatKhau.Text;
 
-            // 2. Kiểm tra (Giữ nguyên)
+            // 2. Kiểm tra
             if (string.IsNullOrWhiteSpace(matKhauCu) ||
                 string.IsNullOrWhiteSpace(matKhauMoi) ||
                 string.IsNullOrWhiteSpace(nhapLaiMatKhau))
@@ -74,16 +69,12 @@ namespace QuanLyDiemSinhVien.GUI
 
             try
             {
-                if (conn.State == ConnectionState.Closed)
-                {
-                    conn.Open();
-                }
+                // Mở kết nối
+                KetnoiSQL.MoKetNoi();
 
                 // 3. Kiểm tra mật khẩu cũ
                 string sqlCheck = "SELECT MatKhau FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap";
-                SqlCommand cmdCheck = new SqlCommand(sqlCheck, conn);
-
-                // THAY ĐỔI: Dùng CurrentUser.Username
+                SqlCommand cmdCheck = new SqlCommand(sqlCheck, KetnoiSQL.conn);
                 cmdCheck.Parameters.AddWithValue("@TenDangNhap", CurrentUser.Username);
 
                 string hashMatKhauCu_DB = cmdCheck.ExecuteScalar()?.ToString();
@@ -93,17 +84,15 @@ namespace QuanLyDiemSinhVien.GUI
                 {
                     MessageBox.Show("Mật khẩu cũ không chính xác!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtMatKhauCu.Focus();
-                    return;
+                    return; // Sẽ nhảy đến 'finally'
                 }
 
                 // 4. Cập nhật mật khẩu mới
                 string hashMatKhauMoi = MaHoaSHA256(matKhauMoi);
                 string sqlUpdate = "UPDATE TaiKhoan SET MatKhau = @MatKhauMoi WHERE TenDangNhap = @TenDangNhap";
 
-                SqlCommand cmdUpdate = new SqlCommand(sqlUpdate, conn);
+                SqlCommand cmdUpdate = new SqlCommand(sqlUpdate, KetnoiSQL.conn);
                 cmdUpdate.Parameters.AddWithValue("@MatKhauMoi", hashMatKhauMoi);
-
-                // THAY ĐỔI: Dùng CurrentUser.Username
                 cmdUpdate.Parameters.AddWithValue("@TenDangNhap", CurrentUser.Username);
 
                 cmdUpdate.ExecuteNonQuery();
@@ -117,16 +106,19 @@ namespace QuanLyDiemSinhVien.GUI
             }
             finally
             {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
+                // Luôn đóng kết nối
+                KetnoiSQL.DongKetNoi();
             }
         }
 
         private void btn_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void fDoiMatKhau_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

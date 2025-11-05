@@ -132,6 +132,7 @@
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(192, 255, 192);
             ClientSize = new Size(422, 413);
             Controls.Add(txtNhapLaiMatKhau);
             Controls.Add(label4);

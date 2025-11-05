@@ -17,6 +17,7 @@ namespace QuanLyDiemSinhVien.GUI
         public MainForm()
         {
             InitializeComponent();
+         
         }
 
         private void OpenChildForm(Form childForm)
@@ -236,12 +237,7 @@ namespace QuanLyDiemSinhVien.GUI
             OpenChildForm(new fBangDiemSV());
         }
 
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
+        private void hệThốngToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

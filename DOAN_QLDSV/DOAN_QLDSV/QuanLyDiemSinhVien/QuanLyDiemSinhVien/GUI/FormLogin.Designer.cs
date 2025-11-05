@@ -117,7 +117,7 @@
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            BackColor = SystemColors.HighlightText;
+            BackColor = Color.FromArgb(192, 255, 192);
             ClientSize = new Size(605, 308);
             Controls.Add(btnThoat);
             Controls.Add(label3);

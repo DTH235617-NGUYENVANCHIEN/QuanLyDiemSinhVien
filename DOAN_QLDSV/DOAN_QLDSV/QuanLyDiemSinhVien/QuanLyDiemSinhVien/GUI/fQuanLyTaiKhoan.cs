@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyDiemSinhVien.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,38 +22,17 @@ namespace QuanLyDiemSinhVien.GUI
         public fQuanLyTaiKhoan()
         {
             InitializeComponent();
+            this.FormClosing += new FormClosingEventHandler(this.fQuanLyTaiKhoan_FormClosing);
         }
-        private void MoNut(bool t)
+        private void fQuanLyTaiKhoan_Load(object sender, EventArgs e)
         {
-            txtTen.Enabled = !t;
-            txtPass.Enabled = !t;
-            cobQuyen.Enabled = !t;
-
-            btnThem.Enabled = t;
-            btnXoa.Enabled = t;
-            btnSua.Enabled = t;
-            btnThoat.Enabled = t;
-            btnTailai.Enabled = !t;
-
-            btnLuu.Enabled = !t;
-        }
-
-        private void label2_Click(object sender, EventArgs e)
+            
+            KetnoiSQL.MoKetNoi();         
+            TaiLaiDuLieu_TK();
+        } 
+        private void fQuanLyTaiKhoan_FormClosing(object sender, FormClosingEventArgs e)
         {
-
-        }
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
+            KetnoiSQL.DongKetNoi();
         }
         private void btnThem_Click(object sender, EventArgs e)
         {
@@ -61,6 +41,13 @@ namespace QuanLyDiemSinhVien.GUI
             txtTen.Text = "";
             txtPass.Text = "";
             cobQuyen.Text = "";
+            MoNut(false);
+            txtTen.Focus();
+
+        }
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            login = txtTen.Text;
             MoNut(false);
             txtTen.Focus();
 
@@ -77,20 +64,13 @@ namespace QuanLyDiemSinhVien.GUI
                 cmd.Parameters.Add("@TenDangNhap", SqlDbType.NVarChar, 20).Value = txtTen.Text;
                 cmd.ExecuteNonQuery();
                 // Tải lại form
-                fQuanLyTaiKhoan_Load(sender, e);
+                TaiLaiDuLieu_TK();
             }
 
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
-        {
-            login = txtTen.Text;
-            MoNut(false);
-            txtTen.Focus();
-
-        }
         // Hàm băm mật khẩu (dùng SHA256)
-        
+
         private void btnLuu_Click(object sender, EventArgs e)
         {
             // Kiểm tra dữ liệu
@@ -104,35 +84,35 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 try
                 {
-                    // Thêm mới
-                    if (login == "")
+                    if (login == "") // Thêm mới
                     {
                         string sql = @"INSERT INTO TaiKhoan
-                        VALUES(@TenDangNhap, @MatKhau, @MaQuyen)";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
+                                     VALUES(@TenDangNhap, @MatKhau, @MaQuyen)";
+                        // SỬA: Dùng KetnoiSQL.conn
+                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
                         cmd.Parameters.Add("@TenDangNhap", SqlDbType.VarChar, 20).Value = txtTen.Text;
                         cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = HashPassword(txtPass.Text);
                         cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
-
                         cmd.ExecuteNonQuery();
                     }
                     else // Sửa
                     {
                         string sql = @"UPDATE TaiKhoan
-                                    SET TenDangNhap = @TenDangNhapMoi,
-                                    MatKhau = @MatKhau,
-                                    MaQuyen = @MaQuyen
-                                    WHERE TenDangNhap = @TenDangNhapCu";
-                        SqlCommand cmd = new SqlCommand(sql, conn);
+                                     SET TenDangNhap = @TenDangNhapMoi,
+                                         MatKhau = @MatKhau,
+                                         MaQuyen = @MaQuyen
+                                     WHERE TenDangNhap = @TenDangNhapCu";
+                        // SỬA: Dùng KetnoiSQL.conn
+                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
                         cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = txtTen.Text;
                         cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = login;
                         cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = HashPassword(txtPass.Text);
                         cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
-
                         cmd.ExecuteNonQuery();
                     }
-                    // Tải lại form
-                    fQuanLyTaiKhoan_Load(sender, e);
+
+                    // SỬA: Tải lại bằng hàm mới
+                    TaiLaiDuLieu_TK();
                 }
                 catch (Exception ex)
                 {
@@ -141,63 +121,80 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-        private void fQuanLyTaiKhoan_Load(object sender, EventArgs e)
+
+        private void btnTailai_Click(object sender, EventArgs e)
         {
-
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
-                conn.Open();
-            }
-            string sqlTaiKhoan = @"SELECT T.*,L.TenQuyen 
-                                 FROM TaiKhoan T, LOAITAIKHOAN L
-                                 WHERE L.MaQuyen=T.MaQuyen"; // Use a valid SQL SELECT statement
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, conn);
-            DataTable data = new DataTable();
-            dataAdapter.Fill(data); // Fill the DataTable directly
-            dgvTaikhoan.DataSource = data; // Set the DataTable as the DataSource
-            cobQuyen.DisplayMember = "TenQuyen";
-            cobQuyen.ValueMember = "MaQuyen";
-
-
-            string LoaiTKsql = @"SELECT * FROM LOAITAIKHOAN";
-            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, conn);
-            DataTable tableLoaiSach = new DataTable();
-            loaiTKAdapter.Fill(tableLoaiSach);
-            cobQuyen.DataSource = tableLoaiSach;
-
-
-            MoNut(true);
-            cobQuyen.DataBindings.Clear();
-            txtTen.DataBindings.Clear();
-            txtPass.DataBindings.Clear();
-
-
-
-            cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);
-            txtTen.DataBindings.Add("Text", dgvTaikhoan.DataSource, "TenDangNhap", false, DataSourceUpdateMode.Never);
-            txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
-
-
-
-
-
+            TaiLaiDuLieu_TK();
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-        private void btnTailai_Click(object sender, EventArgs e)
+        private void TaiLaiDuLieu_TK()
         {
-            fQuanLyTaiKhoan_Load(sender, e);
+            // Hàm này giả định kết nối ĐÃ MỞ
+
+            // 1. Tải dữ liệu TAIKHOAN
+            string sqlTaiKhoan = @"SELECT T.*,L.TenQuyen 
+                                   FROM TaiKhoan T, LOAITAIKHOAN L
+                                   WHERE L.MaQuyen=T.MaQuyen";
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, KetnoiSQL.conn);
+            DataTable data = new DataTable();
+            dataAdapter.Fill(data);
+            dgvTaikhoan.DataSource = data;
+
+            // 2. Tải dữ liệu LOAITAIKHOAN (cho ComboBox)
+            string LoaiTKsql = @"SELECT * FROM LOAITAIKHOAN";
+            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, KetnoiSQL.conn);
+            DataTable tableLoaiSach = new DataTable();
+            loaiTKAdapter.Fill(tableLoaiSach);
+            cobQuyen.DataSource = tableLoaiSach;
+            cobQuyen.DisplayMember = "TenQuyen";
+            cobQuyen.ValueMember = "MaQuyen";
+
+            // 3. Đặt trạng thái nút
+            MoNut(true);
+
+            // 4. Data Bindings
+            cobQuyen.DataBindings.Clear();
+            txtTen.DataBindings.Clear();
+            txtPass.DataBindings.Clear();
+
+            cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);
+            txtTen.DataBindings.Add("Text", dgvTaikhoan.DataSource, "TenDangNhap", false, DataSourceUpdateMode.Never);
+            txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
         }
 
-        private void dgvTaikhoan_SelectionChanged(object sender, EventArgs e)
-        {
 
-          
+        private void MoNut(bool t)
+        {
+            txtTen.Enabled = !t;
+            txtPass.Enabled = !t;
+            cobQuyen.Enabled = !t;
+
+            btnThem.Enabled = t;
+            btnXoa.Enabled = t;
+            btnSua.Enabled = t;
+            btnThoat.Enabled = t;
+            btnTailai.Enabled = !t;
+
+            btnLuu.Enabled = !t;
         }
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+
     }
 }

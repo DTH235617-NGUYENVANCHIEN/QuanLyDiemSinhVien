@@ -15,7 +15,7 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fDiemSinhVien : Form
     {
-        private readonly string MaGV_HienTai = "GV001"; // <<< THAY THẾ BẰNG CurrentUser.MaGV THỰC TẾ
+        private readonly string MaGV_HienTai = CurrentUser.Username; // <<< THAY THẾ BẰNG  THỰC TẾ
 
         // Thay vì MaGV, ta dùng MaGV_HienTai để xác định sinh viên thuộc quyền quản lý
         SqlConnection conn = new SqlConnection();

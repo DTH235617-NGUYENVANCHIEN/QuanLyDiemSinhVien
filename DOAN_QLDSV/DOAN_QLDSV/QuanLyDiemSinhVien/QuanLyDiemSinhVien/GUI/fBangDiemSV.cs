@@ -33,7 +33,7 @@ namespace QuanLyDiemSinhVien.GUI
                 // Luôn gán lại ConnectionString trước khi mở để chắc chắn
                 if (conn.State == ConnectionState.Closed)
                 {
-                    conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
+                    conn.ConnectionString = @"server=.; Database=db_QLDSV;Integrated Security=True";
                     conn.Open();
                     LoadThongTinSinhVien();
                     LoadComboBoxFilter();

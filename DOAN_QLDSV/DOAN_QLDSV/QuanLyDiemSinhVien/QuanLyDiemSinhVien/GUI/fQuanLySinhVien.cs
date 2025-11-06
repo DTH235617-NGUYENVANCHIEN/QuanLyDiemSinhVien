@@ -47,11 +47,11 @@ namespace QuanLyDiemSinhVien.GUI
             // SỬA: Gọi hàm tải dữ liệu
             TaiLaiDuLieu_SV();
 
-        }   
+        }
         private void fQuanLySinhVien_FormClosing(object sender, FormClosingEventArgs e)
         {
             KetnoiSQL.DongKetNoi();
-        }  
+        }
         private void btnThem_Click(object sender, EventArgs e)
         {
             Masv = "";
@@ -70,7 +70,7 @@ namespace QuanLyDiemSinhVien.GUI
         {
             Masv = txtMaSV.Text;
             MoNut(false);
-        }   
+        }
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtMaSV.Text))
@@ -105,7 +105,7 @@ namespace QuanLyDiemSinhVien.GUI
                     MessageBox.Show("Xóa thất bại. Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }  
+        }
         private void btnLuu_Click(object sender, EventArgs e)
         {
             // --- BƯỚC 1: KIỂM TRA DỮ LIỆU (Giữ nguyên) ---
@@ -193,7 +193,7 @@ namespace QuanLyDiemSinhVien.GUI
                     MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }   
+        }
         private void btnTailai_Click(object sender, EventArgs e)
         {
             TaiLaiDuLieu_SV();
@@ -299,5 +299,9 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

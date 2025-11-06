@@ -229,7 +229,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(52, 66);
+            label1.Location = new Point(52, 52);
             label1.Name = "label1";
             label1.Size = new Size(92, 22);
             label1.TabIndex = 56;
@@ -238,7 +238,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(52, 124);
+            label5.Location = new Point(50, 101);
             label5.Name = "label5";
             label5.Size = new Size(118, 22);
             label5.TabIndex = 57;
@@ -247,7 +247,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(52, 172);
+            label6.Location = new Point(52, 149);
             label6.Name = "label6";
             label6.Size = new Size(48, 22);
             label6.TabIndex = 58;
@@ -256,7 +256,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(52, 222);
+            label7.Location = new Point(50, 203);
             label7.Name = "label7";
             label7.Size = new Size(58, 22);
             label7.TabIndex = 59;
@@ -265,7 +265,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(50, 325);
+            label8.Location = new Point(50, 302);
             label8.Name = "label8";
             label8.Size = new Size(85, 22);
             label8.TabIndex = 60;
@@ -274,7 +274,7 @@
             // lbTen
             // 
             lbTen.AutoSize = true;
-            lbTen.Location = new Point(159, 66);
+            lbTen.Location = new Point(150, 52);
             lbTen.Name = "lbTen";
             lbTen.Size = new Size(60, 22);
             lbTen.TabIndex = 61;
@@ -283,7 +283,7 @@
             // lbKhoa
             // 
             lbKhoa.AutoSize = true;
-            lbKhoa.Location = new Point(116, 222);
+            lbKhoa.Location = new Point(114, 203);
             lbKhoa.Name = "lbKhoa";
             lbKhoa.Size = new Size(70, 22);
             lbKhoa.TabIndex = 62;
@@ -292,7 +292,7 @@
             // lbLop
             // 
             lbLop.AutoSize = true;
-            lbLop.Location = new Point(106, 172);
+            lbLop.Location = new Point(106, 149);
             lbLop.Name = "lbLop";
             lbLop.Size = new Size(69, 22);
             lbLop.TabIndex = 63;
@@ -301,7 +301,7 @@
             // lbMSV
             // 
             lbMSV.AutoSize = true;
-            lbMSV.Location = new Point(189, 124);
+            lbMSV.Location = new Point(174, 101);
             lbMSV.Name = "lbMSV";
             lbMSV.Size = new Size(70, 22);
             lbMSV.TabIndex = 64;
@@ -310,7 +310,7 @@
             // lbXL
             // 
             lbXL.AutoSize = true;
-            lbXL.Location = new Point(141, 325);
+            lbXL.Location = new Point(141, 302);
             lbXL.Name = "lbXL";
             lbXL.Size = new Size(70, 22);
             lbXL.TabIndex = 65;
@@ -332,7 +332,7 @@
             groupBox1.Controls.Add(label5);
             groupBox1.Location = new Point(463, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(496, 389);
+            groupBox1.Size = new Size(496, 371);
             groupBox1.TabIndex = 66;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin cá nhân:";
@@ -340,7 +340,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(50, 277);
+            label9.Location = new Point(50, 254);
             label9.Name = "label9";
             label9.Size = new Size(142, 22);
             label9.TabIndex = 67;
@@ -349,7 +349,7 @@
             // lbTB
             // 
             lbTB.AutoSize = true;
-            lbTB.Location = new Point(198, 277);
+            lbTB.Location = new Point(198, 254);
             lbTB.Name = "lbTB";
             lbTB.Size = new Size(70, 22);
             lbTB.TabIndex = 68;

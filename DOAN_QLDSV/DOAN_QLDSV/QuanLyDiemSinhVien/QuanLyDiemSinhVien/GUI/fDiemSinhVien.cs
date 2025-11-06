@@ -475,7 +475,7 @@ namespace QuanLyDiemSinhVien.GUI
                         GetLopKhoa(MaSV_Cu);
                     }
                 }
-            }
+            }\`a
         }
 
         private void cbTenSV_SelectedIndexChanged(object sender, EventArgs e)

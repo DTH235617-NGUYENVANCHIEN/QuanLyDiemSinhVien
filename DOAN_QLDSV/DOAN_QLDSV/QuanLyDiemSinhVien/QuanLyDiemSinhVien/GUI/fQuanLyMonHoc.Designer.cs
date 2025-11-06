@@ -74,7 +74,7 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(5, 3, 5, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(983, 194);
+            panel1.Size = new Size(1371, 194);
             panel1.TabIndex = 2;
             // 
             // txtTenMH
@@ -89,7 +89,7 @@
             // btnTailai
             // 
             btnTailai.Anchor = AnchorStyles.None;
-            btnTailai.Location = new Point(415, 134);
+            btnTailai.Location = new Point(609, 134);
             btnTailai.Margin = new Padding(5, 3, 5, 3);
             btnTailai.Name = "btnTailai";
             btnTailai.Size = new Size(190, 40);
@@ -102,20 +102,20 @@
             // nudSotinchi
             // 
             nudSotinchi.Anchor = AnchorStyles.None;
-            nudSotinchi.Location = new Point(888, 33);
+            nudSotinchi.Location = new Point(1082, 33);
             nudSotinchi.Margin = new Padding(4, 3, 4, 3);
             nudSotinchi.Name = "nudSotinchi";
-            nudSotinchi.Size = new Size(86, 35);
+            nudSotinchi.Size = new Size(106, 30);
             nudSotinchi.TabIndex = 23;
             // 
             // label3
             // 
             label3.Anchor = AnchorStyles.None;
             label3.AutoSize = true;
-            label3.Location = new Point(771, 38);
+            label3.Location = new Point(965, 38);
             label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
-            label3.Size = new Size(108, 27);
+            label3.Size = new Size(91, 22);
             label3.TabIndex = 22;
             label3.Text = "Số tín chỉ:";
             // 
@@ -123,38 +123,38 @@
             // 
             label2.Anchor = AnchorStyles.None;
             label2.AutoSize = true;
-            label2.Location = new Point(367, 38);
+            label2.Location = new Point(472, 38);
             label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new Size(144, 27);
+            label2.Size = new Size(117, 22);
             label2.TabIndex = 21;
             label2.Text = "Tên môn học:";
             // 
             // txtMamonhoc
             // 
             txtMamonhoc.Anchor = AnchorStyles.None;
-            txtMamonhoc.Location = new Point(172, 38);
+            txtMamonhoc.Location = new Point(235, 33);
             txtMamonhoc.Margin = new Padding(6, 3, 6, 3);
             txtMamonhoc.MaxLength = 255;
             txtMamonhoc.Name = "txtMamonhoc";
-            txtMamonhoc.Size = new Size(182, 35);
+            txtMamonhoc.Size = new Size(203, 30);
             txtMamonhoc.TabIndex = 0;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.None;
             label1.AutoSize = true;
-            label1.Location = new Point(6, 38);
+            label1.Location = new Point(110, 38);
             label1.Margin = new Padding(6, 0, 6, 0);
             label1.Name = "label1";
-            label1.Size = new Size(139, 27);
+            label1.Size = new Size(113, 22);
             label1.TabIndex = 19;
             label1.Text = "Mã môn học:";
             // 
             // btnThoat
             // 
             btnThoat.Anchor = AnchorStyles.None;
-            btnThoat.Location = new Point(629, 133);
+            btnThoat.Location = new Point(823, 133);
             btnThoat.Margin = new Padding(5, 3, 5, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(190, 40);
@@ -167,7 +167,7 @@
             // btnLuu
             // 
             btnLuu.Anchor = AnchorStyles.None;
-            btnLuu.Location = new Point(192, 133);
+            btnLuu.Location = new Point(386, 133);
             btnLuu.Margin = new Padding(5, 3, 5, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(190, 40);
@@ -180,7 +180,7 @@
             // btnSua
             // 
             btnSua.Anchor = AnchorStyles.None;
-            btnSua.Location = new Point(629, 86);
+            btnSua.Location = new Point(823, 86);
             btnSua.Margin = new Padding(5, 3, 5, 3);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(190, 40);
@@ -193,7 +193,7 @@
             // btnXoa
             // 
             btnXoa.Anchor = AnchorStyles.None;
-            btnXoa.Location = new Point(415, 87);
+            btnXoa.Location = new Point(609, 87);
             btnXoa.Margin = new Padding(5, 3, 5, 3);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(190, 40);
@@ -206,7 +206,7 @@
             // btnThem
             // 
             btnThem.Anchor = AnchorStyles.None;
-            btnThem.Location = new Point(192, 86);
+            btnThem.Location = new Point(386, 86);
             btnThem.Margin = new Padding(5, 3, 5, 3);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(190, 40);
@@ -243,7 +243,7 @@
             dgvMonhoc.RowHeadersWidth = 62;
             dgvMonhoc.RowTemplate.Height = 30;
             dgvMonhoc.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMonhoc.Size = new Size(983, 292);
+            dgvMonhoc.Size = new Size(1371, 292);
             dgvMonhoc.TabIndex = 2;
             dgvMonhoc.TabStop = false;
             // 
@@ -291,10 +291,10 @@
             // 
             // fQuanLyMonHoc
             // 
-            AutoScaleDimensions = new SizeF(13F, 27F);
+            AutoScaleDimensions = new SizeF(11F, 22F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 192);
-            ClientSize = new Size(983, 486);
+            ClientSize = new Size(1371, 486);
             Controls.Add(dgvMonhoc);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);

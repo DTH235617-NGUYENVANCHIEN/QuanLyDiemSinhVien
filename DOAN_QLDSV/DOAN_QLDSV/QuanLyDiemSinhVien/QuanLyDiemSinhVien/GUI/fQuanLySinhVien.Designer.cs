@@ -126,7 +126,7 @@
             rdoNu.AutoSize = true;
             rdoNu.Location = new Point(80, 3);
             rdoNu.Name = "rdoNu";
-            rdoNu.Size = new Size(67, 31);
+            rdoNu.Size = new Size(56, 26);
             rdoNu.TabIndex = 43;
             rdoNu.TabStop = true;
             rdoNu.Text = "Nữ";
@@ -137,7 +137,7 @@
             rdoNam.AutoSize = true;
             rdoNam.Location = new Point(3, 3);
             rdoNam.Name = "rdoNam";
-            rdoNam.Size = new Size(83, 31);
+            rdoNam.Size = new Size(68, 26);
             rdoNam.TabIndex = 42;
             rdoNam.TabStop = true;
             rdoNam.Text = "Nam";
@@ -150,7 +150,7 @@
             dtaTime.Format = DateTimePickerFormat.Short;
             dtaTime.Location = new Point(927, 16);
             dtaTime.Name = "dtaTime";
-            dtaTime.Size = new Size(163, 35);
+            dtaTime.Size = new Size(163, 30);
             dtaTime.TabIndex = 40;
             // 
             // label6
@@ -160,7 +160,7 @@
             label6.Location = new Point(805, 16);
             label6.Margin = new Padding(5, 0, 5, 0);
             label6.Name = "label6";
-            label6.Size = new Size(114, 27);
+            label6.Size = new Size(94, 22);
             label6.TabIndex = 37;
             label6.Text = "Ngày sinh:";
             // 
@@ -171,7 +171,7 @@
             label3.Location = new Point(509, 65);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(92, 27);
+            label3.Size = new Size(78, 22);
             label3.TabIndex = 35;
             label3.Text = "Tên lớp:";
             // 
@@ -182,7 +182,7 @@
             label4.Location = new Point(205, 65);
             label4.Margin = new Padding(5, 0, 5, 0);
             label4.Name = "label4";
-            label4.Size = new Size(103, 27);
+            label4.Size = new Size(87, 22);
             label4.TabIndex = 33;
             label4.Text = "Giới tính:";
             // 
@@ -193,7 +193,7 @@
             txtTen.Margin = new Padding(4, 3, 4, 3);
             txtTen.MaxLength = 255;
             txtTen.Name = "txtTen";
-            txtTen.Size = new Size(182, 35);
+            txtTen.Size = new Size(182, 30);
             txtTen.TabIndex = 30;
             // 
             // label2
@@ -203,7 +203,7 @@
             label2.Location = new Point(514, 16);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(83, 27);
+            label2.Size = new Size(68, 22);
             label2.TabIndex = 31;
             label2.Text = "Họ tên:";
             // 
@@ -214,7 +214,7 @@
             txtMaSV.Margin = new Padding(5, 3, 5, 3);
             txtMaSV.MaxLength = 255;
             txtMaSV.Name = "txtMaSV";
-            txtMaSV.Size = new Size(163, 35);
+            txtMaSV.Size = new Size(163, 30);
             txtMaSV.TabIndex = 28;
             // 
             // label1
@@ -224,7 +224,7 @@
             label1.Location = new Point(205, 16);
             label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(142, 27);
+            label1.Size = new Size(118, 22);
             label1.TabIndex = 29;
             label1.Text = "Mã sinh viên:";
             // 
@@ -376,7 +376,7 @@
             // 
             // fQuanLySinhVien
             // 
-            AutoScaleDimensions = new SizeF(13F, 27F);
+            AutoScaleDimensions = new SizeF(11F, 22F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1271, 433);
             Controls.Add(dgvSinhVien);

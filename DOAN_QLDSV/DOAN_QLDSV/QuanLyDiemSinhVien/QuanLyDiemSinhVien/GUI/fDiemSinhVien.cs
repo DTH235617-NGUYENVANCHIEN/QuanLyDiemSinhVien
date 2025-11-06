@@ -235,7 +235,7 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 if (conn.State == ConnectionState.Closed)
                 {
-                    conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
+                    conn.ConnectionString = @"server=.; Database=db_QLDSV;User ID=sa;Password=123;TrustServerCertificate=True";
                     conn.Open();
                 }
 

@@ -67,16 +67,13 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void LoadSinhVien()
         {
+            // Sửa câu truy vấn: Bỏ JOIN không chính xác với MONHOC
             string sqlSV = @"
                 SELECT DISTINCT S.MaSV, S.HoTen, S.MaLop 
                 FROM SINHVIEN S
-                JOIN MONHOC M ON S.MaKhoa = M.MaKhoa -- Giả định môn học thuộc Khoa SV
-                -- Hoặc JOIN M.MaGV = @MaGV_HienTai nếu MaGV được lưu trong bảng MONHOC
-
-                -- Sử dụng MaGV để lọc các MaSV có điểm trong DIEM
                 WHERE S.MaSV IN (
                     SELECT MaSV FROM DIEM WHERE MaGV = @MaGV_HienTai
-                )
+                 )
                 ORDER BY S.HoTen";
 
             using (SqlDataAdapter daSV = new SqlDataAdapter(sqlSV, conn))
@@ -91,9 +88,15 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
+
         private void LoadMonHoc()
         {
-            string sqlMH = "SELECT MaMH, TenMH FROM MONHOC WHERE MaGV = @MaGV_HienTai ORDER BY TenMH";
+            string sqlMH = @"
+                SELECT DISTINCT M.MaMH, M.TenMH 
+                FROM MONHOC M
+                JOIN DIEM D ON M.MaMH = D.MaMH
+                WHERE D.MaGV = @MaGV_HienTai
+                ORDER BY M.TenMH";
 
             using (SqlDataAdapter daMH = new SqlDataAdapter(sqlMH, conn))
             {

@@ -88,7 +88,7 @@ namespace QuanLyDiemSinhVien.GUI
                 cbTenSV.DataSource = dtSV;
                 cbTenSV.DisplayMember = "HoTen";
                 cbTenSV.ValueMember = "MaSV";
-            }
+            
         }
 
 
@@ -288,7 +288,7 @@ namespace QuanLyDiemSinhVien.GUI
             txtDiemthi.DataBindings.Add("Text", bs, "DiemThi", true, DataSourceUpdateMode.Never);
         }
 
-        }
+        
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
@@ -453,8 +453,8 @@ namespace QuanLyDiemSinhVien.GUI
                 if (isAdding) // THÊM MỚI
                 {
                     // Thêm trường MaGV_HienTai
-                    string sqlThem = @"INSERT INTO DIEM(MaSV, MaMH, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemTongKet, DiemChu, MaGV) 
-                                         VALUES(@MaSV, @MaMH, @HocKy, @NamHoc, @DiemThanhPhan, @DiemThi, @DiemTongKet, @DiemChu, @MaGV)";
+                    string sqlThem = @"INSERT INTO DIEM(MaSV, MaMH, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemChu, MaGV) 
+                                         VALUES(@MaSV, @MaMH, @HocKy, @NamHoc, @DiemThanhPhan, @DiemThi, @DiemChu, @MaGV)";
 
                     SqlCommand cmd = new SqlCommand(sqlThem, conn);
                     cmd.Parameters.AddWithValue("@MaSV", maSV);
@@ -464,7 +464,7 @@ namespace QuanLyDiemSinhVien.GUI
                     cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP);
                     cmd.Parameters.AddWithValue("@DiemThi", diemThi);
                     // Cần thêm DiemTongKet vào INSERT
-                    cmd.Parameters.AddWithValue("@DiemTongKet", diemTongKet);
+                    
                     cmd.Parameters.AddWithValue("@DiemChu", diemChu);
                     cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
                     cmd.ExecuteNonQuery();
@@ -476,14 +476,14 @@ namespace QuanLyDiemSinhVien.GUI
                     string sqlSua = @"UPDATE DIEM 
                                          SET DiemThanhPhan = @DiemThanhPhan, 
                                              DiemThi = @DiemThi, 
-                                             DiemTongKet = @DiemTongKet,
+                                             
                                              DiemChu = @DiemChu
                                          WHERE MaSV = @MaSV_Cu AND MaMH = @MaMH_Cu AND HocKy = @HocKy_Cu AND NamHoc = @NamHoc_Cu";
 
                     SqlCommand cmd = new SqlCommand(sqlSua, conn);
                     cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP);
                     cmd.Parameters.AddWithValue("@DiemThi", diemThi);
-                    cmd.Parameters.AddWithValue("@DiemTongKet", diemTongKet);
+            
                     cmd.Parameters.AddWithValue("@DiemChu", diemChu);
                     cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
                     // Khóa chính cũ để xác định dòng cần sửa
@@ -572,6 +572,44 @@ namespace QuanLyDiemSinhVien.GUI
                     }
                 }
             }
+        }
+
+        private void GetLopKhoa(string maSV_Cu)
+        {
+            MaLop_Current = "";   // <--- Thêm ;
+            MaKhoa_Current = "";  // <--- Thêm ;
+
+            // Kiểm tra nếu maSV_Cu rỗng (đổi từ maSV trong hàm gốc)
+            if (string.IsNullOrEmpty(maSV_Cu))
+            {
+                cbTenLop.SelectedIndex = -1;
+                cbTenKhoa.SelectedIndex = -1;
+                return;
+            }
+
+            string sql = @"SELECT L.MaLop, K.MaKhoa
+                             FROM SINHVIEN S
+                             JOIN LOP L ON S.MaLop = L.MaLop
+                             JOIN KHOA K ON L.MaKhoa = K.MaKhoa
+                             WHERE S.MaSV = @MaSV";
+
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                // Truyền maSV_Cu vào tham số @MaSV
+                cmd.Parameters.AddWithValue("@MaSV", maSV_Cu);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        MaLop_Current = reader["MaLop"].ToString();
+                        MaKhoa_Current = reader["MaKhoa"].ToString();
+                    }
+                }
+            }
+
+            // Hiển thị thông tin lên ComboBox
+            cbTenLop.SelectedValue = MaLop_Current;
+            cbTenKhoa.SelectedValue = MaKhoa_Current;
         }
 
         private void cbTenSV_SelectedIndexChanged(object sender, EventArgs e)

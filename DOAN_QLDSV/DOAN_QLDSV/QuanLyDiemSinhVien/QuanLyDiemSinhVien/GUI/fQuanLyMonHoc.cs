@@ -176,16 +176,24 @@ namespace QuanLyDiemSinhVien.GUI
         private void TaiLaiDuLieu()
         {
             // SỬA LOGIC: Mặc định là Admin (SELECT *), nếu là Teacher thì lọc theo MaGV trong bảng DIEM
-            string sqlMonHoc = @"SELECT * FROM MONHOC";
+
+            // <--- SỬA ĐỔI 1: THAY "SELECT *" BẰNG "ROW_NUMBER()" CHO ADMIN --->
+            string sqlMonHoc = @"SELECT 
+                                    ROW_NUMBER() OVER (ORDER BY MaMH) AS SoThuTuHienThi, 
+                                    MaMH, TenMH, SoTC 
+                                 FROM MONHOC";
 
             // THÊM ĐIỀU KIỆN LỌC
             if (CurrentUser.TenQuyen == "Teacher")
             {
-                // Chỉ chọn những môn học mà MaGV_HienTai có dạy (dựa trên MaMH có trong bảng DIEM)
+                // <--- SỬA ĐỔI 2: DÙNG "ROW_NUMBER()" CHO TEACHER VÀ BỎ "DISTINCT MH.*" --->
                 sqlMonHoc = @"
-                    SELECT DISTINCT MH.* FROM MONHOC MH
+                    SELECT 
+                        ROW_NUMBER() OVER (ORDER BY MH.MaMH) AS SoThuTuHienThi, 
+                        MH.MaMH, MH.TenMH, MH.SoTC 
+                    FROM MONHOC MH
                     WHERE MH.MaMH IN (
-                        SELECT MaMH FROM DIEM 
+                        SELECT DISTINCT MaMH FROM DIEM 
                         WHERE MaGV = @MaGV_HienTai
                     )";
             }

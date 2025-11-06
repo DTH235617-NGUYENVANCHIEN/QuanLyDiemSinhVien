@@ -68,43 +68,42 @@ namespace QuanLyDiemSinhVien.GUI
         }
 
         private void LoadSinhVien()
+
         {
+            // Tên đăng nhập của giáo viên hiện tại, ví dụ: "GV006"
             string maGVHienTai = CurrentUser.Username;
 
-            // Chỉ chọn sinh viên nào có MaGV hiện tại trong bảng DIEM
-            string sqlSV = @"SELECT DISTINCT S.MaSV, S.HoTen, S.MaLop 
-                     FROM SINHVIEN S
-                     JOIN DIEM D ON S.MaSV = D.MaSV
-                     WHERE D.MaGV = @MaGV
-                     ORDER BY S.HoTen";
+            // THAY ĐỔI CÂU SQL:
+            // Lấy sinh viên thuộc LỚP mà giáo viên này làm Cố vấn (MaGV_CVHT)
+            // thay vì lấy từ bảng DIEM.
+            string sqlSV = @"SELECT S.MaSV, S.HoTen, S.MaLop 
+                             FROM SINHVIEN S
+                             JOIN LOP L ON S.MaLop = L.MaLop
+                             WHERE L.MaGV_CVHT = @MaGV
+                             ORDER BY S.HoTen";
 
             SqlCommand cmd = new SqlCommand(sqlSV, conn);
-            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
+            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai); // @MaGV = "GV006"
 
             SqlDataAdapter daSV = new SqlDataAdapter(cmd);
             DataTable dtSV = new DataTable();
             daSV.Fill(dtSV);
 
-                cbTenSV.DataSource = dtSV;
-                cbTenSV.DisplayMember = "HoTen";
-                cbTenSV.ValueMember = "MaSV";
-            
+            cbTenSV.DataSource = dtSV;
+            cbTenSV.DisplayMember = "HoTen";
+            cbTenSV.ValueMember = "MaSV";
+
         }
 
 
         private void LoadMonHoc()
         {
-            string maGVHienTai = CurrentUser.Username;
-
-            // Chỉ chọn môn nào có MaGV hiện tại trong bảng DIEM
-            string sqlMH = @"SELECT DISTINCT M.MaMH, M.TenMH 
-                     FROM MONHOC M
-                     JOIN DIEM D ON M.MaMH = D.MaMH
-                     WHERE D.MaGV = @MaGV
-                     ORDER BY M.TenMH";
+            // BỎ logic join với bảng DIEM
+            // Một giáo viên cần thấy TẤT CẢ môn học để có thể thêm điểm
+            string sqlMH = @"SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH";
 
             SqlCommand cmd = new SqlCommand(sqlMH, conn);
-            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
+            // Không cần tham số @MaGV nữa
 
             SqlDataAdapter daMH = new SqlDataAdapter(cmd);
             DataTable dtMH = new DataTable();
@@ -119,13 +118,11 @@ namespace QuanLyDiemSinhVien.GUI
         {
             string maGVHienTai = CurrentUser.Username;
 
-            // Chỉ chọn môn nào có MaGV hiện tại trong bảng DIEM
-            string sqlLop = @"SELECT DISTINCT L.MaLop, L.TenLop 
-                   FROM LOP L
-                   JOIN SINHVIEN S ON L.MaLop = S.MaLop
-                   JOIN DIEM D ON S.MaSV = D.MaSV
-                   WHERE D.MaGV = @MaGV
-                   ORDER BY L.TenLop";
+            // Logic mới: Tải LỚP mà giáo viên này làm CVHT
+            string sqlLop = @"SELECT MaLop, TenLop 
+                              FROM LOP 
+                              WHERE MaGV_CVHT = @MaGV
+                              ORDER BY TenLop";
 
             SqlCommand cmd = new SqlCommand(sqlLop, conn);
             cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
@@ -142,14 +139,12 @@ namespace QuanLyDiemSinhVien.GUI
         {
             string maGVHienTai = CurrentUser.Username;
 
-            // Chỉ chọn môn nào có MaGV hiện tại trong bảng DIEM
+            // Logic mới: Tải KHOA của LỚP mà giáo viên này làm CVHT
             string sqlKhoa = @"SELECT DISTINCT K.MaKhoa, K.TenKhoa 
-                    FROM KHOA K
-                    JOIN LOP L ON K.MaKhoa = L.MaKhoa
-                    JOIN SINHVIEN S ON L.MaLop = S.MaLop
-                    JOIN DIEM D ON S.MaSV = D.MaSV
-                    WHERE D.MaGV = @MaGV
-                    ORDER BY K.TenKhoa";
+                               FROM KHOA K
+                               JOIN LOP L ON K.MaKhoa = L.MaKhoa
+                               WHERE L.MaGV_CVHT = @MaGV
+                               ORDER BY K.TenKhoa";
 
             SqlCommand cmd = new SqlCommand(sqlKhoa, conn);
             cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
@@ -164,20 +159,13 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void LoadHK()
         {
-            string maGVHienTai = CurrentUser.Username;
-
-            // Chỉ chọn môn nào có MaGV hiện tại trong bảng DIEM
-            string sqlHK = @"SELECT DISTINCT HocKy 
-                  FROM DIEM 
-                  WHERE MaGV = @MaGV 
-                  ORDER BY HocKy";
-
-            SqlCommand cmd = new SqlCommand(sqlHK, conn);
-            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
-
-            SqlDataAdapter daHK = new SqlDataAdapter(cmd);
+            // Học kỳ là cố định (1, 2, 3), không cần truy vấn CSDL
             DataTable dtHK = new DataTable();
-            daHK.Fill(dtHK);
+            dtHK.Columns.Add("HocKy", typeof(int));
+
+            dtHK.Rows.Add(1);
+            dtHK.Rows.Add(2);
+            dtHK.Rows.Add(3);
 
             cbHocKy.DataSource = dtHK;
             cbHocKy.DisplayMember = "HocKy";

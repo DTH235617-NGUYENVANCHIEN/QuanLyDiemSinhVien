@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             panel1 = new Panel();
             txtTenMH = new TextBox();
             btnTailai = new Button();
@@ -80,7 +80,7 @@
             // txtTenMH
             // 
             txtTenMH.Anchor = AnchorStyles.None;
-            txtTenMH.Location = new Point(520, 35);
+            txtTenMH.Location = new Point(625, 30);
             txtTenMH.Margin = new Padding(4, 3, 4, 3);
             txtTenMH.Name = "txtTenMH";
             txtTenMH.Size = new Size(251, 35);
@@ -105,7 +105,7 @@
             nudSotinchi.Location = new Point(1082, 33);
             nudSotinchi.Margin = new Padding(4, 3, 4, 3);
             nudSotinchi.Name = "nudSotinchi";
-            nudSotinchi.Size = new Size(106, 30);
+            nudSotinchi.Size = new Size(106, 35);
             nudSotinchi.TabIndex = 23;
             // 
             // label3
@@ -115,7 +115,7 @@
             label3.Location = new Point(965, 38);
             label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
-            label3.Size = new Size(91, 22);
+            label3.Size = new Size(108, 27);
             label3.TabIndex = 22;
             label3.Text = "Số tín chỉ:";
             // 
@@ -126,18 +126,18 @@
             label2.Location = new Point(472, 38);
             label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new Size(117, 22);
+            label2.Size = new Size(144, 27);
             label2.TabIndex = 21;
             label2.Text = "Tên môn học:";
             // 
             // txtMamonhoc
             // 
             txtMamonhoc.Anchor = AnchorStyles.None;
-            txtMamonhoc.Location = new Point(235, 33);
+            txtMamonhoc.Location = new Point(258, 35);
             txtMamonhoc.Margin = new Padding(6, 3, 6, 3);
             txtMamonhoc.MaxLength = 255;
             txtMamonhoc.Name = "txtMamonhoc";
-            txtMamonhoc.Size = new Size(203, 30);
+            txtMamonhoc.Size = new Size(203, 35);
             txtMamonhoc.TabIndex = 0;
             // 
             // label1
@@ -147,7 +147,7 @@
             label1.Location = new Point(110, 38);
             label1.Margin = new Padding(6, 0, 6, 0);
             label1.Name = "label1";
-            label1.Size = new Size(113, 22);
+            label1.Size = new Size(139, 27);
             label1.TabIndex = 19;
             label1.Text = "Mã môn học:";
             // 
@@ -222,14 +222,14 @@
             dgvMonhoc.AllowUserToDeleteRows = false;
             dgvMonhoc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMonhoc.BackgroundColor = Color.FromArgb(255, 255, 192);
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = Color.White;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvMonhoc.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = Color.White;
+            dataGridViewCellStyle6.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvMonhoc.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgvMonhoc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMonhoc.Columns.AddRange(new DataGridViewColumn[] { STT, MaMH, TenMH, SoTC });
             dgvMonhoc.Dock = DockStyle.Fill;
@@ -249,10 +249,10 @@
             // 
             // STT
             // 
-            STT.DataPropertyName = "STT";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
-            STT.DefaultCellStyle = dataGridViewCellStyle2;
+            STT.DataPropertyName = "SoThuTuHienThi";
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = Color.FromArgb(255, 255, 192);
+            STT.DefaultCellStyle = dataGridViewCellStyle7;
             STT.HeaderText = "SỐ TT";
             STT.MinimumWidth = 8;
             STT.Name = "STT";
@@ -261,8 +261,8 @@
             // MaMH
             // 
             MaMH.DataPropertyName = "MaMH";
-            dataGridViewCellStyle3.BackColor = Color.FromArgb(255, 255, 192);
-            MaMH.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.BackColor = Color.FromArgb(255, 255, 192);
+            MaMH.DefaultCellStyle = dataGridViewCellStyle8;
             MaMH.HeaderText = "MÃ MÔN HỌC";
             MaMH.MinimumWidth = 8;
             MaMH.Name = "MaMH";
@@ -271,8 +271,8 @@
             // TenMH
             // 
             TenMH.DataPropertyName = "TenMH";
-            dataGridViewCellStyle4.BackColor = Color.FromArgb(255, 255, 192);
-            TenMH.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.BackColor = Color.FromArgb(255, 255, 192);
+            TenMH.DefaultCellStyle = dataGridViewCellStyle9;
             TenMH.HeaderText = "TÊN MÔN";
             TenMH.MinimumWidth = 8;
             TenMH.Name = "TenMH";
@@ -281,9 +281,9 @@
             // SoTC
             // 
             SoTC.DataPropertyName = "SoTC";
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = Color.FromArgb(255, 255, 192);
-            SoTC.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = Color.FromArgb(255, 255, 192);
+            SoTC.DefaultCellStyle = dataGridViewCellStyle10;
             SoTC.HeaderText = "SỐ TÍN CHỈ";
             SoTC.MinimumWidth = 8;
             SoTC.Name = "SoTC";
@@ -291,7 +291,7 @@
             // 
             // fQuanLyMonHoc
             // 
-            AutoScaleDimensions = new SizeF(11F, 22F);
+            AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 192);
             ClientSize = new Size(1371, 486);

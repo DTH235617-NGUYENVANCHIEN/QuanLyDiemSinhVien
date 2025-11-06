@@ -14,7 +14,7 @@ namespace QuanLyDiemSinhVien.DAL
         public static SqlConnection conn = new SqlConnection();
 
         // Chuỗi kết nối
-        private static string connectionString = @"server=.; Database=db_QLDSV;Integrated Security=True";
+        private static string connectionString = @"server=.; Database=QLDSV;Integrated Security=True";
 
         // Đây là PHƯƠNG THỨC để mở kết nối
         public static void MoKetNoi()

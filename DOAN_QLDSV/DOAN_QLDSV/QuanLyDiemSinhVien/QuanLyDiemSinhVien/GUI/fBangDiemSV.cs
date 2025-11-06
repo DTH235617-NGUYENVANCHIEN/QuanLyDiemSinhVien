@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -34,6 +35,7 @@ namespace QuanLyDiemSinhVien.GUI
                 {
                     conn.ConnectionString = @"server=.; Database=QLDSV;Integrated Security=True";
                     conn.Open();
+                    LoadThongTinSinhVien();
                     LoadComboBoxFilter();
                     LoadDiemData();
                     isLoaded = true;
@@ -44,7 +46,78 @@ namespace QuanLyDiemSinhVien.GUI
                 MessageBox.Show("Lỗi khởi động: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        // --- HÀM LOAD THÔNG TIN SINH VIÊN ---
+        private void LoadThongTinSinhVien()
+        {
+            try
+            {
+                string maSV = CurrentUser.Username;
 
+                string sql = @"
+            SELECT S.HoTen, S.MaSV, L.TenLop, K.TenKhoa
+            FROM SINHVIEN S
+            JOIN LOP L ON S.MaLop = L.MaLop
+            JOIN KHOA K ON L.MaKhoa = K.MaKhoa
+            WHERE S.MaSV = @MaSV";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@MaSV", maSV);
+
+                //if (conn.State == ConnectionState.Closed) 
+                    //conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // Gán thông tin vào các Label (Nhớ đổi tên label19, label12... cho dễ nhớ)
+                    lbTen.Text = reader["HoTen"].ToString(); // Họ và tên
+                    lbMSV.Text = reader["MaSV"].ToString();  // Mã sinh viên
+                    lbLop.Text = reader["TenLop"].ToString(); // Lớp
+                    lbKhoa.Text = reader["TenKhoa"].ToString(); // Khoa
+                }
+                reader.Close();
+
+                // --- Tính điểm trung bình và xếp loại
+                // Công thức: Tổng (Điểm Tổng Kết * Số Tín Chỉ) / Tổng Số Tín Chỉ
+                string sqlDiemTB = @"
+    SELECT SUM(D.DiemTongKet * M.SoTC) / SUM(M.SoTC) AS DiemTrungBinh
+    FROM DIEM D
+    JOIN MONHOC M ON D.MaMH = M.MaMH
+    WHERE D.MaSV = @MaSV";
+
+                SqlCommand cmdDiemTB = new SqlCommand(sqlDiemTB, conn);
+                cmdDiemTB.Parameters.AddWithValue("@MaSV", maSV);
+
+                object result = cmdDiemTB.ExecuteScalar(); // Lấy 1 giá trị duy nhất
+
+                if (result != DBNull.Value && result != null)
+                {
+                    double diemTB = Convert.ToDouble(result);
+                    string xepLoai = "";
+
+                    if (diemTB >= 9.0) xepLoai = "Xuất sắc";
+                    else if (diemTB >= 8.0) xepLoai = "Giỏi";
+                    else if (diemTB >= 7.0) xepLoai = "Khá";
+                    else if (diemTB >= 5.0) xepLoai = "Trung bình";
+                    else xepLoai = "Yếu";
+
+                    // Hiển thị lên Label (giả sử lbXL là label Xếp loại)
+
+                    lbXL.Text = xepLoai;
+                    // Hiển thị điểm trung bình lên label mới (làm tròn 2 chữ số thập phân)
+                    lbTB.Text = diemTB.ToString("F2");
+                }
+                else
+                {
+                    lbXL.Text = "Đang cập nhật";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải thông tin sinh viên: " + ex.Message);
+                if (conn.State == ConnectionState.Open) conn.Close(); // Đảm bảo đóng kết nối nếu lỗi
+            }
+        }
         // --- HÀM LOAD DỮ LIỆU CHO COMBOBOX ---
         private void LoadComboBoxFilter()
         {
@@ -62,16 +135,20 @@ namespace QuanLyDiemSinhVien.GUI
             ORDER BY M.TenMH";
                 SqlDataAdapter daMH = new SqlDataAdapter(sqlMH, conn);
                 daMH.SelectCommand.Parameters.AddWithValue("@MaSV", maSVHienTai);
-                DataTable dtMH = new DataTable();
-                daMH.Fill(dtMH);
+                DataTable dtMH_Raw = new DataTable();
+                daMH.Fill(dtMH_Raw);
 
-                DataRow drMH = dtMH.NewRow();
-                drMH["MaMH"] = "ALL";
-                drMH["TenMH"] = "--- Tất cả môn ---";
-                dtMH.Rows.InsertAt(drMH, 0);
-                cbMonHoc.DisplayMember = "TenMH";
-                cbMonHoc.ValueMember = "MaMH";
+                DataTable dtMH = new DataTable();
+                dtMH.Columns.Add("MaMH");
+                dtMH.Columns.Add("TenMH");
+                dtMH.Rows.Add("ALL", "--- Tất cả môn ---");
+                foreach (DataRow row in dtMH_Raw.Rows)
+                {
+                    dtMH.Rows.Add(row["MaMH"], row["TenMH"]);
+                }
                 cbMonHoc.DataSource = dtMH;
+                cbMonHoc.ValueMember = "MaMH";
+                cbMonHoc.DisplayMember = "TenMH";
 
                 // 2. Năm Học: Chỉ lấy năm mà sinh viên này CÓ ĐIỂM
                 string sqlNH = @"
@@ -81,18 +158,20 @@ namespace QuanLyDiemSinhVien.GUI
             ORDER BY NamHoc DESC";
                 SqlDataAdapter daNH = new SqlDataAdapter(sqlNH, conn);
                 daNH.SelectCommand.Parameters.AddWithValue("@MaSV", maSVHienTai);
+                DataTable dtNH_Raw = new DataTable();
+                daNH.Fill(dtNH_Raw);
+
                 DataTable dtNH = new DataTable();
-                daNH.Fill(dtNH);
-
-                DataTable dtNHFilter = new DataTable();
-                dtNHFilter.Columns.Add("NamHoc", typeof(string));
-                dtNHFilter.Rows.Add("--- Tất cả năm ---"); // Đổi chữ "ALL" thành tiếng Việt cho đồng bộ
-                                                           // Lưu ý: Giá trị thực tế để lọc vẫn cần xử lý là "ALL" hoặc chuỗi rỗng trong ApplyFilter nếu cần
-                foreach (DataRow row in dtNH.Rows) dtNHFilter.Rows.Add(row["NamHoc"].ToString());
-
-                cbNamHoc.DisplayMember = "NamHoc";
+                dtNH.Columns.Add("NamHoc");   // Cột giá trị (ValueMember)
+                dtNH.Columns.Add("HienNamHoc");  // Cột hiển thị (DisplayMember)
+                dtNH.Rows.Add("ALL", "--- Tất cả năm học ---"); // Dòng đầu tiên
+                foreach (DataRow row in dtNH_Raw.Rows)
+                {
+                    dtNH.Rows.Add(row["NamHoc"], row["NamHoc"]);
+                }
+                cbNamHoc.DataSource = dtNH;
                 cbNamHoc.ValueMember = "NamHoc";
-                cbNamHoc.DataSource = dtNHFilter;
+                cbNamHoc.DisplayMember = "HienNamHoc";
 
                 // 3. Học Kỳ: Chỉ lấy học kỳ mà sinh viên này CÓ ĐIỂM
                 string sqlHK = @"
@@ -106,21 +185,23 @@ namespace QuanLyDiemSinhVien.GUI
                 daHK.Fill(dtHK_Raw);
 
                 DataTable dtHK = new DataTable();
-                dtHK.Columns.Add("HocKy", typeof(string));
-                dtHK.Columns.Add("TenHocKy", typeof(string));
-                dtHK.Rows.Add("ALL", "--- Tất cả học kỳ ---");
+                dtHK.Columns.Add("HocKy");   // Cột giá trị (ValueMember)
+                dtHK.Columns.Add("TenHocKy");  // Cột hiển thị (DisplayMember)
+                dtHK.Rows.Add("ALL", "--- Tất cả học kỳ ---"); // Dòng đầu tiên
                 foreach (DataRow row in dtHK_Raw.Rows)
                 {
-                    string hk = row["HocKy"].ToString();
-                    dtHK.Rows.Add(hk, "Học kỳ " + hk);
+                    dtHK.Rows.Add(row["HocKy"], row["HocKy"]);
                 }
-
-                cbHocKy.DisplayMember = "TenHocKy";
-                cbHocKy.ValueMember = "HocKy";
                 cbHocKy.DataSource = dtHK;
+                cbHocKy.ValueMember = "HocKy";
+                cbHocKy.DisplayMember = "TenHocKy";
             }
-    catch (Exception ex) { /* Bỏ qua lỗi nhỏ khi load filter */ }
+            catch (Exception ex) 
+            { 
+                /* Bỏ qua lỗi nhỏ khi load filter */ 
+            }
         }
+
 
         // --- HÀM LOAD DỮ LIỆU ĐIỂM ---
         private void LoadDiemData()

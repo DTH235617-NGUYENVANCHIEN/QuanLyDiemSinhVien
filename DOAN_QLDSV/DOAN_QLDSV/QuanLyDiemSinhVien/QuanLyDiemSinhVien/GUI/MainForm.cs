@@ -121,6 +121,7 @@ namespace QuanLyDiemSinhVien.GUI
                 btnQLLop.Visible = false;
                 btnQLGV.Visible = false;
                 btnQLTaikhoan.Visible = false;
+                btnXemDiem.Visible = false;
 
                 quảnLýKhoaToolStripMenuItem.Visible = false;
                 quảnLýLớpToolStripMenuItem.Visible = false;

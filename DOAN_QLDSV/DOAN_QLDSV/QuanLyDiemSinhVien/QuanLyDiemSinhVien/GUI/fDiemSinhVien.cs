@@ -15,6 +15,9 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fDiemSinhVien : Form
     {
+        private readonly string MaGV_HienTai = "GV001"; // <<< THAY THẾ BẰNG CurrentUser.MaGV THỰC TẾ
+
+        // Thay vì MaGV, ta dùng MaGV_HienTai để xác định sinh viên thuộc quyền quản lý
         SqlConnection conn = new SqlConnection();
         private bool isAdding = false;
         private string MaSV_Cu = "";
@@ -22,16 +25,13 @@ namespace QuanLyDiemSinhVien.GUI
         private int HocKy_Cu = 0;
         private string NamHoc_Cu = "";
 
-        // Thêm biến để lưu MaLop, MaKhoa, MaGV_CVHT của Sinh viên hiện tại
+        // Giữ lại các biến này để hiển thị thông tin khi chọn SV
         private string MaLop_Current = "";
         private string MaKhoa_Current = "";
-        private string MaGV_CVHT_Current = "";
         public fDiemSinhVien()
         {
             InitializeComponent();
-            // Gắn sự kiện CellContentClick vào DataGridView (cần thiết cho chức năng Sửa)
             this.dgvDiem.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDiem_CellContentClick);
-            // Gắn sự kiện SelectedIndexChanged cho ComboBox Tên Sinh viên
             this.cbTenSV.SelectedIndexChanged += new System.EventHandler(this.cbTenSV_SelectedIndexChanged);
         }
         private string TinhDiemChu(float diemTongKet)
@@ -85,10 +85,12 @@ namespace QuanLyDiemSinhVien.GUI
             DataTable dtSV = new DataTable();
             daSV.Fill(dtSV);
 
-            cbTenSV.DataSource = dtSV;
-            cbTenSV.DisplayMember = "HoTen";
-            cbTenSV.ValueMember = "MaSV";
+                cbTenSV.DataSource = dtSV;
+                cbTenSV.DisplayMember = "HoTen";
+                cbTenSV.ValueMember = "MaSV";
+            }
         }
+
 
         private void LoadMonHoc()
         {
@@ -185,7 +187,6 @@ namespace QuanLyDiemSinhVien.GUI
         {
             MaLop_Current = "";
             MaKhoa_Current = "";
-            MaGV_CVHT_Current = "";
 
             if (string.IsNullOrEmpty(maSV))
             {
@@ -194,11 +195,11 @@ namespace QuanLyDiemSinhVien.GUI
                 return;
             }
 
-            string sql = @"SELECT L.MaLop, K.MaKhoa, L.MaGV_CVHT
-                           FROM SINHVIEN S
-                           JOIN LOP L ON S.MaLop = L.MaLop
-                           JOIN KHOA K ON L.MaKhoa = K.MaKhoa
-                           WHERE S.MaSV = @MaSV";
+            string sql = @"SELECT L.MaLop, K.MaKhoa
+                            FROM SINHVIEN S
+                            JOIN LOP L ON S.MaLop = L.MaLop
+                            JOIN KHOA K ON L.MaKhoa = K.MaKhoa
+                            WHERE S.MaSV = @MaSV";
 
             using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
@@ -209,7 +210,6 @@ namespace QuanLyDiemSinhVien.GUI
                     {
                         MaLop_Current = reader["MaLop"].ToString();
                         MaKhoa_Current = reader["MaKhoa"].ToString();
-                        MaGV_CVHT_Current = reader["MaGV_CVHT"].ToString();
                     }
                 }
             }
@@ -255,8 +255,8 @@ namespace QuanLyDiemSinhVien.GUI
             DataTable data = new DataTable();
             dataAdapter.Fill(data);
 
-            dgvDiem.AutoGenerateColumns = false;
-            dgvDiem.DataSource = data;
+                dgvDiem.AutoGenerateColumns = false;
+                dgvDiem.DataSource = data;
 
             // Tải dữ liệu cho các ComboBox
             LoadSinhVien();
@@ -273,10 +273,10 @@ namespace QuanLyDiemSinhVien.GUI
             txtDiemthanhphan.DataBindings.Clear();
             txtDiemthi.DataBindings.Clear();
 
-            // Thiết lập Data Binding mới
-            BindingSource bs = new BindingSource();
-            bs.DataSource = data;
-            dgvDiem.DataSource = bs;
+                // Thiết lập Data Binding mới
+                BindingSource bs = new BindingSource();
+                bs.DataSource = data;
+                dgvDiem.DataSource = bs;
 
             cbTenSV.DataBindings.Add("SelectedValue", bs, "MaSV", true, DataSourceUpdateMode.Never);
             cbMonHoc.DataBindings.Add("SelectedValue", bs, "MaMH", true, DataSourceUpdateMode.Never);
@@ -288,7 +288,7 @@ namespace QuanLyDiemSinhVien.GUI
             txtDiemthi.DataBindings.Add("Text", bs, "DiemThi", true, DataSourceUpdateMode.Never);
         }
 
-
+        }
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
@@ -379,8 +379,6 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dgvDiem.CurrentRow == null) return;
-
             isAdding = false; // Thiết lập trạng thái Sửa
             MoNut(false); // Mở các control nhập liệu
 
@@ -399,6 +397,7 @@ namespace QuanLyDiemSinhVien.GUI
                 NamHoc_Cu = drv["NamHoc"].ToString();
             }
         }
+        
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
@@ -411,7 +410,7 @@ namespace QuanLyDiemSinhVien.GUI
 
             float diemTP, diemThi;
 
-            // BƯỚC 1: KIỂM TRA DỮ LIỆU
+            // BƯỚC 1: KIỂM TRA DỮ LIỆU (Giữ nguyên)
             if (string.IsNullOrEmpty(maSV) || string.IsNullOrEmpty(maMH) || string.IsNullOrEmpty(hocKyText) || string.IsNullOrEmpty(namHoc))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ Tên Sinh viên, Môn học, Học kỳ và Năm học!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -436,7 +435,7 @@ namespace QuanLyDiemSinhVien.GUI
                 return;
             }
 
-            // BƯỚC 2: TÍNH ĐIỂM TỔNG KẾT VÀ ĐIỂM CHỮ
+            // BƯỚC 2: TÍNH ĐIỂM TỔNG KẾT VÀ ĐIỂM CHỮ (Giữ nguyên)
             float diemTongKet = (float)Math.Round((diemTP * 0.3 + diemThi * 0.7), 2);
             string diemChu = TinhDiemChu(diemTongKet);
 
@@ -453,8 +452,9 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 if (isAdding) // THÊM MỚI
                 {
-                    string sqlThem = @"INSERT INTO DIEM(MaSV, MaMH, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemChu, MaGV) 
-                                       VALUES(@MaSV, @MaMH, @HocKy, @NamHoc, @DiemThanhPhan, @DiemThi, @DiemChu, @MaGV)";
+                    // Thêm trường MaGV_HienTai
+                    string sqlThem = @"INSERT INTO DIEM(MaSV, MaMH, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemTongKet, DiemChu, MaGV) 
+                                         VALUES(@MaSV, @MaMH, @HocKy, @NamHoc, @DiemThanhPhan, @DiemThi, @DiemTongKet, @DiemChu, @MaGV)";
 
                     SqlCommand cmd = new SqlCommand(sqlThem, conn);
                     cmd.Parameters.AddWithValue("@MaSV", maSV);
@@ -463,6 +463,8 @@ namespace QuanLyDiemSinhVien.GUI
                     cmd.Parameters.AddWithValue("@NamHoc", namHoc);
                     cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP);
                     cmd.Parameters.AddWithValue("@DiemThi", diemThi);
+                    // Cần thêm DiemTongKet vào INSERT
+                    cmd.Parameters.AddWithValue("@DiemTongKet", diemTongKet);
                     cmd.Parameters.AddWithValue("@DiemChu", diemChu);
                     cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
                     cmd.ExecuteNonQuery();
@@ -470,16 +472,18 @@ namespace QuanLyDiemSinhVien.GUI
                 }
                 else // SỬA ĐIỂM
                 {
+                    // Không cần update MaGV vì MaGV là một phần của khóa chính logic
                     string sqlSua = @"UPDATE DIEM 
-                                       SET DiemThanhPhan = @DiemThanhPhan, 
-                                           DiemThi = @DiemThi, 
-                                           DiemChu = @DiemChu,
-                                           MaGV = @MaGV
-                                       WHERE MaSV = @MaSV_Cu AND MaMH = @MaMH_Cu AND HocKy = @HocKy_Cu AND NamHoc = @NamHoc_Cu";
+                                         SET DiemThanhPhan = @DiemThanhPhan, 
+                                             DiemThi = @DiemThi, 
+                                             DiemTongKet = @DiemTongKet,
+                                             DiemChu = @DiemChu
+                                         WHERE MaSV = @MaSV_Cu AND MaMH = @MaMH_Cu AND HocKy = @HocKy_Cu AND NamHoc = @NamHoc_Cu";
 
                     SqlCommand cmd = new SqlCommand(sqlSua, conn);
                     cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP);
                     cmd.Parameters.AddWithValue("@DiemThi", diemThi);
+                    cmd.Parameters.AddWithValue("@DiemTongKet", diemTongKet);
                     cmd.Parameters.AddWithValue("@DiemChu", diemChu);
                     cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
                     // Khóa chính cũ để xác định dòng cần sửa
@@ -499,7 +503,6 @@ namespace QuanLyDiemSinhVien.GUI
             }
             catch (SqlException ex)
             {
-                // Bắt lỗi trùng khóa chính khi Thêm
                 if (ex.Number == 2627 && isAdding)
                 {
                     MessageBox.Show("Mục điểm này (SV, MH, HK, NH) đã tồn tại! Vui lòng chọn Sửa hoặc kiểm tra lại.", "Lỗi Trùng Lặp", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -565,7 +568,7 @@ namespace QuanLyDiemSinhVien.GUI
                     // Cập nhật các ComboBox Lớp/Khoa theo sinh viên vừa chọn
                     if (!string.IsNullOrEmpty(MaSV_Cu))
                     {
-                        GetLopKhoaGiaoVien(MaSV_Cu);
+                        GetLopKhoa(MaSV_Cu);
                     }
                 }
             }
@@ -575,7 +578,7 @@ namespace QuanLyDiemSinhVien.GUI
         {
             if (cbTenSV.SelectedValue != null && cbTenSV.SelectedValue != DBNull.Value)
             {
-                GetLopKhoaGiaoVien(cbTenSV.SelectedValue.ToString());
+                GetLopKhoa(cbTenSV.SelectedValue.ToString());
             }
             else
             {

@@ -28,7 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             panel1 = new Panel();
             cboLoaikhoa = new ComboBox();
             btnTailai = new Button();
@@ -241,14 +245,16 @@
             // 
             dgvGiaovien.AllowUserToAddRows = false;
             dgvGiaovien.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvGiaovien.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvGiaovien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvGiaovien.BackgroundColor = Color.FromArgb(255, 255, 192);
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvGiaovien.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvGiaovien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvGiaovien.Columns.AddRange(new DataGridViewColumn[] { MaGV, HoTen, NgaySinh, TenKhoa });
             dgvGiaovien.Dock = DockStyle.Fill;
@@ -267,38 +273,42 @@
             // MaGV
             // 
             MaGV.DataPropertyName = "MaGV";
-            MaGV.HeaderText = "MÃ GIÁO VIÊN";
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
+            MaGV.DefaultCellStyle = dataGridViewCellStyle2;
+            MaGV.HeaderText = "MÃ GIAO VIÊN";
             MaGV.MinimumWidth = 8;
             MaGV.Name = "MaGV";
             MaGV.ReadOnly = true;
-            MaGV.Width = 211;
             // 
             // HoTen
             // 
             HoTen.DataPropertyName = "HoTen";
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(255, 255, 192);
+            HoTen.DefaultCellStyle = dataGridViewCellStyle3;
             HoTen.HeaderText = "HỌ TÊN GV";
             HoTen.MinimumWidth = 8;
             HoTen.Name = "HoTen";
             HoTen.ReadOnly = true;
-            HoTen.Width = 210;
             // 
             // NgaySinh
             // 
             NgaySinh.DataPropertyName = "NgaySinh";
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(255, 255, 192);
+            NgaySinh.DefaultCellStyle = dataGridViewCellStyle4;
             NgaySinh.HeaderText = "NGÀY SINH";
             NgaySinh.MinimumWidth = 8;
             NgaySinh.Name = "NgaySinh";
             NgaySinh.ReadOnly = true;
-            NgaySinh.Width = 211;
             // 
             // TenKhoa
             // 
             TenKhoa.DataPropertyName = "TenKhoa";
+            dataGridViewCellStyle5.BackColor = Color.FromArgb(255, 255, 192);
+            TenKhoa.DefaultCellStyle = dataGridViewCellStyle5;
             TenKhoa.HeaderText = "TÊN KHOA";
             TenKhoa.MinimumWidth = 8;
             TenKhoa.Name = "TenKhoa";
             TenKhoa.ReadOnly = true;
-            TenKhoa.Width = 260;
             // 
             // fQuanLyGiaoVien
             // 
@@ -312,7 +322,6 @@
             Name = "fQuanLyGiaoVien";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Quản Lý Giao Viên";
-            FormClosing += fQuanLyGiaoVien_FormClosing;
             Load += fQuanLyGiaoVien_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

@@ -137,7 +137,6 @@
             Name = "fThongTinChiTiet";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Thông Tin Chi Tiết";
-            FormClosing += fThongTinChiTiet_FormClosing;
             Load += fThongTinChiTiet_Load;
             ResumeLayout(false);
             PerformLayout();

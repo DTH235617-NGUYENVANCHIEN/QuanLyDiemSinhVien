@@ -20,21 +20,14 @@ namespace QuanLyDiemSinhVien.GUI
         public fQuanLyGiaoVien()
         {
             InitializeComponent();
-            // Thêm sự kiện FormClosing để đóng kết nối
-            this.FormClosing += new FormClosingEventHandler(this.fQuanLyGiaoVien_FormClosing);
+            
         }
         private void fQuanLyGiaoVien_Load(object sender, EventArgs e)
         {
-            // SỬA: Mở kết nối 1 lần khi Form Load
-            KetnoiSQL.MoKetNoi();
             TaiLaiDuLieu_GV();
 
         } 
-        private void fQuanLyGiaoVien_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // SỬA: Đóng kết nối khi Form tắt
-            KetnoiSQL.DongKetNoi();
-        } 
+   
         private void btnThem_Click(object sender, EventArgs e)
         {
             magv = "";
@@ -58,10 +51,23 @@ namespace QuanLyDiemSinhVien.GUI
             kq = MessageBox.Show("Bạn có muốn xóa " + txtHotengv.Text + " không?", "Xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (kq == DialogResult.Yes)
             {
-                string sql = @"DELETE FROM GIAOVIEN WHERE MaGV = @MaGV";
-                SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
-                cmd.ExecuteNonQuery();
+                // Dùng kết nối MỚI, tự đóng
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
+                {
+                    try
+                    {
+                        conn.Open();
+                        string sql = @"DELETE FROM GIAOVIEN WHERE MaGV = @MaGV";
+                        SqlCommand cmd = new SqlCommand(sql, conn);
+                        cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi xóa: " + ex.Message);
+                    }
+                } // conn tự động đóng ở đây
+
                 // Tải lại form
                 TaiLaiDuLieu_GV();
             }
@@ -84,47 +90,49 @@ namespace QuanLyDiemSinhVien.GUI
                 MessageBox.Show("Ngay sinh chưa đổi(đang là ngày hôm nay)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                try
+                // Dùng kết nối MỚI, tự đóng
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
                 {
-                    // Thêm mới
-                    if (magv == "")
+                    try
                     {
-                        // SỬA: Dùng KetnoiSQL.conn
-                        string sql = @"INSERT INTO GIAOVIEN 
-                                     VALUES (@MaGV, @HoTen, @NgaySinh, @MaKhoa)";
-                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                        cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
-                        cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
-                        cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
-                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
-
-                        cmd.ExecuteNonQuery();
+                        conn.Open();
+                        // Thêm mới
+                        if (magv == "")
+                        {
+                            string sql = @"INSERT INTO GIAOVIEN 
+                                           VALUES (@MaGV, @HoTen, @NgaySinh, @MaKhoa)";
+                            SqlCommand cmd = new SqlCommand(sql, conn);
+                            cmd.Parameters.Add("@MaGV", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
+                            cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
+                            cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
+                            cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
+                            cmd.ExecuteNonQuery();
+                        }
+                        else // Sửa
+                        {
+                            string sql = @"UPDATE GIAOVIEN
+                                           SET MaGV = @MaGVMoi,
+                                               HoTen = @HoTen,
+                                               NgaySinh = @NgaySinh,
+                                               MaKhoa = @MaKhoa
+                                           WHERE MaGV = @MaGVCu";
+                            SqlCommand cmd = new SqlCommand(sql, conn);
+                            cmd.Parameters.Add("@MaGVMoi", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
+                            cmd.Parameters.Add("@MaGVCu", SqlDbType.VarChar, 20).Value = magv;
+                            cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
+                            cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
+                            cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
+                            cmd.ExecuteNonQuery();
+                        }
                     }
-                    else // Sửa
+                    catch (Exception ex)
                     {
-                        // SỬA: Dùng KetnoiSQL.conn
-                        string sql = @"UPDATE GIAOVIEN
-                                     SET MaGV = @MaGVMoi,
-                                         HoTen = @HoTen,
-                                         NgaySinh = @NgaySinh,
-                                         MaKhoa = @MaKhoa
-                                     WHERE MaGV = @MaGVCu";
-                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                        cmd.Parameters.Add("@MaGVMoi", SqlDbType.VarChar, 20).Value = txtMaGV.Text;
-                        cmd.Parameters.Add("@MaGVCu", SqlDbType.VarChar, 20).Value = magv;
-                        cmd.Parameters.Add("@HoTen", SqlDbType.NVarChar, 100).Value = txtHotengv.Text;
-                        cmd.Parameters.Add("@NgaySinh", SqlDbType.Date).Value = dtTime.Value;
-                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = cboLoaikhoa.SelectedValue;
-
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show(ex.Message);
                     }
-                    // Tải lại form
-                    TaiLaiDuLieu_GV();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                } // conn tự động đóng ở đây
+
+                // Tải lại form
+                TaiLaiDuLieu_GV();
             }
         }
 
@@ -139,36 +147,55 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void TaiLaiDuLieu_GV()
         {
-            // Hàm này giả định kết nối ĐÃ MỞ
-
             // 1. Tải dữ liệu GIAOVIEN cho DataGridView
-            string sqlTaiKhoan = @"SELECT G.*,K.TenKhoa 
-                                   FROM GIAOVIEN G, KHOA K
-                                   WHERE G.MaKhoa=K.MaKhoa";
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, KetnoiSQL.conn);
-            DataTable data = new DataTable();
-            dataAdapter.Fill(data);
-            dgvGiaovien.AutoGenerateColumns = false;
-            dgvGiaovien.DataSource = data;
+            // (Thêm MaGV vào câu SELECT để cột hiển thị)
+            string sqlTaiKhoan = @"SELECT G.MaGV, G.HoTen, G.NgaySinh, K.TenKhoa, G.MaKhoa
+                                    FROM GIAOVIEN G, KHOA K
+                                    WHERE G.MaKhoa=K.MaKhoa";
 
             // 2. Tải dữ liệu KHOA cho ComboBox
             string LoaiTKsql = @"SELECT * FROM KHOA";
-            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, KetnoiSQL.conn);
+
+            DataTable data = new DataTable();
             DataTable tableLoaiSach = new DataTable();
-            loaiTKAdapter.Fill(tableLoaiSach);
+
+            // Dùng kết nối MỚI, tự đóng
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlTaiKhoan, conn);
+                    dataAdapter.Fill(data);
+
+                    SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiTKsql, conn);
+                    loaiTKAdapter.Fill(tableLoaiSach);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                    return;
+                }
+            } // conn tự động đóng ở đây
+
+            // 3. Đổ dữ liệu
+            dgvGiaovien.AutoGenerateColumns = false;
+            dgvGiaovien.DataSource = data;
+
             cboLoaikhoa.DataSource = tableLoaiSach;
             cboLoaikhoa.DisplayMember = "TenKhoa";
             cboLoaikhoa.ValueMember = "MaKhoa";
 
-            // 3. Đặt trạng thái nút
+            // 4. Đặt trạng thái nút
             MoNut(true);
 
-            // 4. Data Bindings
+            // 5. Data Bindings (Giữ nguyên)
             cboLoaikhoa.DataBindings.Clear();
             txtMaGV.DataBindings.Clear();
             txtHotengv.DataBindings.Clear();
             dtTime.DataBindings.Clear();
 
+            // Sửa DataBinding cho ComboBox để dùng SelectedValue
             cboLoaikhoa.DataBindings.Add("SelectedValue", dgvGiaovien.DataSource, "MaKhoa", false, DataSourceUpdateMode.Never);
             txtMaGV.DataBindings.Add("Text", dgvGiaovien.DataSource, "MaGV", false, DataSourceUpdateMode.Never);
             txtHotengv.DataBindings.Add("Text", dgvGiaovien.DataSource, "HoTen", false, DataSourceUpdateMode.Never);

@@ -20,17 +20,14 @@ namespace QuanLyDiemSinhVien.GUI
         public fQuanLyLop()
         {
             InitializeComponent();
-            this.FormClosing += new FormClosingEventHandler(this.fQuanLyLop_FormClosing);
+            
         }
         private void fQuanLyLop_Load(object sender, EventArgs e)
         {
-            KetnoiSQL.MoKetNoi();
+     
             TaiLaiDuLieu_Lop();
-        } 
-        private void fQuanLyLop_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            KetnoiSQL.DongKetNoi();
         }
+        
         private void btnThem_Click(object sender, EventArgs e)
         {
             Malop = "";
@@ -42,12 +39,12 @@ namespace QuanLyDiemSinhVien.GUI
                                             // Dòng trên sẽ tự động kích hoạt sự kiện ở Bước 3
                                             // và làm cho cobGiaovien (ComboBox giáo viên) tự động bị xóa theo.
             MoNut(false);
-        } 
+        }
         private void btnSua_Click(object sender, EventArgs e)
         {
             Malop = txtMalop.Text;
             MoNut(false);
-        } 
+        }
         private void btnXoa_Click(object sender, EventArgs e)
         {
 
@@ -55,14 +52,25 @@ namespace QuanLyDiemSinhVien.GUI
             kq = MessageBox.Show("Bạn có muốn xóa lớp " + txtTenlop.Text + " không?", "Xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (kq == DialogResult.Yes)
             {
-                string sql = @"DELETE FROM Lop WHERE MaLop = @MaLop";
-                SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                cmd.Parameters.Add("@MaLop", SqlDbType.VarChar, 20).Value = txtMalop.Text;
-                cmd.ExecuteNonQuery();
-               
+                // SỬA: Dùng 'using'
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
+                {
+                    try
+                    {
+                        conn.Open();
+                        string sql = @"DELETE FROM Lop WHERE MaLop = @MaLop";
+                        SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                        cmd.Parameters.Add("@MaLop", SqlDbType.VarChar, 20).Value = txtMalop.Text;
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi xóa: " + ex.Message);
+                    }
+                } // conn tự động đóng
                 TaiLaiDuLieu_Lop();
             }
-        }   
+        }
         private void btnLuu_Click(object sender, EventArgs e)
         {
             string maLop = txtMalop.Text.Trim();
@@ -79,19 +87,20 @@ namespace QuanLyDiemSinhVien.GUI
                 MessageBox.Show("Vui lòng chọn Giáo viên quản lý!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                // Lấy MaKhoa và MaGV từ ComboBox
-                string maKhoa = cboLoaikhoa.SelectedValue.ToString();
-                string maGV = cobGiaovien.SelectedValue.ToString();
-
-                try
+                // SỬA: Dùng 'using'
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
                 {
-                    if (Malop == "") // THÊM MỚI
+                    try
                     {
-                        string sql = @"INSERT INTO LOP (MaLop, TenLop, MaKhoa, MaGV_CVHT) 
-                                     VALUES (@MaLop, @TenLop, @MaKhoa, @MaGV_CVHT)";
-                        // SỬA: Dùng KetnoiSQL.conn
-                        using (SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn))
+                        conn.Open();
+                        string maKhoa = cboLoaikhoa.SelectedValue.ToString();
+                        string maGV = cobGiaovien.SelectedValue.ToString();
+
+                        if (Malop == "") // THÊM MỚI
                         {
+                            string sql = @"INSERT INTO LOP (MaLop, TenLop, MaKhoa, MaGV_CVHT) 
+                                           VALUES (@MaLop, @TenLop, @MaKhoa, @MaGV_CVHT)";
+                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
                             cmd.Parameters.Add("@MaLop", SqlDbType.VarChar, 20).Value = maLop;
                             cmd.Parameters.Add("@TenLop", SqlDbType.NVarChar, 100).Value = tenLop;
                             cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = maKhoa;
@@ -99,18 +108,15 @@ namespace QuanLyDiemSinhVien.GUI
                             cmd.ExecuteNonQuery();
                             MessageBox.Show("Thêm lớp mới thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                    }
-                    else // SỬA
-                    {
-                        string sql = @"UPDATE LOP
-                                     SET MaLop = @MaLop_Moi,
-                                         TenLop = @TenLop,
-                                         MaKhoa = @MaKhoa,
-                                         MaGV_CVHT = @MaGV_CVHT
-                                     WHERE MaLop = @MaLop_Cu";
-                        // SỬA: Dùng KetnoiSQL.conn
-                        using (SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn))
+                        else // SỬA
                         {
+                            string sql = @"UPDATE LOP
+                                           SET MaLop = @MaLop_Moi,
+                                               TenLop = @TenLop,
+                                               MaKhoa = @MaKhoa,
+                                               MaGV_CVHT = @MaGV_CVHT
+                                           WHERE MaLop = @MaLop_Cu";
+                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
                             cmd.Parameters.Add("@MaLop_Moi", SqlDbType.VarChar, 20).Value = maLop;
                             cmd.Parameters.Add("@TenLop", SqlDbType.NVarChar, 100).Value = tenLop;
                             cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = maKhoa;
@@ -120,26 +126,25 @@ namespace QuanLyDiemSinhVien.GUI
                             MessageBox.Show("Cập nhật lớp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
+                    catch (SqlException ex) // (Bắt lỗi SQL)
+                    {
+                        if (ex.Message.Contains("UNIQUE KEY constraint"))
+                            MessageBox.Show("Mã lớp '" + maLop + "' đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        else if (ex.Message.Contains("FOREIGN KEY constraint"))
+                            MessageBox.Show("Lỗi khóa ngoại, kiểm tra lại Mã Khoa hoặc Mã Giáo viên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        else
+                            MessageBox.Show("Lỗi SQL: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                } // conn tự động đóng
 
-                    // SỬA: Tải lại bằng hàm mới
-                    TaiLaiDuLieu_Lop();
-                }
-                catch (SqlException ex) // (Giữ nguyên phần bắt lỗi)
-                {
-                    if (ex.Message.Contains("UNIQUE KEY constraint"))
-                        MessageBox.Show("Mã lớp '" + maLop + "' đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    else if (ex.Message.Contains("FOREIGN KEY constraint"))
-                        MessageBox.Show("Lỗi khóa ngoại, kiểm tra lại Mã Khoa hoặc Mã Giáo viên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    else
-                        MessageBox.Show("Lỗi SQL: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                TaiLaiDuLieu_Lop();
             }
 
-        }   
+        }
         private void btnTailai_Click(object sender, EventArgs e)
         {
             TaiLaiDuLieu_Lop();
@@ -150,34 +155,50 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void TaiLaiDuLieu_Lop()
         {
-            // Hàm này giả định kết nối ĐÃ MỞ
-
-            // 1. Tải dữ liệu LỚP cho DataGridView
+            // SỬA: Tạo 3 câu SQL
             string sqlLop = @"SELECT L.*,G.HoTen,K.TenKhoa
                             FROM Lop L, GIAOVIEN G,KHOA K
                             WHERE L.MaGV_CVHT=G.MaGV 
                             AND L.MaKhoa =K.MaKhoa";
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlLop, KetnoiSQL.conn);
+            string LoaiKhoasql = @"SELECT * FROM KHOA";
+            string LoaiGVsql = @"SELECT * FROM GIAOVIEN"; // Tải tất cả GV
+
             DataTable data = new DataTable();
+            DataTable tablekhoa = new DataTable();
+            DataTable tableGV = new DataTable();
+
+            // SỬA: Dùng 1 'using' duy nhất để tải cả 3 bảng
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlLop, conn);
+                    dataAdapter.Fill(data);
+
+                    SqlDataAdapter loaiKhoaAdapter = new SqlDataAdapter(LoaiKhoasql, conn);
+                    loaiKhoaAdapter.Fill(tablekhoa);
+
+                    SqlDataAdapter loaiGVAdapter = new SqlDataAdapter(LoaiGVsql, conn);
+                    loaiGVAdapter.Fill(tableGV);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                    return;
+                }
+            } // conn tự động đóng
+
+            // 1. Đổ dữ liệu LỚP
             dgvLop.AutoGenerateColumns = false;
-            dataAdapter.Fill(data);
             dgvLop.DataSource = data;
 
-            // 2. Tải dữ liệu KHOA cho ComboBox
-            string LoaiKhoasql = @"SELECT * FROM KHOA";
-            SqlDataAdapter loaiKhoaAdapter = new SqlDataAdapter(LoaiKhoasql, KetnoiSQL.conn);
-            DataTable tablekhoa = new DataTable();
-            loaiKhoaAdapter.Fill(tablekhoa);
+            // 2. Đổ dữ liệu KHOA
             cboLoaikhoa.DataSource = tablekhoa;
             cboLoaikhoa.DisplayMember = "TenKhoa";
             cboLoaikhoa.ValueMember = "MaKhoa";
 
-            // 3. Tải dữ liệu GIÁO VIÊN cho ComboBox (Tải TẤT CẢ lúc đầu)
-            // (Hàm LoadGiangVienComboBox sẽ lọc lại sau)
-            string LoaiLopsql = @"SELECT * FROM GIAOVIEN";
-            SqlDataAdapter loaiTKAdapter = new SqlDataAdapter(LoaiLopsql, KetnoiSQL.conn);
-            DataTable tableGV = new DataTable();
-            loaiTKAdapter.Fill(tableGV);
+            // 3. Đổ dữ liệu GIÁO VIÊN (tạm thời)
             cobGiaovien.DataSource = tableGV;
             cobGiaovien.DisplayMember = "HoTen";
             cobGiaovien.ValueMember = "MaGV";
@@ -195,40 +216,49 @@ namespace QuanLyDiemSinhVien.GUI
             cobGiaovien.DataBindings.Add("SelectedValue", dgvLop.DataSource, "MaGV_CVHT", false, DataSourceUpdateMode.Never);
             txtMalop.DataBindings.Add("Text", dgvLop.DataSource, "MaLop", false, DataSourceUpdateMode.Never);
             txtTenlop.DataBindings.Add("Text", dgvLop.DataSource, "TenLop", false, DataSourceUpdateMode.Never);
-
-            // Đặt dòng này ở cuối để nó không kích hoạt sự kiện lúc DataBinding
-            cboLoaikhoa.SelectedIndex = -1;
         }
-        // HÀM MỚI: Tải GIÁO VIÊN (lọc theo MaKhoa được chọn)
         private void LoadGiangVienComboBox(string maKhoa)
         {
             DataTable dtGV = new DataTable();
-            if (!string.IsNullOrEmpty(maKhoa))
+
+            // SỬA: Dùng 'using'
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                string sqlGV = "SELECT MaGV, HoTen FROM GIAOVIEN WHERE MaKhoa = @MaKhoa";
-                // SỬA: Dùng KetnoiSQL.conn
-                SqlDataAdapter daGV = new SqlDataAdapter(sqlGV, KetnoiSQL.conn);
-                daGV.SelectCommand.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = maKhoa;
-                daGV.Fill(dtGV);
-            }
+                try
+                {
+                    if (!string.IsNullOrEmpty(maKhoa))
+                    {
+                        string sqlGV = "SELECT MaGV, HoTen FROM GIAOVIEN WHERE MaKhoa = @MaKhoa";
+                        SqlDataAdapter daGV = new SqlDataAdapter(sqlGV, conn); // conn mới
+                        daGV.SelectCommand.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = maKhoa;
+                        daGV.Fill(dtGV);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lọc giáo viên: " + ex.Message);
+                }
+            } // conn tự động đóng
+
             cobGiaovien.DataSource = dtGV;
             cobGiaovien.DisplayMember = "HoTen";
             cobGiaovien.ValueMember = "MaGV";
-        } 
+        }
         private void cboLoaikhoa_SelectedValueChanged(object sender, EventArgs e)
         {
-            // Khi người dùng chọn 1 khoa (hoặc khi data binding)
-            if (cboLoaikhoa.SelectedValue != null)
+            // Chỉ chạy khi người dùng tương tác (không phải lúc data binding)
+            // Sửa: (cboLoaikhoa.Focused || !cboLoaikhoa.Enabled) để bắt sự kiện khi bấm Thêm
+            if (cboLoaikhoa.Focused || !cboLoaikhoa.Enabled)
             {
-                string maKhoa = cboLoaikhoa.SelectedValue.ToString();
-                // Tải lại danh sách GV theo Khoa
-                LoadGiangVienComboBox(maKhoa);
-            }
-            else
-            {
-                // Nếu không chọn Khoa nào (khi bấm Thêm mới)
-                // Xóa sạch danh sách GV
-                LoadGiangVienComboBox(null);
+                if (cboLoaikhoa.SelectedValue != null)
+                {
+                    string maKhoa = cboLoaikhoa.SelectedValue.ToString();
+                    LoadGiangVienComboBox(maKhoa); // Tải lại GV theo Khoa
+                }
+                else
+                {
+                    LoadGiangVienComboBox(null); // Xóa sạch GV
+                }
             }
         }
         private void MoNut(bool t)
@@ -247,8 +277,6 @@ namespace QuanLyDiemSinhVien.GUI
 
             btnLuu.Enabled = !t;
         }
-
-       
     }
 }
 

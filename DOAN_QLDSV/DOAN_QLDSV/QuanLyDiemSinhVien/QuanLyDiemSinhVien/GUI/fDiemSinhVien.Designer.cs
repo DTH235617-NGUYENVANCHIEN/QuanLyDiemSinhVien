@@ -172,14 +172,14 @@
             // 
             // txtDiemthi
             // 
-            txtDiemthi.Location = new Point(811, 108);
+            txtDiemthi.Location = new Point(811, 68);
             txtDiemthi.Name = "txtDiemthi";
             txtDiemthi.Size = new Size(182, 30);
             txtDiemthi.TabIndex = 34;
             // 
             // txtDiemthanhphan
             // 
-            txtDiemthanhphan.Location = new Point(811, 67);
+            txtDiemthanhphan.Location = new Point(811, 24);
             txtDiemthanhphan.Name = "txtDiemthanhphan";
             txtDiemthanhphan.Size = new Size(182, 30);
             txtDiemthanhphan.TabIndex = 33;
@@ -202,7 +202,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(720, 108);
+            label6.Location = new Point(720, 75);
             label6.Name = "label6";
             label6.Size = new Size(84, 22);
             label6.TabIndex = 27;
@@ -211,7 +211,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(669, 67);
+            label5.Location = new Point(669, 28);
             label5.Name = "label5";
             label5.Size = new Size(147, 22);
             label5.TabIndex = 26;

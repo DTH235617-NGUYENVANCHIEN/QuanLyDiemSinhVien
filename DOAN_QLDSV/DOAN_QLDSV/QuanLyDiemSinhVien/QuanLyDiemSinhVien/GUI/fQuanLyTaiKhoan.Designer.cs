@@ -151,7 +151,7 @@
             // 
             cobQuyen.Anchor = AnchorStyles.Top;
             cobQuyen.FormattingEnabled = true;
-            cobQuyen.Location = new Point(167, 56);
+            cobQuyen.Location = new Point(167, 120);
             cobQuyen.Name = "cobQuyen";
             cobQuyen.Size = new Size(281, 35);
             cobQuyen.TabIndex = 2;
@@ -159,7 +159,7 @@
             // txtPass
             // 
             txtPass.Anchor = AnchorStyles.Top;
-            txtPass.Location = new Point(167, 117);
+            txtPass.Location = new Point(167, 69);
             txtPass.MaxLength = 255;
             txtPass.Name = "txtPass";
             txtPass.Size = new Size(281, 35);
@@ -188,7 +188,7 @@
             // txtTen
             // 
             txtTen.Anchor = AnchorStyles.Top;
-            txtTen.Location = new Point(167, 6);
+            txtTen.Location = new Point(167, 14);
             txtTen.Margin = new Padding(4, 3, 4, 3);
             txtTen.MaxLength = 255;
             txtTen.Name = "txtTen";
@@ -211,6 +211,7 @@
             dgvTaikhoan.AllowUserToAddRows = false;
             dgvTaikhoan.AllowUserToDeleteRows = false;
             dgvTaikhoan.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvTaikhoan.BackgroundColor = Color.FromArgb(255, 255, 192);
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -222,6 +223,7 @@
             dgvTaikhoan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvTaikhoan.Columns.AddRange(new DataGridViewColumn[] { TenDangNhap, MatKhau, TenQuyen });
             dgvTaikhoan.Dock = DockStyle.Fill;
+            dgvTaikhoan.GridColor = Color.Black;
             dgvTaikhoan.Location = new Point(0, 162);
             dgvTaikhoan.Margin = new Padding(4, 3, 4, 3);
             dgvTaikhoan.MultiSelect = false;
@@ -239,6 +241,7 @@
             // 
             TenDangNhap.DataPropertyName = "TenDangNhap";
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
             TenDangNhap.DefaultCellStyle = dataGridViewCellStyle2;
             TenDangNhap.HeaderText = "TÊN ĐĂNG NHẬP";
             TenDangNhap.MinimumWidth = 8;
@@ -249,6 +252,7 @@
             // 
             MatKhau.DataPropertyName = "MatKhau";
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(255, 255, 192);
             MatKhau.DefaultCellStyle = dataGridViewCellStyle3;
             MatKhau.HeaderText = "MẬT KHẨU";
             MatKhau.MinimumWidth = 8;
@@ -259,6 +263,7 @@
             // 
             TenQuyen.DataPropertyName = "TenQuyen";
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(255, 255, 192);
             TenQuyen.DefaultCellStyle = dataGridViewCellStyle4;
             TenQuyen.HeaderText = "LOẠI TÀI KHOẢN";
             TenQuyen.MinimumWidth = 8;
@@ -277,7 +282,6 @@
             Name = "fQuanLyTaiKhoan";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "fQuanLyTaiKhoan";
-            FormClosing += fQuanLyTaiKhoan_FormClosing;
             Load += fQuanLyTaiKhoan_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

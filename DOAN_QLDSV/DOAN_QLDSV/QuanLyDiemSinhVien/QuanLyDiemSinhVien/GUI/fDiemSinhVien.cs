@@ -96,14 +96,29 @@ namespace QuanLyDiemSinhVien.GUI
         }
 
 
-        private void LoadMonHoc()
+        private void LoadMonHoc(string maKhoa = null)
         {
-            // BỎ logic join với bảng DIEM
-            // Một giáo viên cần thấy TẤT CẢ môn học để có thể thêm điểm
-            string sqlMH = @"SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH";
+            string sqlMH;
+            SqlCommand cmd = new SqlCommand();
 
-            SqlCommand cmd = new SqlCommand(sqlMH, conn);
-            // Không cần tham số @MaGV nữa
+            if (string.IsNullOrEmpty(maKhoa))
+            {
+                // Nếu không có khoa (lúc mới tải form), tải tất cả
+                sqlMH = @"SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH";
+                cmd.CommandText = sqlMH;
+                cmd.Connection = conn;
+            }
+            else
+            {
+                // Nếu CÓ khoa, chỉ tải môn học của khoa đó
+                sqlMH = @"SELECT MaMH, TenMH 
+                  FROM MONHOC 
+                  WHERE MaKhoa = @MaKhoa 
+                  ORDER BY TenMH";
+                cmd.CommandText = sqlMH;
+                cmd.Connection = conn;
+                cmd.Parameters.AddWithValue("@MaKhoa", maKhoa);
+            }
 
             SqlDataAdapter daMH = new SqlDataAdapter(cmd);
             DataTable dtMH = new DataTable();
@@ -604,12 +619,24 @@ namespace QuanLyDiemSinhVien.GUI
         {
             if (cbTenSV.SelectedValue != null && cbTenSV.SelectedValue != DBNull.Value)
             {
-                GetLopKhoa(cbTenSV.SelectedValue.ToString());
+                string maSVChon = cbTenSV.SelectedValue.ToString();
+
+                // 1. Tìm Lớp/Khoa của SV (hàm này sẽ gán giá trị cho MaKhoa_Current)
+                // (Đảm bảo bạn dùng GetLopKhoa chứ không phải GetLopKhoaGiaoVien)
+                GetLopKhoa(maSVChon);
+
+                // 2. Lọc lại ComboBox Môn học dựa trên khoa của sinh viên
+                // (Đây là dòng code bị thiếu trong file của bạn)
+                LoadMonHoc(MaKhoa_Current);
             }
             else
             {
+                // Nếu không chọn SV nào, xóa trắng Lớp/Khoa và tải tất cả môn
                 cbTenLop.SelectedIndex = -1;
                 cbTenKhoa.SelectedIndex = -1;
+
+                // (Đây cũng là dòng code bị thiếu)
+                LoadMonHoc(); // Tải tất cả môn học
             }
         }
     }

@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            label4 = new Label();
             txtTenMH = new TextBox();
             btnTailai = new Button();
             nudSotinchi = new NumericUpDown();
@@ -47,10 +49,12 @@
             btnXoa = new Button();
             btnThem = new Button();
             dgvMonhoc = new DataGridView();
+            txtMaKhoa = new TextBox();
             STT = new DataGridViewTextBoxColumn();
             MaMH = new DataGridViewTextBoxColumn();
             TenMH = new DataGridViewTextBoxColumn();
             SoTC = new DataGridViewTextBoxColumn();
+            MaKhoa = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudSotinchi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMonhoc).BeginInit();
@@ -58,6 +62,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(txtMaKhoa);
+            panel1.Controls.Add(label4);
             panel1.Controls.Add(txtTenMH);
             panel1.Controls.Add(btnTailai);
             panel1.Controls.Add(nudSotinchi);
@@ -74,13 +80,24 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(5, 3, 5, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1371, 194);
+            panel1.Size = new Size(1496, 194);
             panel1.TabIndex = 2;
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.None;
+            label4.AutoSize = true;
+            label4.Location = new Point(1079, 27);
+            label4.Margin = new Padding(6, 0, 6, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(103, 27);
+            label4.TabIndex = 26;
+            label4.Text = "Mã khoa:";
             // 
             // txtTenMH
             // 
             txtTenMH.Anchor = AnchorStyles.None;
-            txtTenMH.Location = new Point(625, 30);
+            txtTenMH.Location = new Point(586, 27);
             txtTenMH.Margin = new Padding(4, 3, 4, 3);
             txtTenMH.Name = "txtTenMH";
             txtTenMH.Size = new Size(251, 35);
@@ -89,7 +106,7 @@
             // btnTailai
             // 
             btnTailai.Anchor = AnchorStyles.None;
-            btnTailai.Location = new Point(609, 134);
+            btnTailai.Location = new Point(672, 134);
             btnTailai.Margin = new Padding(5, 3, 5, 3);
             btnTailai.Name = "btnTailai";
             btnTailai.Size = new Size(190, 40);
@@ -102,7 +119,7 @@
             // nudSotinchi
             // 
             nudSotinchi.Anchor = AnchorStyles.None;
-            nudSotinchi.Location = new Point(1082, 33);
+            nudSotinchi.Location = new Point(950, 27);
             nudSotinchi.Margin = new Padding(4, 3, 4, 3);
             nudSotinchi.Name = "nudSotinchi";
             nudSotinchi.Size = new Size(106, 35);
@@ -112,7 +129,7 @@
             // 
             label3.Anchor = AnchorStyles.None;
             label3.AutoSize = true;
-            label3.Location = new Point(965, 38);
+            label3.Location = new Point(846, 27);
             label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
             label3.Size = new Size(108, 27);
@@ -123,7 +140,7 @@
             // 
             label2.Anchor = AnchorStyles.None;
             label2.AutoSize = true;
-            label2.Location = new Point(472, 38);
+            label2.Location = new Point(433, 27);
             label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
             label2.Size = new Size(144, 27);
@@ -133,7 +150,7 @@
             // txtMamonhoc
             // 
             txtMamonhoc.Anchor = AnchorStyles.None;
-            txtMamonhoc.Location = new Point(258, 35);
+            txtMamonhoc.Location = new Point(219, 27);
             txtMamonhoc.Margin = new Padding(6, 3, 6, 3);
             txtMamonhoc.MaxLength = 255;
             txtMamonhoc.Name = "txtMamonhoc";
@@ -144,7 +161,7 @@
             // 
             label1.Anchor = AnchorStyles.None;
             label1.AutoSize = true;
-            label1.Location = new Point(110, 38);
+            label1.Location = new Point(69, 27);
             label1.Margin = new Padding(6, 0, 6, 0);
             label1.Name = "label1";
             label1.Size = new Size(139, 27);
@@ -154,7 +171,7 @@
             // btnThoat
             // 
             btnThoat.Anchor = AnchorStyles.None;
-            btnThoat.Location = new Point(823, 133);
+            btnThoat.Location = new Point(886, 133);
             btnThoat.Margin = new Padding(5, 3, 5, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(190, 40);
@@ -167,7 +184,7 @@
             // btnLuu
             // 
             btnLuu.Anchor = AnchorStyles.None;
-            btnLuu.Location = new Point(386, 133);
+            btnLuu.Location = new Point(449, 133);
             btnLuu.Margin = new Padding(5, 3, 5, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(190, 40);
@@ -180,7 +197,7 @@
             // btnSua
             // 
             btnSua.Anchor = AnchorStyles.None;
-            btnSua.Location = new Point(823, 86);
+            btnSua.Location = new Point(886, 86);
             btnSua.Margin = new Padding(5, 3, 5, 3);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(190, 40);
@@ -193,7 +210,7 @@
             // btnXoa
             // 
             btnXoa.Anchor = AnchorStyles.None;
-            btnXoa.Location = new Point(609, 87);
+            btnXoa.Location = new Point(672, 87);
             btnXoa.Margin = new Padding(5, 3, 5, 3);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(190, 40);
@@ -206,7 +223,7 @@
             // btnThem
             // 
             btnThem.Anchor = AnchorStyles.None;
-            btnThem.Location = new Point(386, 86);
+            btnThem.Location = new Point(449, 86);
             btnThem.Margin = new Padding(5, 3, 5, 3);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(190, 40);
@@ -222,16 +239,16 @@
             dgvMonhoc.AllowUserToDeleteRows = false;
             dgvMonhoc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMonhoc.BackgroundColor = Color.FromArgb(255, 255, 192);
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = Color.White;
-            dataGridViewCellStyle6.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvMonhoc.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = Color.White;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvMonhoc.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvMonhoc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMonhoc.Columns.AddRange(new DataGridViewColumn[] { STT, MaMH, TenMH, SoTC });
+            dgvMonhoc.Columns.AddRange(new DataGridViewColumn[] { STT, MaMH, TenMH, SoTC, MaKhoa });
             dgvMonhoc.Dock = DockStyle.Fill;
             dgvMonhoc.GridColor = SystemColors.Desktop;
             dgvMonhoc.Location = new Point(0, 194);
@@ -243,16 +260,23 @@
             dgvMonhoc.RowHeadersWidth = 62;
             dgvMonhoc.RowTemplate.Height = 30;
             dgvMonhoc.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMonhoc.Size = new Size(1371, 292);
+            dgvMonhoc.Size = new Size(1496, 292);
             dgvMonhoc.TabIndex = 2;
             dgvMonhoc.TabStop = false;
+            // 
+            // txtMaKhoa
+            // 
+            txtMaKhoa.Location = new Point(1191, 24);
+            txtMaKhoa.Name = "txtMaKhoa";
+            txtMaKhoa.Size = new Size(293, 35);
+            txtMaKhoa.TabIndex = 27;
             // 
             // STT
             // 
             STT.DataPropertyName = "SoThuTuHienThi";
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = Color.FromArgb(255, 255, 192);
-            STT.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
+            STT.DefaultCellStyle = dataGridViewCellStyle2;
             STT.HeaderText = "SỐ TT";
             STT.MinimumWidth = 8;
             STT.Name = "STT";
@@ -261,8 +285,8 @@
             // MaMH
             // 
             MaMH.DataPropertyName = "MaMH";
-            dataGridViewCellStyle8.BackColor = Color.FromArgb(255, 255, 192);
-            MaMH.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(255, 255, 192);
+            MaMH.DefaultCellStyle = dataGridViewCellStyle3;
             MaMH.HeaderText = "MÃ MÔN HỌC";
             MaMH.MinimumWidth = 8;
             MaMH.Name = "MaMH";
@@ -271,8 +295,8 @@
             // TenMH
             // 
             TenMH.DataPropertyName = "TenMH";
-            dataGridViewCellStyle9.BackColor = Color.FromArgb(255, 255, 192);
-            TenMH.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(255, 255, 192);
+            TenMH.DefaultCellStyle = dataGridViewCellStyle4;
             TenMH.HeaderText = "TÊN MÔN";
             TenMH.MinimumWidth = 8;
             TenMH.Name = "TenMH";
@@ -281,20 +305,30 @@
             // SoTC
             // 
             SoTC.DataPropertyName = "SoTC";
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = Color.FromArgb(255, 255, 192);
-            SoTC.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = Color.FromArgb(255, 255, 192);
+            SoTC.DefaultCellStyle = dataGridViewCellStyle5;
             SoTC.HeaderText = "SỐ TÍN CHỈ";
             SoTC.MinimumWidth = 8;
             SoTC.Name = "SoTC";
             SoTC.ReadOnly = true;
+            // 
+            // MaKhoa
+            // 
+            MaKhoa.DataPropertyName = "MaKhoa";
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(255, 255, 192);
+            MaKhoa.DefaultCellStyle = dataGridViewCellStyle6;
+            MaKhoa.HeaderText = "MÃ KHOA";
+            MaKhoa.MinimumWidth = 8;
+            MaKhoa.Name = "MaKhoa";
+            MaKhoa.ReadOnly = true;
             // 
             // fQuanLyMonHoc
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 192);
-            ClientSize = new Size(1371, 486);
+            ClientSize = new Size(1496, 486);
             Controls.Add(dgvMonhoc);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -326,9 +360,12 @@
         private Button btnTailai;
         private TextBox txtTenMH;
         private DataGridView dgvMonhoc;
+        private Label label4;
+        private TextBox txtMaKhoa;
         private DataGridViewTextBoxColumn STT;
         private DataGridViewTextBoxColumn MaMH;
         private DataGridViewTextBoxColumn TenMH;
         private DataGridViewTextBoxColumn SoTC;
+        private DataGridViewTextBoxColumn MaKhoa;
     }
 }

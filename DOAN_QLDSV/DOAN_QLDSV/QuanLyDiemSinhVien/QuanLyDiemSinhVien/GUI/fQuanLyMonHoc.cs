@@ -49,6 +49,7 @@ namespace QuanLyDiemSinhVien.GUI
             txtMamonhoc.Text = "";
             txtTenMH.Text = "";
             nudSotinchi.Value = 0;
+            txtMaKhoa.Text = "";
 
             MoNut(false);
             txtMamonhoc.Focus();
@@ -95,6 +96,8 @@ namespace QuanLyDiemSinhVien.GUI
             string maMH = txtMamonhoc.Text.Trim();
             string tenMH = txtTenMH.Text.Trim();
             int soTC = (int)nudSotinchi.Value;
+            // <--- SỬA 2: Lấy MaKhoa từ TextBox (Giả sử tên là txtMaKhoa) --->
+            string maKhoa = txtMaKhoa.Text.Trim();
 
             // --- 1. KIỂM TRA DỮ LIỆU ĐẦU VÀO ---
             if (maMH == "")
@@ -103,10 +106,22 @@ namespace QuanLyDiemSinhVien.GUI
                 MessageBox.Show("Tên môn học không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (soTC <= 0)
                 MessageBox.Show("Số tín chỉ phải lớn hơn 0!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            // <--- SỬA 3: Thay đổi logic kiểm tra Khoa --->
+            else if (string.IsNullOrEmpty(maKhoa))
+            {
+                MessageBox.Show("Bạn phải nhập Mã khoa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtMaKhoa.Focus();
+            }
+            // <--- THÊM MỚI 2: Ràng buộc (Constraint) mà bạn yêu cầu --->
+            else if (!KiemTraKhoaTonTai(maKhoa))
+            {
+                MessageBox.Show("Mã khoa '" + maKhoa + "' không tồn tại. Vui lòng kiểm tra lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtMaKhoa.Focus();
+            }
             else
             {
                 // --- 2. DỮ LIỆU HỢP LỆ -> TIẾN HÀNH LƯU ---
-                // SỬA: Dùng 'using'
                 using (SqlConnection conn = KetnoiSQL.GetConnection())
                 {
                     try
@@ -115,36 +130,42 @@ namespace QuanLyDiemSinhVien.GUI
                         // Trường hợp THÊM MỚI
                         if (Mamonhoc == "")
                         {
-                            string sql = @"INSERT INTO MONHOC (MaMH, TenMH, SoTC) 
-                                           VALUES (@MaMH, @TenMH, @SoTC)";
+                            // Câu lệnh SQL vẫn đúng (đã lưu MaKhoa)
+                            string sql = @"INSERT INTO MONHOC (MaMH, TenMH, SoTC, MaKhoa) 
+                                           VALUES (@MaMH, @TenMH, @SoTC, @MaKhoa)";
 
-                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                            SqlCommand cmd = new SqlCommand(sql, conn);
                             cmd.Parameters.Add("@MaMH", SqlDbType.VarChar, 20).Value = maMH;
                             cmd.Parameters.Add("@TenMH", SqlDbType.NVarChar, 100).Value = tenMH;
                             cmd.Parameters.Add("@SoTC", SqlDbType.Int).Value = soTC;
+                            cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = maKhoa;
                             cmd.ExecuteNonQuery();
                             MessageBox.Show("Thêm môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         // Trường hợp SỬA
                         else
                         {
+                            // Câu lệnh SQL vẫn đúng (đã lưu MaKhoa)
                             string sql = @"UPDATE MONHOC
                                            SET MaMH = @MaMH_Moi,
                                                TenMH = @TenMH,
-                                               SoTC = @SoTC
+                                               SoTC = @SoTC,
+                                               MaKhoa = @MaKhoa
                                            WHERE MaMH = @MaMH_Cu";
 
-                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                            SqlCommand cmd = new SqlCommand(sql, conn);
                             cmd.Parameters.Add("@MaMH_Moi", SqlDbType.VarChar, 20).Value = maMH;
                             cmd.Parameters.Add("@TenMH", SqlDbType.NVarChar, 100).Value = tenMH;
                             cmd.Parameters.Add("@SoTC", SqlDbType.Int).Value = soTC;
+                            cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = maKhoa;
                             cmd.Parameters.Add("@MaMH_Cu", SqlDbType.VarChar, 20).Value = Mamonhoc;
                             cmd.ExecuteNonQuery();
                             MessageBox.Show("Cập nhật môn học thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
-                    catch (SqlException ex) // Bắt lỗi SQL (Giữ nguyên)
+                    catch (SqlException ex)
                     {
+                        // ... (Phần bắt lỗi giữ nguyên) ...
                         if (ex.Message.Contains("UNIQUE KEY constraint"))
                             MessageBox.Show("Mã môn học '" + maMH + "' đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         else if (ex.Message.Contains("CHECK constraint"))
@@ -175,22 +196,20 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void TaiLaiDuLieu()
         {
-            // SỬA LOGIC: Mặc định là Admin (SELECT *), nếu là Teacher thì lọc theo MaGV trong bảng DIEM
-
-            // <--- SỬA ĐỔI 1: THAY "SELECT *" BẰNG "ROW_NUMBER()" CHO ADMIN --->
-            string sqlMonHoc = @"SELECT 
-                                    ROW_NUMBER() OVER (ORDER BY MaMH) AS SoThuTuHienThi, 
-                                    MaMH, TenMH, SoTC 
-                                 FROM MONHOC";
+            string sqlMonHoc = @"
+                SELECT 
+                    ROW_NUMBER() OVER (ORDER BY MH.MaMH) AS SoThuTuHienThi, 
+                    MH.MaMH, MH.TenMH, MH.SoTC, MH.MaKhoa
+                FROM MONHOC MH";
 
             // THÊM ĐIỀU KIỆN LỌC
             if (CurrentUser.TenQuyen == "Teacher")
             {
-                // <--- SỬA ĐỔI 2: DÙNG "ROW_NUMBER()" CHO TEACHER VÀ BỎ "DISTINCT MH.*" --->
+                // <--- SỬA 5: Cập nhật SQL cho Teacher (Bỏ JOIN, chỉ lấy MaKhoa) --->
                 sqlMonHoc = @"
                     SELECT 
                         ROW_NUMBER() OVER (ORDER BY MH.MaMH) AS SoThuTuHienThi, 
-                        MH.MaMH, MH.TenMH, MH.SoTC 
+                        MH.MaMH, MH.TenMH, MH.SoTC, MH.MaKhoa
                     FROM MONHOC MH
                     WHERE MH.MaMH IN (
                         SELECT DISTINCT MaMH FROM DIEM 
@@ -207,10 +226,8 @@ namespace QuanLyDiemSinhVien.GUI
                     conn.Open();
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlMonHoc, conn);
 
-                    // THÊM PARAMETER NẾU LÀ GIÁO VIÊN
                     if (CurrentUser.TenQuyen == "Teacher")
                     {
-                        // Giả định TenDangNhap của GV chính là MaGV
                         dataAdapter.SelectCommand.Parameters.AddWithValue("@MaGV_HienTai", CurrentUser.Username);
                     }
 
@@ -226,20 +243,49 @@ namespace QuanLyDiemSinhVien.GUI
             dgvMonhoc.DataSource = data;
             MoNut(true);
 
-            // Data Bindings (Giữ nguyên)
+            // Data Bindings
             txtMamonhoc.DataBindings.Clear();
             txtTenMH.DataBindings.Clear();
             nudSotinchi.DataBindings.Clear();
+            // <--- SỬA 6: Đổi ComboBox sang TextBox --->
+            txtMaKhoa.DataBindings.Clear();
 
             txtMamonhoc.DataBindings.Add("Text", dgvMonhoc.DataSource, "MaMH", false, DataSourceUpdateMode.Never);
             txtTenMH.DataBindings.Add("Text", dgvMonhoc.DataSource, "TenMH", false, DataSourceUpdateMode.Never);
             nudSotinchi.DataBindings.Add("Value", dgvMonhoc.DataSource, "SoTC", false, DataSourceUpdateMode.Never);
+            // <--- SỬA 7: Binding cho TextBox MaKhoa --->
+            txtMaKhoa.DataBindings.Add("Text", dgvMonhoc.DataSource, "MaKhoa", false, DataSourceUpdateMode.Never);
+        }
+        private bool KiemTraKhoaTonTai(string maKhoa)
+        {
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    // Dùng SELECT 1 (nhanh hơn COUNT(*)) để kiểm tra sự tồn tại
+                    string sql = "SELECT 1 FROM KHOA WHERE MaKhoa = @MaKhoa";
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@MaKhoa", maKhoa);
+
+                    object result = cmd.ExecuteScalar();
+
+                    // Nếu ExecuteScalar trả về 1 (hoặc bất cứ gì không null), nghĩa là Mã Khoa tồn tại
+                    return (result != null);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi kiểm tra mã khoa: " + ex.Message);
+                    return false; // Gặp lỗi thì coi như không tồn tại
+                }
+            }
         }
         private void MoNut(bool t)
         {
             txtMamonhoc.Enabled = !t;
             txtTenMH.Enabled = !t;
             nudSotinchi.Enabled = !t;
+            txtMaKhoa.Enabled = !t;
 
             btnThem.Enabled = t;
             btnXoa.Enabled = t;

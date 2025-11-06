@@ -67,7 +67,7 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void LoadSinhVien()
         {
-            // Sửa câu truy vấn: Bỏ JOIN không chính xác với MONHOC
+            
             string sqlSV = @"
                 SELECT DISTINCT S.MaSV, S.HoTen, S.MaLop 
                 FROM SINHVIEN S
@@ -475,7 +475,7 @@ namespace QuanLyDiemSinhVien.GUI
                         GetLopKhoa(MaSV_Cu);
                     }
                 }
-            }\`a
+            }
         }
 
         private void cbTenSV_SelectedIndexChanged(object sender, EventArgs e)

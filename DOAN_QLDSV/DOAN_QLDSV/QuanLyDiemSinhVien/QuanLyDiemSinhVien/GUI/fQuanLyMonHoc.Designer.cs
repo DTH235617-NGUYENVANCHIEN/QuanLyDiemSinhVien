@@ -31,6 +31,8 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             panel1 = new Panel();
             txtTenMH = new TextBox();
             btnTailai = new Button();
@@ -78,10 +80,10 @@
             // txtTenMH
             // 
             txtTenMH.Anchor = AnchorStyles.None;
-            txtTenMH.Location = new Point(547, 33);
+            txtTenMH.Location = new Point(520, 35);
             txtTenMH.Margin = new Padding(4, 3, 4, 3);
             txtTenMH.Name = "txtTenMH";
-            txtTenMH.Size = new Size(194, 35);
+            txtTenMH.Size = new Size(251, 35);
             txtTenMH.TabIndex = 25;
             // 
             // btnTailai
@@ -219,8 +221,9 @@
             dgvMonhoc.AllowUserToAddRows = false;
             dgvMonhoc.AllowUserToDeleteRows = false;
             dgvMonhoc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvMonhoc.BackgroundColor = Color.FromArgb(255, 255, 192);
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.BackColor = Color.White;
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
@@ -230,6 +233,7 @@
             dgvMonhoc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMonhoc.Columns.AddRange(new DataGridViewColumn[] { STT, MaMH, TenMH, SoTC });
             dgvMonhoc.Dock = DockStyle.Fill;
+            dgvMonhoc.GridColor = SystemColors.Desktop;
             dgvMonhoc.Location = new Point(0, 194);
             dgvMonhoc.Margin = new Padding(5, 3, 5, 3);
             dgvMonhoc.MultiSelect = false;
@@ -247,6 +251,7 @@
             // 
             STT.DataPropertyName = "STT";
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
             STT.DefaultCellStyle = dataGridViewCellStyle2;
             STT.HeaderText = "SỐ TT";
             STT.MinimumWidth = 8;
@@ -256,6 +261,8 @@
             // MaMH
             // 
             MaMH.DataPropertyName = "MaMH";
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(255, 255, 192);
+            MaMH.DefaultCellStyle = dataGridViewCellStyle3;
             MaMH.HeaderText = "MÃ MÔN HỌC";
             MaMH.MinimumWidth = 8;
             MaMH.Name = "MaMH";
@@ -264,6 +271,8 @@
             // TenMH
             // 
             TenMH.DataPropertyName = "TenMH";
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(255, 255, 192);
+            TenMH.DefaultCellStyle = dataGridViewCellStyle4;
             TenMH.HeaderText = "TÊN MÔN";
             TenMH.MinimumWidth = 8;
             TenMH.Name = "TenMH";
@@ -272,8 +281,9 @@
             // SoTC
             // 
             SoTC.DataPropertyName = "SoTC";
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            SoTC.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = Color.FromArgb(255, 255, 192);
+            SoTC.DefaultCellStyle = dataGridViewCellStyle5;
             SoTC.HeaderText = "SỐ TÍN CHỈ";
             SoTC.MinimumWidth = 8;
             SoTC.Name = "SoTC";
@@ -292,7 +302,6 @@
             Name = "fQuanLyMonHoc";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "fQuanLyMonHoc";
-            FormClosing += fQuanLyMonHoc_FormClosing;
             Load += fQuanLyMonHoc_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

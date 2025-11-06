@@ -21,20 +21,15 @@ namespace QuanLyDiemSinhVien.GUI
         public fQuanLyKhoa()
         {
             InitializeComponent();
-            // SỬA: Thêm sự kiện FormClosing
-            this.FormClosing += new FormClosingEventHandler(this.fQuanLyKhoa_FormClosing);
+   
         }
 
         private void fQuanLyKhoa_Load(object sender, EventArgs e)
         {
-            KetnoiSQL.MoKetNoi();
+   
             TaiLaiDuLieu_Khoa();
         }
-        private void fQuanLyKhoa_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            KetnoiSQL.DongKetNoi();
-        }
-
+      
         private void btnThem_Click(object sender, EventArgs e)
         {
             maKhoa = "";
@@ -55,10 +50,23 @@ namespace QuanLyDiemSinhVien.GUI
             kq = MessageBox.Show("Bạn có muốn xóa  " + txtTenkhoa.Text + " không?", "Xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (kq == DialogResult.Yes)
             {
-                string sql = @"DELETE FROM KHOA WHERE  MaKhoa= @MaKhoa";
-                SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = txtMakhoa.Text;
-                cmd.ExecuteNonQuery();
+                // SỬA: Dùng 'using' để kết nối
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
+                {
+                    try
+                    {
+                        conn.Open();
+                        string sql = @"DELETE FROM KHOA WHERE  MaKhoa= @MaKhoa";
+                        SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = txtMakhoa.Text;
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi xóa: " + ex.Message);
+                    }
+                } // conn tự động đóng ở đây
+
                 // Tải lại form
                 TaiLaiDuLieu_Khoa();
             }
@@ -67,53 +75,55 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            // Kiểm tra dữ liệu
+            // Kiểm tra dữ liệu (Giữ nguyên)
             if (txtMakhoa.Text.Trim() == "")
                 MessageBox.Show("Chưa có mã khoa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else if (txtTenkhoa.Text.Trim() == "")
                 MessageBox.Show("Ten không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                try
+                // SỬA: Dùng 'using' để kết nối
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
                 {
-                    // Thêm mới
-                    if (maKhoa == "")
+                    try
                     {
-                        string sql = @"INSERT INTO KHOA
-                                       VALUES(@MaKhoa, @TenKhoa)";
-                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                        cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = txtMakhoa.Text;
-                        cmd.Parameters.Add("@TenKhoa", SqlDbType.NVarChar, 100).Value = txtTenkhoa.Text;
-
-
-                        cmd.ExecuteNonQuery();
+                        conn.Open();
+                        // Thêm mới
+                        if (maKhoa == "")
+                        {
+                            string sql = @"INSERT INTO KHOA
+                                           VALUES(@MaKhoa, @TenKhoa)";
+                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                            cmd.Parameters.Add("@MaKhoa", SqlDbType.VarChar, 20).Value = txtMakhoa.Text;
+                            cmd.Parameters.Add("@TenKhoa", SqlDbType.NVarChar, 100).Value = txtTenkhoa.Text;
+                            cmd.ExecuteNonQuery();
+                        }
+                        else // Sửa
+                        {
+                            string sql = @"UPDATE KHOA
+                                           SET MaKhoa = @MaKhoaMoi,
+                                           TenKhoa = @TenKhoa        
+                                           WHERE MaKhoa = @MaKhoaCu";
+                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                            cmd.Parameters.Add("@MaKhoaMoi", SqlDbType.VarChar, 20).Value = txtMakhoa.Text;
+                            cmd.Parameters.Add("@MaKhoaCu", SqlDbType.VarChar, 20).Value = maKhoa;
+                            cmd.Parameters.Add("@TenKhoa", SqlDbType.NVarChar, 100).Value = txtTenkhoa.Text;
+                            cmd.ExecuteNonQuery();
+                        }
                     }
-                    else // Sửa
+                    catch (Exception ex)
                     {
-                        string sql = @"UPDATE KHOA
-                                    SET MaKhoa = @MaKhoaMoi,
-                                    TenKhoa = @TenKhoa           
-                                    WHERE MaKhoa = @MaKhoaCu";
-                        SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                        cmd.Parameters.Add("@MaKhoaMoi", SqlDbType.VarChar, 20).Value = txtMakhoa.Text;
-                        cmd.Parameters.Add("@MaKhoaCu", SqlDbType.VarChar, 20).Value = maKhoa;
-                        cmd.Parameters.Add("@TenKhoa", SqlDbType.NVarChar, 100).Value = txtTenkhoa.Text;
-
-
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show(ex.Message);
                     }
-                    // Tải lại form
-                    TaiLaiDuLieu_Khoa();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                } // conn tự động đóng ở đây
+
+                // Tải lại form
+                TaiLaiDuLieu_Khoa();
             }
         } 
         private void btnTailai_Click(object sender, EventArgs e)
         {
-            fQuanLyKhoa_Load(sender, e);
+            TaiLaiDuLieu_Khoa();
         }
         private void btnThoat_Click(object sender, EventArgs e)
         {
@@ -121,12 +131,23 @@ namespace QuanLyDiemSinhVien.GUI
         }
         private void TaiLaiDuLieu_Khoa()
         {
-            // Hàm này giả định kết nối ĐÃ MỞ
-            string sqlKhoa = @"SELECT * FROM KHOA";
-            // SỬA: Dùng KetnoiSQL.conn
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlKhoa, KetnoiSQL.conn);
             DataTable data = new DataTable();
-            dataAdapter.Fill(data);
+
+            // SỬA: Dùng 'using' để kết nối
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
+            {
+                try
+                {
+                    string sqlKhoa = @"SELECT * FROM KHOA";
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlKhoa, conn); // Dùng 'conn' mới
+                    dataAdapter.Fill(data);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                }
+            } // conn tự động đóng ở đây
+
             dgvKhoa.DataSource = data;
 
             MoAn(true);
@@ -137,6 +158,7 @@ namespace QuanLyDiemSinhVien.GUI
             txtMakhoa.DataBindings.Add("Text", dgvKhoa.DataSource, "MaKhoa", false, DataSourceUpdateMode.Never);
             txtTenkhoa.DataBindings.Add("Text", dgvKhoa.DataSource, "TenKhoa", false, DataSourceUpdateMode.Never);
         }
+        
 
         private void MoAn(bool t)
         {

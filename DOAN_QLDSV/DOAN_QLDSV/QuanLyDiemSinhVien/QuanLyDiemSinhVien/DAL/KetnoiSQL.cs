@@ -10,32 +10,16 @@ namespace QuanLyDiemSinhVien.DAL
 {
     internal class KetnoiSQL
     {
-        // Đây là biến lưu trữ kết nối, dùng chung
-        public static SqlConnection conn = new SqlConnection();
+        // 1. Chuỗi kết nối ĐÚNG
+        // (Xóa 'Integrated Security' và thêm 'TrustServerCertificate')
+        private static string connectionString = @"server=.; Database=db_QLDSV;User ID=sa;Password=123;TrustServerCertificate=True";
 
-        // Chuỗi kết nối
-        private static string connectionString = @"server=.; Database=db_QLDSV;Integrated Security=True";
-
-        // Đây là PHƯƠNG THỨC để mở kết nối
-        public static void MoKetNoi()
+        // 2. Hàm này trả về một KẾT NỐI MỚI mỗi khi được gọi
+        public static SqlConnection GetConnection()
         {
-            // Di chuyển code logic của bạn vào đây
-            if (conn.State == ConnectionState.Closed)
-            {
-                conn.ConnectionString = connectionString;
-                conn.Open();
-            }
+            return new SqlConnection(connectionString);
         }
 
-        // Tạo thêm phương thức đóng kết nối
-        public static void DongKetNoi()
-        {
-            if (conn.State == ConnectionState.Open)
-            {
-                conn.Close();
-            }
-        }
-       
 
 
     }

@@ -30,6 +30,7 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             panel1 = new Panel();
             btnTailai = new Button();
             txtTenkhoa = new TextBox();
@@ -65,13 +66,13 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(4, 3, 4, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(887, 210);
+            panel1.Size = new Size(920, 210);
             panel1.TabIndex = 0;
             // 
             // btnTailai
             // 
             btnTailai.Anchor = AnchorStyles.Top;
-            btnTailai.Location = new Point(366, 145);
+            btnTailai.Location = new Point(383, 145);
             btnTailai.Margin = new Padding(4, 3, 4, 3);
             btnTailai.Name = "btnTailai";
             btnTailai.Size = new Size(146, 37);
@@ -84,18 +85,18 @@
             // txtTenkhoa
             // 
             txtTenkhoa.Anchor = AnchorStyles.Top;
-            txtTenkhoa.Location = new Point(589, 32);
+            txtTenkhoa.Location = new Point(606, 32);
             txtTenkhoa.Margin = new Padding(4, 3, 4, 3);
             txtTenkhoa.MaxLength = 255;
             txtTenkhoa.Name = "txtTenkhoa";
-            txtTenkhoa.Size = new Size(239, 35);
+            txtTenkhoa.Size = new Size(256, 35);
             txtTenkhoa.TabIndex = 20;
             // 
             // label2
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(473, 38);
+            label2.Location = new Point(490, 38);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(108, 27);
@@ -105,7 +106,7 @@
             // txtMakhoa
             // 
             txtMakhoa.Anchor = AnchorStyles.Top;
-            txtMakhoa.Location = new Point(181, 35);
+            txtMakhoa.Location = new Point(198, 35);
             txtMakhoa.Margin = new Padding(5, 3, 5, 3);
             txtMakhoa.MaxLength = 255;
             txtMakhoa.Name = "txtMakhoa";
@@ -116,7 +117,7 @@
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(68, 35);
+            label1.Location = new Point(85, 35);
             label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
             label1.Size = new Size(103, 27);
@@ -126,7 +127,7 @@
             // btnThoat
             // 
             btnThoat.Anchor = AnchorStyles.Top;
-            btnThoat.Location = new Point(608, 145);
+            btnThoat.Location = new Point(625, 145);
             btnThoat.Margin = new Padding(4, 3, 4, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(146, 37);
@@ -139,7 +140,7 @@
             // btnLuu
             // 
             btnLuu.Anchor = AnchorStyles.Top;
-            btnLuu.Location = new Point(148, 145);
+            btnLuu.Location = new Point(165, 145);
             btnLuu.Margin = new Padding(4, 3, 4, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(146, 37);
@@ -152,7 +153,7 @@
             // btnSua
             // 
             btnSua.Anchor = AnchorStyles.Top;
-            btnSua.Location = new Point(608, 86);
+            btnSua.Location = new Point(625, 86);
             btnSua.Margin = new Padding(4, 3, 4, 3);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(146, 37);
@@ -165,7 +166,7 @@
             // btnXoa
             // 
             btnXoa.Anchor = AnchorStyles.Top;
-            btnXoa.Location = new Point(366, 86);
+            btnXoa.Location = new Point(383, 86);
             btnXoa.Margin = new Padding(4, 3, 4, 3);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(146, 37);
@@ -178,7 +179,7 @@
             // btnThem
             // 
             btnThem.Anchor = AnchorStyles.Top;
-            btnThem.Location = new Point(148, 86);
+            btnThem.Location = new Point(165, 86);
             btnThem.Margin = new Padding(4, 3, 4, 3);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(146, 37);
@@ -193,6 +194,7 @@
             dgvKhoa.AllowUserToAddRows = false;
             dgvKhoa.AllowUserToDeleteRows = false;
             dgvKhoa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvKhoa.BackgroundColor = Color.FromArgb(255, 255, 192);
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -213,14 +215,14 @@
             dgvKhoa.RowHeadersWidth = 62;
             dgvKhoa.RowTemplate.Height = 30;
             dgvKhoa.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvKhoa.Size = new Size(887, 276);
+            dgvKhoa.Size = new Size(920, 276);
             dgvKhoa.TabIndex = 1;
             dgvKhoa.TabStop = false;
             // 
             // MaKhoa
             // 
             MaKhoa.DataPropertyName = "MaKhoa";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
             MaKhoa.DefaultCellStyle = dataGridViewCellStyle2;
             MaKhoa.HeaderText = "MÃ KHOA";
             MaKhoa.MinimumWidth = 8;
@@ -230,6 +232,8 @@
             // TenKhoa
             // 
             TenKhoa.DataPropertyName = "TenKhoa";
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(255, 255, 192);
+            TenKhoa.DefaultCellStyle = dataGridViewCellStyle3;
             TenKhoa.HeaderText = "TÊN KHOA";
             TenKhoa.MinimumWidth = 8;
             TenKhoa.Name = "TenKhoa";
@@ -239,7 +243,7 @@
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(887, 486);
+            ClientSize = new Size(920, 486);
             Controls.Add(dgvKhoa);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -247,7 +251,6 @@
             Name = "fQuanLyKhoa";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Quản Lý Khoa";
-            FormClosing += fQuanLyKhoa_FormClosing;
             Load += fQuanLyKhoa_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

@@ -21,7 +21,7 @@ namespace QuanLyDiemSinhVien.GUI
         public fThongTinChiTiet()
         {
             InitializeComponent();
-            this.FormClosing += new FormClosingEventHandler(this.fThongTinChiTiet_FormClosing);
+     
 
         }
 
@@ -34,48 +34,47 @@ namespace QuanLyDiemSinhVien.GUI
                 this.Close();
                 return;
             }
-            KetnoiSQL.MoKetNoi();
+        
             LoadThongTinTaiKhoan();
         }  
-        private void fThongTinChiTiet_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            KetnoiSQL.DongKetNoi();
-        }
+        
+     
         private void LoadThongTinTaiKhoan()
         {
-            try
+            // SỬA: Dùng 'using'
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                // SỬA: Bỏ 'conn.Open()' vì kết nối đã được mở ở Form_Load
-
-                string sql = @"SELECT T.TenDangNhap, L.TenQuyen 
-                               FROM TAIKHOAN T 
-                               JOIN LOAITAIKHOAN L ON T.MaQuyen = L.MaQuyen 
-                               WHERE T.TenDangNhap = @TenDangNhap";
-
-                // SỬA: Dùng KetnoiSQL.conn
-                SqlCommand cmd = new SqlCommand(sql, KetnoiSQL.conn);
-                cmd.Parameters.AddWithValue("@TenDangNhap", CurrentUser.Username);
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                try
                 {
-                    if (reader.Read())
+                    conn.Open(); // Mở kết nối
+                    string sql = @"SELECT T.TenDangNhap, L.TenQuyen 
+                                   FROM TAIKHOAN T 
+                                   JOIN LOAITAIKHOAN L ON T.MaQuyen = L.MaQuyen 
+                                   WHERE T.TenDangNhap = @TenDangNhap";
+
+                    SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
+                    cmd.Parameters.AddWithValue("@TenDangNhap", CurrentUser.Username);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        txtTenDangNhap.Text = reader["TenDangNhap"].ToString();
-                        txtQuyen.Text = reader["TenQuyen"].ToString();
-                        txtMatKhau.Text = "**********";
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không tìm thấy thông tin tài khoản.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.Close();
+                        if (reader.Read())
+                        {
+                            txtTenDangNhap.Text = reader["TenDangNhap"].ToString();
+                            txtQuyen.Text = reader["TenQuyen"].ToString();
+                            txtMatKhau.Text = "**********";
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy thông tin tài khoản.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this.Close();
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải thông tin: " + ex.Message);
-            }
-            // SỬA: Bỏ khối 'finally' và 'conn.Close()'
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải thông tin: " + ex.Message);
+                }
+            } // conn tự động đóng ở đây
         }
 
         private void btnDong_Click(object sender, EventArgs e)

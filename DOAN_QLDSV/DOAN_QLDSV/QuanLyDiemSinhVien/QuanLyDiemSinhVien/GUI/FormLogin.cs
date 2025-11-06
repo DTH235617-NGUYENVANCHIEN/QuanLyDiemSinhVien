@@ -34,7 +34,7 @@ namespace QuanLyDiemSinhVien
             }
 
             // 1. Băm mật khẩu nhập vào
-            string matKhauHashed = HashPassword(matKhau);
+            string matKhauHashed = MaHoa.MaHoaSHA256(matKhau);
 
             try
             {
@@ -70,23 +70,7 @@ namespace QuanLyDiemSinhVien
             Application.Exit();
         }
 
-        // 3. HÀM BĂM MẬT KHẨU (HASH PASSWORD)
-        // (Đây là hàm bạn đã dùng trong code mẫu `fQuanLyTaiKhoan`)
-        // Dùng SHA-256
-
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
+    
 
         private void FormLogin_Load(object sender, EventArgs e)
         {

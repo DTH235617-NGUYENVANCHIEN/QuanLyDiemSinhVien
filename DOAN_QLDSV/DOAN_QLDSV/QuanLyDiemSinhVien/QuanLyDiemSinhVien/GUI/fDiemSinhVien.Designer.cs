@@ -36,8 +36,6 @@
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             panel2 = new Panel();
-            cbTenGV = new ComboBox();
-            label9 = new Label();
             label8 = new Label();
             cbTenLop = new ComboBox();
             cbTenKhoa = new ComboBox();
@@ -72,7 +70,6 @@
             DiemChu = new DataGridViewTextBoxColumn();
             TenKhoa = new DataGridViewTextBoxColumn();
             TenLop = new DataGridViewTextBoxColumn();
-            HoTen = new DataGridViewTextBoxColumn();
             panel2.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDiem).BeginInit();
@@ -81,8 +78,6 @@
             // panel2
             // 
             panel2.BackColor = Color.FromArgb(192, 255, 192);
-            panel2.Controls.Add(cbTenGV);
-            panel2.Controls.Add(label9);
             panel2.Controls.Add(label8);
             panel2.Controls.Add(cbTenLop);
             panel2.Controls.Add(cbTenKhoa);
@@ -111,23 +106,6 @@
             panel2.Size = new Size(1444, 208);
             panel2.TabIndex = 2;
             panel2.Paint += panel2_Paint;
-            // 
-            // cbTenGV
-            // 
-            cbTenGV.FormattingEnabled = true;
-            cbTenGV.Location = new Point(811, 24);
-            cbTenGV.Name = "cbTenGV";
-            cbTenGV.Size = new Size(182, 27);
-            cbTenGV.TabIndex = 43;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(683, 24);
-            label9.Name = "label9";
-            label9.Size = new Size(99, 19);
-            label9.TabIndex = 42;
-            label9.Text = "Tên Giáo Viên:";
             // 
             // label8
             // 
@@ -194,14 +172,14 @@
             // 
             // txtDiemthi
             // 
-            txtDiemthi.Location = new Point(811, 108);
+            txtDiemthi.Location = new Point(811, 68);
             txtDiemthi.Name = "txtDiemthi";
             txtDiemthi.Size = new Size(182, 26);
             txtDiemthi.TabIndex = 34;
             // 
             // txtDiemthanhphan
             // 
-            txtDiemthanhphan.Location = new Point(811, 67);
+            txtDiemthanhphan.Location = new Point(811, 24);
             txtDiemthanhphan.Name = "txtDiemthanhphan";
             txtDiemthanhphan.Size = new Size(182, 26);
             txtDiemthanhphan.TabIndex = 33;
@@ -224,7 +202,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(720, 108);
+            label6.Location = new Point(720, 75);
             label6.Name = "label6";
             label6.Size = new Size(62, 19);
             label6.TabIndex = 27;
@@ -233,7 +211,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(669, 67);
+            label5.Location = new Point(669, 28);
             label5.Name = "label5";
             label5.Size = new Size(113, 19);
             label5.TabIndex = 26;
@@ -357,7 +335,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvDiem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvDiem.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDiem.Columns.AddRange(new DataGridViewColumn[] { TenSinhVien, TenMonHoc, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemTongKet, DiemChu, TenKhoa, TenLop, HoTen });
+            dgvDiem.Columns.AddRange(new DataGridViewColumn[] { TenSinhVien, TenMonHoc, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemTongKet, DiemChu, TenKhoa, TenLop });
             dgvDiem.Dock = DockStyle.Fill;
             dgvDiem.Location = new Point(0, 0);
             dgvDiem.MultiSelect = false;
@@ -374,7 +352,7 @@
             // 
             // TenSinhVien
             // 
-            TenSinhVien.DataPropertyName = "HoTen";
+            TenSinhVien.DataPropertyName = "TenSinhVien";
             TenSinhVien.FillWeight = 36.36364F;
             TenSinhVien.HeaderText = "TÊN SINH VIÊN";
             TenSinhVien.MinimumWidth = 8;
@@ -384,7 +362,7 @@
             // 
             // TenMonHoc
             // 
-            TenMonHoc.DataPropertyName = "TenMH";
+            TenMonHoc.DataPropertyName = "TenMonHoc";
             TenMonHoc.FillWeight = 36.36364F;
             TenMonHoc.HeaderText = "MÔN HỌC";
             TenMonHoc.MinimumWidth = 8;
@@ -477,13 +455,6 @@
             TenLop.Name = "TenLop";
             TenLop.ReadOnly = true;
             // 
-            // HoTen
-            // 
-            HoTen.DataPropertyName = "HoTen";
-            HoTen.HeaderText = "TÊN GIÁO VIÊN";
-            HoTen.Name = "HoTen";
-            HoTen.ReadOnly = true;
-            // 
             // fDiemSinhVien
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -526,14 +497,11 @@
         private Button btnLamlai;
         private ComboBox cbTenSV;
         private ComboBox cbMonHoc;
-        private DataGridViewTextBoxColumn HoTen;
         private DataGridViewTextBoxColumn TenMH;
         private Label label7;
         private ComboBox cbTenKhoa;
         private Label label8;
         private ComboBox cbTenLop;
-        private ComboBox cbTenGV;
-        private Label label9;
         private DataGridViewTextBoxColumn TenSinhVien;
         private DataGridViewTextBoxColumn TenMonHoc;
         private DataGridViewTextBoxColumn HocKy;

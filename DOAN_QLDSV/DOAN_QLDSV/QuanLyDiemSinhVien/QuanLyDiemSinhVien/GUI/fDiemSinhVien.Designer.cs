@@ -113,7 +113,7 @@
             // 
             label8.Anchor = AnchorStyles.Top;
             label8.AutoSize = true;
-            label8.Location = new Point(500, 153);
+            label8.Location = new Point(628, 153);
             label8.Name = "label8";
             label8.Size = new Size(101, 27);
             label8.TabIndex = 41;
@@ -123,7 +123,7 @@
             // 
             cbTenLop.Anchor = AnchorStyles.Top;
             cbTenLop.FormattingEnabled = true;
-            cbTenLop.Location = new Point(619, 153);
+            cbTenLop.Location = new Point(747, 153);
             cbTenLop.Name = "cbTenLop";
             cbTenLop.Size = new Size(300, 35);
             cbTenLop.TabIndex = 40;
@@ -132,7 +132,7 @@
             // 
             cbTenKhoa.Anchor = AnchorStyles.Top;
             cbTenKhoa.FormattingEnabled = true;
-            cbTenKhoa.Location = new Point(619, 25);
+            cbTenKhoa.Location = new Point(747, 25);
             cbTenKhoa.Name = "cbTenKhoa";
             cbTenKhoa.Size = new Size(300, 35);
             cbTenKhoa.TabIndex = 39;
@@ -141,7 +141,7 @@
             // 
             label7.Anchor = AnchorStyles.Top;
             label7.AutoSize = true;
-            label7.Location = new Point(500, 25);
+            label7.Location = new Point(628, 25);
             label7.Name = "label7";
             label7.Size = new Size(113, 27);
             label7.TabIndex = 38;
@@ -151,7 +151,7 @@
             // 
             cbTenSV.Anchor = AnchorStyles.Top;
             cbTenSV.FormattingEnabled = true;
-            cbTenSV.Location = new Point(175, 25);
+            cbTenSV.Location = new Point(303, 25);
             cbTenSV.Name = "cbTenSV";
             cbTenSV.Size = new Size(268, 35);
             cbTenSV.TabIndex = 37;
@@ -161,7 +161,7 @@
             // 
             cbMonHoc.Anchor = AnchorStyles.Top;
             cbMonHoc.FormattingEnabled = true;
-            cbMonHoc.Location = new Point(619, 89);
+            cbMonHoc.Location = new Point(747, 89);
             cbMonHoc.Name = "cbMonHoc";
             cbMonHoc.Size = new Size(300, 35);
             cbMonHoc.TabIndex = 36;
@@ -182,7 +182,7 @@
             // txtDiemthi
             // 
             txtDiemthi.Anchor = AnchorStyles.Top;
-            txtDiemthi.Location = new Point(1135, 89);
+            txtDiemthi.Location = new Point(1263, 89);
             txtDiemthi.Name = "txtDiemthi";
             txtDiemthi.Size = new Size(166, 35);
             txtDiemthi.TabIndex = 34;
@@ -190,7 +190,7 @@
             // txtDiemthanhphan
             // 
             txtDiemthanhphan.Anchor = AnchorStyles.Top;
-            txtDiemthanhphan.Location = new Point(1135, 25);
+            txtDiemthanhphan.Location = new Point(1263, 25);
             txtDiemthanhphan.Name = "txtDiemthanhphan";
             txtDiemthanhphan.Size = new Size(166, 35);
             txtDiemthanhphan.TabIndex = 33;
@@ -198,7 +198,7 @@
             // txtNamhoc
             // 
             txtNamhoc.Anchor = AnchorStyles.Top;
-            txtNamhoc.Location = new Point(175, 89);
+            txtNamhoc.Location = new Point(303, 89);
             txtNamhoc.Name = "txtNamhoc";
             txtNamhoc.Size = new Size(268, 35);
             txtNamhoc.TabIndex = 32;
@@ -207,7 +207,7 @@
             // 
             cbHocKy.Anchor = AnchorStyles.Top;
             cbHocKy.FormattingEnabled = true;
-            cbHocKy.Location = new Point(175, 153);
+            cbHocKy.Location = new Point(303, 153);
             cbHocKy.Name = "cbHocKy";
             cbHocKy.Size = new Size(268, 35);
             cbHocKy.TabIndex = 31;
@@ -216,7 +216,7 @@
             // 
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Location = new Point(946, 89);
+            label6.Location = new Point(1074, 89);
             label6.Name = "label6";
             label6.Size = new Size(101, 27);
             label6.TabIndex = 27;
@@ -226,7 +226,7 @@
             // 
             label5.Anchor = AnchorStyles.Top;
             label5.AutoSize = true;
-            label5.Location = new Point(946, 25);
+            label5.Location = new Point(1074, 25);
             label5.Name = "label5";
             label5.Size = new Size(183, 27);
             label5.TabIndex = 26;
@@ -236,7 +236,7 @@
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(22, 89);
+            label4.Location = new Point(150, 89);
             label4.Name = "label4";
             label4.Size = new Size(105, 27);
             label4.TabIndex = 25;
@@ -246,7 +246,7 @@
             // 
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(22, 153);
+            label3.Location = new Point(150, 153);
             label3.Name = "label3";
             label3.Size = new Size(88, 27);
             label3.TabIndex = 24;
@@ -256,7 +256,7 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(500, 89);
+            label2.Location = new Point(628, 89);
             label2.Name = "label2";
             label2.Size = new Size(104, 27);
             label2.TabIndex = 23;
@@ -266,7 +266,7 @@
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(22, 25);
+            label1.Location = new Point(150, 25);
             label1.Name = "label1";
             label1.Size = new Size(147, 27);
             label1.TabIndex = 22;
@@ -275,7 +275,7 @@
             // btnThoat
             // 
             btnThoat.Anchor = AnchorStyles.Top;
-            btnThoat.Location = new Point(1719, 153);
+            btnThoat.Location = new Point(1627, 153);
             btnThoat.Margin = new Padding(4, 3, 4, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(146, 37);
@@ -288,7 +288,7 @@
             // btnLuu
             // 
             btnLuu.Anchor = AnchorStyles.Top;
-            btnLuu.Location = new Point(1719, 89);
+            btnLuu.Location = new Point(1627, 87);
             btnLuu.Margin = new Padding(4, 3, 4, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(146, 37);
@@ -314,7 +314,7 @@
             // btnXoa
             // 
             btnXoa.Anchor = AnchorStyles.Top;
-            btnXoa.Location = new Point(1719, 25);
+            btnXoa.Location = new Point(1627, 25);
             btnXoa.Margin = new Padding(4, 3, 4, 3);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(146, 37);

@@ -113,7 +113,7 @@
             // 
             btnDong.Location = new Point(157, 327);
             btnDong.Name = "btnDong";
-            btnDong.Size = new Size(112, 34);
+            btnDong.Size = new Size(154, 34);
             btnDong.TabIndex = 7;
             btnDong.Text = "Đóng";
             btnDong.UseVisualStyleBackColor = true;
@@ -123,6 +123,7 @@
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(192, 255, 192);
             ClientSize = new Size(473, 373);
             Controls.Add(btnDong);
             Controls.Add(label4);

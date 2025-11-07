@@ -35,6 +35,7 @@
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            txtMaKhoa = new TextBox();
             label4 = new Label();
             txtTenMH = new TextBox();
             btnTailai = new Button();
@@ -49,7 +50,6 @@
             btnXoa = new Button();
             btnThem = new Button();
             dgvMonhoc = new DataGridView();
-            txtMaKhoa = new TextBox();
             STT = new DataGridViewTextBoxColumn();
             MaMH = new DataGridViewTextBoxColumn();
             TenMH = new DataGridViewTextBoxColumn();
@@ -80,14 +80,21 @@
             panel1.Location = new Point(0, 0);
             panel1.Margin = new Padding(5, 3, 5, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1496, 194);
+            panel1.Size = new Size(1634, 194);
             panel1.TabIndex = 2;
+            // 
+            // txtMaKhoa
+            // 
+            txtMaKhoa.Location = new Point(1348, 19);
+            txtMaKhoa.Name = "txtMaKhoa";
+            txtMaKhoa.Size = new Size(274, 35);
+            txtMaKhoa.TabIndex = 27;
             // 
             // label4
             // 
             label4.Anchor = AnchorStyles.None;
             label4.AutoSize = true;
-            label4.Location = new Point(1079, 27);
+            label4.Location = new Point(1158, 30);
             label4.Margin = new Padding(6, 0, 6, 0);
             label4.Name = "label4";
             label4.Size = new Size(103, 27);
@@ -97,7 +104,7 @@
             // txtTenMH
             // 
             txtTenMH.Anchor = AnchorStyles.None;
-            txtTenMH.Location = new Point(586, 27);
+            txtTenMH.Location = new Point(655, 27);
             txtTenMH.Margin = new Padding(4, 3, 4, 3);
             txtTenMH.Name = "txtTenMH";
             txtTenMH.Size = new Size(251, 35);
@@ -106,7 +113,7 @@
             // btnTailai
             // 
             btnTailai.Anchor = AnchorStyles.None;
-            btnTailai.Location = new Point(672, 134);
+            btnTailai.Location = new Point(741, 134);
             btnTailai.Margin = new Padding(5, 3, 5, 3);
             btnTailai.Name = "btnTailai";
             btnTailai.Size = new Size(190, 40);
@@ -119,7 +126,7 @@
             // nudSotinchi
             // 
             nudSotinchi.Anchor = AnchorStyles.None;
-            nudSotinchi.Location = new Point(950, 27);
+            nudSotinchi.Location = new Point(1019, 27);
             nudSotinchi.Margin = new Padding(4, 3, 4, 3);
             nudSotinchi.Name = "nudSotinchi";
             nudSotinchi.Size = new Size(106, 35);
@@ -129,7 +136,7 @@
             // 
             label3.Anchor = AnchorStyles.None;
             label3.AutoSize = true;
-            label3.Location = new Point(846, 27);
+            label3.Location = new Point(915, 27);
             label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
             label3.Size = new Size(108, 27);
@@ -140,7 +147,7 @@
             // 
             label2.Anchor = AnchorStyles.None;
             label2.AutoSize = true;
-            label2.Location = new Point(433, 27);
+            label2.Location = new Point(502, 27);
             label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
             label2.Size = new Size(144, 27);
@@ -150,7 +157,7 @@
             // txtMamonhoc
             // 
             txtMamonhoc.Anchor = AnchorStyles.None;
-            txtMamonhoc.Location = new Point(219, 27);
+            txtMamonhoc.Location = new Point(288, 27);
             txtMamonhoc.Margin = new Padding(6, 3, 6, 3);
             txtMamonhoc.MaxLength = 255;
             txtMamonhoc.Name = "txtMamonhoc";
@@ -161,7 +168,7 @@
             // 
             label1.Anchor = AnchorStyles.None;
             label1.AutoSize = true;
-            label1.Location = new Point(69, 27);
+            label1.Location = new Point(138, 27);
             label1.Margin = new Padding(6, 0, 6, 0);
             label1.Name = "label1";
             label1.Size = new Size(139, 27);
@@ -171,7 +178,7 @@
             // btnThoat
             // 
             btnThoat.Anchor = AnchorStyles.None;
-            btnThoat.Location = new Point(886, 133);
+            btnThoat.Location = new Point(955, 133);
             btnThoat.Margin = new Padding(5, 3, 5, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(190, 40);
@@ -184,7 +191,7 @@
             // btnLuu
             // 
             btnLuu.Anchor = AnchorStyles.None;
-            btnLuu.Location = new Point(449, 133);
+            btnLuu.Location = new Point(518, 133);
             btnLuu.Margin = new Padding(5, 3, 5, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(190, 40);
@@ -197,7 +204,7 @@
             // btnSua
             // 
             btnSua.Anchor = AnchorStyles.None;
-            btnSua.Location = new Point(886, 86);
+            btnSua.Location = new Point(955, 86);
             btnSua.Margin = new Padding(5, 3, 5, 3);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(190, 40);
@@ -210,7 +217,7 @@
             // btnXoa
             // 
             btnXoa.Anchor = AnchorStyles.None;
-            btnXoa.Location = new Point(672, 87);
+            btnXoa.Location = new Point(741, 87);
             btnXoa.Margin = new Padding(5, 3, 5, 3);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(190, 40);
@@ -223,7 +230,7 @@
             // btnThem
             // 
             btnThem.Anchor = AnchorStyles.None;
-            btnThem.Location = new Point(449, 86);
+            btnThem.Location = new Point(518, 86);
             btnThem.Margin = new Padding(5, 3, 5, 3);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(190, 40);
@@ -260,16 +267,9 @@
             dgvMonhoc.RowHeadersWidth = 62;
             dgvMonhoc.RowTemplate.Height = 30;
             dgvMonhoc.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMonhoc.Size = new Size(1496, 292);
+            dgvMonhoc.Size = new Size(1634, 292);
             dgvMonhoc.TabIndex = 2;
             dgvMonhoc.TabStop = false;
-            // 
-            // txtMaKhoa
-            // 
-            txtMaKhoa.Location = new Point(1191, 24);
-            txtMaKhoa.Name = "txtMaKhoa";
-            txtMaKhoa.Size = new Size(293, 35);
-            txtMaKhoa.TabIndex = 27;
             // 
             // STT
             // 
@@ -328,7 +328,7 @@
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 192);
-            ClientSize = new Size(1496, 486);
+            ClientSize = new Size(1634, 486);
             Controls.Add(dgvMonhoc);
             Controls.Add(panel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);

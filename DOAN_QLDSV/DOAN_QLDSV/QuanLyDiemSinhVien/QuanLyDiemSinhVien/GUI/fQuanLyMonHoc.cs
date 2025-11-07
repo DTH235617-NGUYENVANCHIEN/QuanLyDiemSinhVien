@@ -22,7 +22,7 @@ namespace QuanLyDiemSinhVien.GUI
         public fQuanLyMonHoc()
         {
             InitializeComponent();
-            
+
         }
 
 
@@ -41,7 +41,7 @@ namespace QuanLyDiemSinhVien.GUI
 
             TaiLaiDuLieu();
         }
-     
+
         private void btnThem_Click(object sender, EventArgs e)
         {
             Mamonhoc = "";
@@ -295,7 +295,5 @@ namespace QuanLyDiemSinhVien.GUI
 
             btnLuu.Enabled = !t;
         }
-
-       
     }
 }

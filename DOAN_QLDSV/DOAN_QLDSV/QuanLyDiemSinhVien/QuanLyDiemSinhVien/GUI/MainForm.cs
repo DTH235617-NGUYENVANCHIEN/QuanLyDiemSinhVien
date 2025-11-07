@@ -22,64 +22,50 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void OpenChildForm(Form childForm)
         {
-            // Ẩn form chính đi
-            this.Hide();
+            // 1. Xóa tất cả các control (form con cũ) đang có trong panel
+            // (Đảm bảo panel của bạn tên là 'panel1')
+            this.palForm.Controls.Clear();
 
-            // Hiển thị form con. 
-            // Dùng ShowDialog() để nó chạy độc lập và phải tắt nó mới quay lại Main được.
-            childForm.Enabled = true;
-            childForm.ShowDialog();
+            // 2. Thiết lập các thuộc tính quan trọng cho form con
+            childForm.TopLevel = false;             // Không phải là form cấp cao nhất
+            childForm.FormBorderStyle = FormBorderStyle.None; // Bỏ viền của form con
+            childForm.Dock = DockStyle.Fill;        // Lấp đầy toàn bộ panel
 
-            // Sau khi form con (formToOpen) bị tắt, hiển thị lại form chính
-            this.Show();
+            // 3. Thêm form con vào danh sách Controls của panel
+            this.palForm.Controls.Add(childForm);
+
+            // 4. Hiển thị form con
+            childForm.Show();
         }
 
         private void quảnLýKhoaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fQuanLyKhoa f = new fQuanLyKhoa();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            OpenChildForm(new fQuanLyKhoa());
         }
 
         private void quảnLýLớpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fQuanLyLop f = new fQuanLyLop();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            OpenChildForm(new fQuanLyLop());
         }
 
         private void quảnLýSinhViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fQuanLySinhVien f = new fQuanLySinhVien();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            OpenChildForm(new fQuanLySinhVien());
         }
 
         private void quảnLýMônHọcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fQuanLyMonHoc f = new fQuanLyMonHoc();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            OpenChildForm(new fQuanLyMonHoc());
         }
 
         private void quảnLýGiáoViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fQuanLyGiaoVien f = new fQuanLyGiaoVien();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            OpenChildForm(new fQuanLyGiaoVien());
         }
 
         private void quảnLýTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fQuanLyTaiKhoan f = new fQuanLyTaiKhoan();
-            this.Hide();
-            f.ShowDialog();
-            this.Show();
+            OpenChildForm(new fQuanLyTaiKhoan());
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -142,7 +128,7 @@ namespace QuanLyDiemSinhVien.GUI
                 xEMĐIỂMToolStripMenuItem.Visible = false;
                 btnXemDiem.Visible = false;
             }
-
+            OpenChildForm(new fTrangChu());
 
         }
 
@@ -243,9 +229,6 @@ namespace QuanLyDiemSinhVien.GUI
 
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+       
     }
 }

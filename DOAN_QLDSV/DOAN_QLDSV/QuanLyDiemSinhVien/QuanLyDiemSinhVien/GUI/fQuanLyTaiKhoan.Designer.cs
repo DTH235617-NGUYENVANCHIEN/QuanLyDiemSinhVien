@@ -150,6 +150,7 @@
             // cobQuyen
             // 
             cobQuyen.Anchor = AnchorStyles.Top;
+            cobQuyen.DropDownStyle = ComboBoxStyle.DropDownList;
             cobQuyen.FormattingEnabled = true;
             cobQuyen.Location = new Point(167, 120);
             cobQuyen.Name = "cobQuyen";
@@ -236,11 +237,11 @@
             dgvTaikhoan.Size = new Size(752, 324);
             dgvTaikhoan.TabIndex = 1;
             dgvTaikhoan.TabStop = false;
+            dgvTaikhoan.SelectionChanged += dgvTaikhoan_SelectionChanged;
             // 
             // TenDangNhap
             // 
             TenDangNhap.DataPropertyName = "TenDangNhap";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = Color.FromArgb(255, 255, 192);
             TenDangNhap.DefaultCellStyle = dataGridViewCellStyle2;
             TenDangNhap.HeaderText = "TÊN ĐĂNG NHẬP";
@@ -262,7 +263,6 @@
             // TenQuyen
             // 
             TenQuyen.DataPropertyName = "TenQuyen";
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.BackColor = Color.FromArgb(255, 255, 192);
             TenQuyen.DefaultCellStyle = dataGridViewCellStyle4;
             TenQuyen.HeaderText = "LOẠI TÀI KHOẢN";

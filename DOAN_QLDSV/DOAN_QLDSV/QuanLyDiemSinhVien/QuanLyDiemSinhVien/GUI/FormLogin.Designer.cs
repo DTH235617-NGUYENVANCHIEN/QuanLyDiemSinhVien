@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogin));
             label1 = new Label();
             label2 = new Label();
             txtTen = new TextBox();
@@ -40,7 +41,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(18, 63);
+            label1.Location = new Point(18, 54);
             label1.Name = "label1";
             label1.Size = new Size(160, 27);
             label1.TabIndex = 0;
@@ -89,7 +90,7 @@
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
             label3.Font = new Font("Times New Roman", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.DodgerBlue;
+            label3.ForeColor = Color.Black;
             label3.Location = new Point(197, 9);
             label3.Name = "label3";
             label3.Size = new Size(226, 41);
@@ -128,7 +129,10 @@
             Controls.Add(label1);
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ForeColor = Color.Black;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FormLogin";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Đăng nhập";

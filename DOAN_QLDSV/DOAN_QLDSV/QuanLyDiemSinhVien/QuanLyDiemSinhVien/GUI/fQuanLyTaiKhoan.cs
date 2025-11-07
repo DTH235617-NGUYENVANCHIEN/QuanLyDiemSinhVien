@@ -18,20 +18,21 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fQuanLyTaiKhoan : Form
     {
-        
+
         String login = "";
+     
         public fQuanLyTaiKhoan()
         {
             InitializeComponent();
-           
+
         }
         private void fQuanLyTaiKhoan_Load(object sender, EventArgs e)
         {
-            
-               
+
+
             TaiLaiDuLieu_TK();
-        } 
-     
+        }
+
         private void btnThem_Click(object sender, EventArgs e)
         {
             login = "";
@@ -47,7 +48,8 @@ namespace QuanLyDiemSinhVien.GUI
         {
             login = txtTen.Text;
             MoNut(false);
-            txtTen.Focus();
+            txtPass.Text = "";
+            txtPass.Focus();
 
         }
 
@@ -83,63 +85,125 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
+           // ---CÁC KIỂM TRA CŨ(Giữ nguyên)-- -
             if (cobQuyen.Text.Trim() == "")
             {
                 MessageBox.Show("Chưa chọn quyen!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Dừng lại
             }
-            else if (txtTen.Text.Trim() == "")
+            if (txtTen.Text.Trim() == "")
             {
                 MessageBox.Show("Ten không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Dừng lại
             }
-            else if (txtPass.Text.Trim() == "")
+            if (login == "" && txtPass.Text.Trim() == "") // login == "" là Thêm mới
             {
-                MessageBox.Show("MK không được bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("MK không được bỏ trống khi thêm mới!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Dừng lại
             }
-            else
+
+            // --- TIẾN HÀNH LƯU (ĐÃ SỬA) ---
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                // SỬA: Dùng 'using'
-                using (SqlConnection conn = KetnoiSQL.GetConnection())
+                try
                 {
-                    try
-                    {
-                        conn.Open();
+                    conn.Open();
+                    string tenMoi = txtTen.Text.Trim(); // Tên mới người dùng nhập
 
-                        // SỬA: Gọi hàm MaHoa.cs
+                    if (login == "") // Thêm mới
+                    {
+                        // ===== BƯỚC 1: KIỂM TRA TRÙNG KHI THÊM MỚI =====
+                        string sqlCheck = "SELECT COUNT(*) FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap";
+                        SqlCommand cmdCheck = new SqlCommand(sqlCheck, conn);
+                        cmdCheck.Parameters.Add("@TenDangNhap", SqlDbType.VarChar, 20).Value = tenMoi;
+
+                        int count = (int)cmdCheck.ExecuteScalar(); // Lấy số lượng
+
+                        if (count > 0)
+                        {
+                            // Nếu tìm thấy (count > 0), báo lỗi thân thiện và dừng lại
+                            MessageBox.Show(
+                                "Tên đăng nhập '" + tenMoi + "' đã tồn tại. Vui lòng chọn tên khác!",
+                                "Lỗi Trùng Tên",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
+                            return; // Dừng, không INSERT
+                        }
+                        // ===== KẾT THÚC KIỂM TRA TRÙNG =====
+
+                        // Nếu không trùng, tiếp tục INSERT
                         string passHashed = MaHoa.MaHoaSHA256(txtPass.Text);
+                        string sqlInsert = @"INSERT INTO TaiKhoan (TenDangNhap, MatKhau, MaQuyen)
+                                     VALUES(@TenDangNhap, @MatKhau, @MaQuyen)";
 
-                        if (login == "") // Thêm mới
-                        {
-                            string sql = @"INSERT INTO TaiKhoan
-                                           VALUES(@TenDangNhap, @MatKhau, @MaQuyen)";
-                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
-                            cmd.Parameters.Add("@TenDangNhap", SqlDbType.VarChar, 20).Value = txtTen.Text;
-                            cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = passHashed;
-                            cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
-                            cmd.ExecuteNonQuery();
-                        }
-                        else // Sửa
-                        {
-                            string sql = @"UPDATE TaiKhoan
-                                           SET TenDangNhap = @TenDangNhapMoi,
-                                               MatKhau = @MatKhau,
-                                               MaQuyen = @MaQuyen
-                                           WHERE TenDangNhap = @TenDangNhapCu";
-                            SqlCommand cmd = new SqlCommand(sql, conn); // Dùng 'conn' mới
-                            cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = txtTen.Text;
-                            cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = login;
-                            cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = passHashed;
-                            cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
-                            cmd.ExecuteNonQuery();
-                        }
+                        SqlCommand cmd = new SqlCommand(sqlInsert, conn);
+                        cmd.Parameters.Add("@TenDangNhap", SqlDbType.VarChar, 20).Value = tenMoi;
+                        cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = passHashed;
+                        cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
+                        cmd.ExecuteNonQuery();
                     }
-                    catch (Exception ex)
+                    else // Sửa
                     {
-                        MessageBox.Show(ex.Message);
-                    }
-                } // conn tự động đóng
+                        // ===== BƯỚC 2: KIỂM TRA TRÙNG KHI SỬA =====
+                        // (Chỉ kiểm tra nếu người dùng đổi Tên đăng nhập)
+                        if (tenMoi != login) // Nếu tên mới khác tên gốc (login)
+                        {
+                            string sqlCheck = "SELECT COUNT(*) FROM TaiKhoan WHERE TenDangNhap = @TenDangNhap";
+                            SqlCommand cmdCheck = new SqlCommand(sqlCheck, conn);
+                            cmdCheck.Parameters.Add("@TenDangNhap", SqlDbType.VarChar, 20).Value = tenMoi;
+                            int count = (int)cmdCheck.ExecuteScalar();
+                            if (count > 0)
+                            {
+                                MessageBox.Show(
+                                    "Tên đăng nhập '" + tenMoi + "' đã tồn tại. Vui lòng chọn tên khác!",
+                                    "Lỗi Trùng Tên",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error
+                                );
+                                return; // Dừng, không UPDATE
+                            }
+                        }
+                        // ===== KẾT THÚC KIỂM TRA TRÙNG =====
 
-                TaiLaiDuLieu_TK();
-            }
+                        // Nếu không trùng, tiếp tục UPDATE
+                        SqlCommand cmd;
+                        if (txtPass.Text.Trim() == "") // Không đổi pass
+                        {
+                            string sqlUpdate = @"UPDATE TaiKhoan
+                                         SET TenDangNhap = @TenDangNhapMoi,
+                                             MaQuyen = @MaQuyen
+                                         WHERE TenDangNhap = @TenDangNhapCu";
+                            cmd = new SqlCommand(sqlUpdate, conn);
+                        }
+                        else // Có đổi pass
+                        {
+                            string passHashed = MaHoa.MaHoaSHA256(txtPass.Text);
+                            string sqlUpdate = @"UPDATE TaiKhoan
+                                         SET TenDangNhap = @TenDangNhapMoi,
+                                             MatKhau = @MatKhau,
+                                             MaQuyen = @MaQuyen
+                                         WHERE TenDangNhap = @TenDangNhapCu";
+                            cmd = new SqlCommand(sqlUpdate, conn);
+                            cmd.Parameters.Add("@MatKhau", SqlDbType.VarChar, 128).Value = passHashed;
+                        }
+
+                        // Các tham số chung
+                        cmd.Parameters.Add("@TenDangNhapMoi", SqlDbType.NVarChar, 10).Value = tenMoi;
+                        cmd.Parameters.Add("@TenDangNhapCu", SqlDbType.NVarChar, 10).Value = login;
+                        cmd.Parameters.Add("@MaQuyen", SqlDbType.VarChar, 10).Value = cobQuyen.SelectedValue;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Catch này giờ chỉ bắt các lỗi khác (ví dụ: mất kết nối)
+                    MessageBox.Show("Đã xảy ra lỗi: " + ex.Message);
+                }
+            } // conn tự động đóng
+
+            TaiLaiDuLieu_TK(); // Tải lại dữ liệu sau khi Lưu
+
         }
 
 
@@ -161,6 +225,8 @@ namespace QuanLyDiemSinhVien.GUI
 
             DataTable data = new DataTable();
             DataTable tableLoaiSach = new DataTable();
+            this.dgvTaikhoan.Columns["MatKhau"].Visible = false; // Ẩn cột Mật khẩu
+     
 
             // SỬA: Dùng 1 'using' duy nhất
             using (SqlConnection conn = KetnoiSQL.GetConnection())
@@ -182,6 +248,7 @@ namespace QuanLyDiemSinhVien.GUI
             } // conn tự động đóng
 
             // 1. Tải dữ liệu TAIKHOAN
+            dgvTaikhoan.AutoGenerateColumns = false;
             dgvTaikhoan.DataSource = data;
 
             // 2. Tải dữ liệu LOAITAIKHOAN (cho ComboBox)
@@ -195,11 +262,11 @@ namespace QuanLyDiemSinhVien.GUI
             // 4. Data Bindings (Giữ nguyên)
             cobQuyen.DataBindings.Clear();
             txtTen.DataBindings.Clear();
-            txtPass.DataBindings.Clear();
+
 
             cobQuyen.DataBindings.Add("SelectedValue", dgvTaikhoan.DataSource, "MaQuyen", false, DataSourceUpdateMode.Never);
             txtTen.DataBindings.Add("Text", dgvTaikhoan.DataSource, "TenDangNhap", false, DataSourceUpdateMode.Never);
-            txtPass.DataBindings.Add("Text", dgvTaikhoan.DataSource, "MatKhau", false, DataSourceUpdateMode.Never);
+
         }
 
 
@@ -217,8 +284,15 @@ namespace QuanLyDiemSinhVien.GUI
 
             btnLuu.Enabled = !t;
         }
-  
 
-
+        private void dgvTaikhoan_SelectionChanged(object sender, EventArgs e)
+        {
+            // Khi người dùng bấm chọn 1 hàng (ở chế độ xem, không phải Sửa/Thêm)
+            // Luôn luôn đặt txtPass là "********"
+            if (btnLuu.Enabled == false) // btnLuu.Enabled = false nghĩa là đang ở chế độ xem
+            {
+                txtPass.Text = "********";
+            }
+        }
     }
 }

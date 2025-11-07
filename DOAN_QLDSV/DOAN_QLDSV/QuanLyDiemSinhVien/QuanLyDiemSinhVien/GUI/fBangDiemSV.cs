@@ -13,16 +13,18 @@ using QuanLyDiemSinhVien.BLL;
 
 namespace QuanLyDiemSinhVien.GUI
 {
+    
     public partial class fBangDiemSV : Form
     {
+
         SqlConnection conn = new SqlConnection();
         BindingSource bsDiem = new BindingSource();
         DataTable dtDiem = new DataTable();
         private bool isLoaded = false;
-
+        public event EventHandler ThoatVeTrangChu;
         public fBangDiemSV()
         {
-        InitializeComponent();
+            InitializeComponent();
         }
 
         private void fBangDiemSV_Load(object sender, EventArgs e)
@@ -66,7 +68,7 @@ namespace QuanLyDiemSinhVien.GUI
                 cmd.Parameters.AddWithValue("@MaSV", maSV);
 
                 //if (conn.State == ConnectionState.Closed) 
-                    //conn.Open();
+                //conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 if (reader.Read())
@@ -198,9 +200,9 @@ namespace QuanLyDiemSinhVien.GUI
                 cbHocKy.ValueMember = "HocKy";
                 cbHocKy.DisplayMember = "TenHocKy";
             }
-            catch (Exception ex) 
-            { 
-                /* Bỏ qua lỗi nhỏ khi load filter */ 
+            catch (Exception ex)
+            {
+                /* Bỏ qua lỗi nhỏ khi load filter */
             }
         }
 
@@ -244,7 +246,7 @@ namespace QuanLyDiemSinhVien.GUI
             }
 
         }
-        
+
 
         // --- HÀM LỌC ---
         private void ApplyFilter()
@@ -280,6 +282,14 @@ namespace QuanLyDiemSinhVien.GUI
         private void dgvDiem_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            if (ThoatVeTrangChu != null)
+            {
+                ThoatVeTrangChu(this, EventArgs.Empty);
+            }
         }
     }
 }

@@ -16,7 +16,8 @@ namespace QuanLyDiemSinhVien.GUI
     public partial class fThongTinChiTiet : Form
     {
 
-
+        //mở trang chủ khi bấm nút thoát 
+        public event EventHandler ThoatVeTrangChu;
 
         public fThongTinChiTiet()
         {
@@ -79,7 +80,10 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnDong_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (ThoatVeTrangChu != null)
+            {
+                ThoatVeTrangChu(this, EventArgs.Empty);
+            }
         }
 
      

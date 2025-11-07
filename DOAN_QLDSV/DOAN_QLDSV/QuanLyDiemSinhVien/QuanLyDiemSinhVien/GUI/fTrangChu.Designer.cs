@@ -111,7 +111,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.White;
+            BackColor = Color.FromArgb(192, 255, 192);
             ClientSize = new Size(800, 450);
             Controls.Add(tableLayoutPanel1);
             Name = "fTrangChu";

@@ -19,6 +19,8 @@ namespace QuanLyDiemSinhVien.GUI
     {
         // Dùng để lưu trạng thái đang "Thêm mới" (rỗng) hay "Sửa" (chứa MaMH)
         String Mamonhoc = "";
+        //mở trang chủ khi bấm nút thoát 
+        public event EventHandler ThoatVeTrangChu;
         public fQuanLyMonHoc()
         {
             InitializeComponent();
@@ -192,7 +194,10 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnThoat_Click_1(object sender, EventArgs e)
         {
-            this.Close();
+            if (ThoatVeTrangChu != null)
+            {
+                ThoatVeTrangChu(this, EventArgs.Empty);
+            }
         }
         private void TaiLaiDuLieu()
         {

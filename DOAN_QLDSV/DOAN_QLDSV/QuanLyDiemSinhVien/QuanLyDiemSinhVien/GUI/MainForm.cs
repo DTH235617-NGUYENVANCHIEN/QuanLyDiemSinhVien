@@ -13,13 +13,26 @@ namespace QuanLyDiemSinhVien.GUI
 {
     public partial class MainForm : Form
     {
-
+        // khi bấm đổi nút
+        private MenuHighlightManager menuManager;
         public MainForm()
         {
             InitializeComponent();
 
         }
-
+        //Mở trang chủ khi thoát từ form con
+        void f_ThoatVeTrangChu(object sender, EventArgs e)
+        {
+            menuManager.ResetAllButtons();
+            // Khi nhận được tín hiệu, mở lại Form Trang chủ
+            // (Nhớ đổi fTrangChu thành tên đúng)
+            OpenChildForm(new fTrangChu());
+        }
+        void f_YeuCauDangXuat(object sender, EventArgs e)
+        {
+            // Đóng Form Chính -> Tự động quay về Form Đăng nhập
+            this.Close();
+        }
         private void OpenChildForm(Form childForm)
         {
             // 1. Xóa tất cả các control (form con cũ) đang có trong panel
@@ -40,33 +53,86 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void quảnLýKhoaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyKhoa());
+            fQuanLyKhoa f = new fQuanLyKhoa();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void quảnLýLớpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyLop());
+            fQuanLyLop f = new fQuanLyLop();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void quảnLýSinhViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLySinhVien());
+            fQuanLySinhVien f = new fQuanLySinhVien();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void quảnLýMônHọcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyMonHoc());
+            fQuanLyMonHoc f = new fQuanLyMonHoc();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void quảnLýGiáoViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyGiaoVien());
+            fQuanLyGiaoVien f = new fQuanLyGiaoVien();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void quảnLýTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyTaiKhoan());
+            fQuanLyTaiKhoan f = new fQuanLyTaiKhoan();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
+        } 
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult kq = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (kq == DialogResult.Yes)
+            {
+                // Đóng form Main (sẽ quay về FormLogin nếu bạn lập trình đúng)
+                this.Close();
+            }
         }
+
+        private void đổiMậtKhẩuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fDoiMatKhau f = new fDoiMatKhau();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            // 2. Lắng nghe nút "Cập nhật" (bắt đăng xuất)
+            f.YeuCauDangXuat += new EventHandler(f_YeuCauDangXuat);
+            OpenChildForm(f);
+        }
+
+        private void thôngTinChiTiếtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fThongTinChiTiet f = new fThongTinChiTiet();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
+        }
+
+        private void qLĐIÊMSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fDiemSinhVien f = new fDiemSinhVien();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
+        }
+
+        private void xEMĐIỂMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fBangDiemSV f = new fBangDiemSV();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
+        }
+
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -128,62 +194,117 @@ namespace QuanLyDiemSinhVien.GUI
                 xEMĐIỂMToolStripMenuItem.Visible = false;
                 btnXemDiem.Visible = false;
             }
+            // --- KHỞI TẠO MENU MANAGER ---
+             // 1. Tạo một danh sách chứa tất cả các nút
+            List<Button> menuButtons = new List<Button>()
+            {
+                // (Thêm tất cả các nút menu của bạn vào đây)
+                btnQLTaikhoan,
+                btnQLKhoa,      
+                btnQLGV,
+                btnQLLop,
+                btnQLSV,
+                btnbtnQLMonhoc, // (Bạn kiểm tra lại tên nút này nhé)
+                btnQLDSV,
+                btnThongtin,
+                btnDoiPass,
+                btnDangXuat,
+                btnXemDiem
+            };
+
+            // 2. Khởi tạo manager
+            menuManager = new MenuHighlightManager(menuButtons);
+            // --- KẾT THÚC KHỞI TẠO ---
+
             OpenChildForm(new fTrangChu());
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyLop());
+            menuManager.ActivateButton(btnQLLop);
+            fQuanLyLop f = new fQuanLyLop();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnQLKhoa_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyKhoa());
+            menuManager.ActivateButton(btnQLKhoa);
+            fQuanLyKhoa f = new fQuanLyKhoa();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnQLSV_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLySinhVien());
+            menuManager.ActivateButton(btnQLSV);
+            fQuanLySinhVien f = new fQuanLySinhVien();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnbtnQLMonhoc_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyMonHoc());
+            menuManager.ActivateButton(btnbtnQLMonhoc);
+            fQuanLyMonHoc f = new fQuanLyMonHoc();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnQLGV_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyGiaoVien());
+            menuManager.ActivateButton(btnQLGV);
+            fQuanLyGiaoVien f = new fQuanLyGiaoVien();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnQLTaikhoan_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fQuanLyTaiKhoan());
+            menuManager.ActivateButton(btnQLTaikhoan);
+            fQuanLyTaiKhoan f = new fQuanLyTaiKhoan();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnQLDSV_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fDiemSinhVien());
+            menuManager.ActivateButton(btnQLDSV);
+            fDiemSinhVien f = new fDiemSinhVien();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnXemDiem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fBangDiemSV());
+            menuManager.ActivateButton(btnXemDiem);
+            fBangDiemSV f = new fBangDiemSV();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnThongtin_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fThongTinChiTiet());
+            menuManager.ActivateButton(btnThongtin);
+            fThongTinChiTiet f = new fThongTinChiTiet();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            OpenChildForm(f);
         }
 
         private void btnDoiPass_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new fDoiMatKhau());
+            menuManager.ActivateButton(btnDoiPass);
+            fDoiMatKhau f = new fDoiMatKhau();
+            f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
+            // 2. Lắng nghe nút "Cập nhật" (bắt đăng xuất)
+            f.YeuCauDangXuat += new EventHandler(f_YeuCauDangXuat);
+            OpenChildForm(f);
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)
         {
+            menuManager.ActivateButton(btnDangXuat);
             DialogResult kq = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (kq == DialogResult.Yes)
@@ -191,44 +312,12 @@ namespace QuanLyDiemSinhVien.GUI
                 // Đóng form Main (sẽ quay về FormLogin nếu bạn lập trình đúng)
                 this.Close();
             }
-        }
-
-        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult kq = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (kq == DialogResult.Yes)
-            {
-                // Đóng form Main (sẽ quay về FormLogin nếu bạn lập trình đúng)
-                this.Close();
-            }
-        }
-
-        private void đổiMậtKhẩuToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new fDoiMatKhau());
-        }
-
-        private void thôngTinChiTiếtToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new fThongTinChiTiet());
-        }
-
-        private void qLĐIÊMSVToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new fDiemSinhVien());
-        }
-
-        private void xEMĐIỂMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new fBangDiemSV());
-        }
-
-        private void hệThốngToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
        
+      
+  
+
+
     }
 }

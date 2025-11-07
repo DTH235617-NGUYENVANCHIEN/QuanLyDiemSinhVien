@@ -19,6 +19,8 @@ namespace QuanLyDiemSinhVien.GUI
     {
 
         String Masv = "";
+        //mở trang chủ khi bấm nút thoát 
+        public event EventHandler ThoatVeTrangChu;
         public fQuanLySinhVien()
         {
             InitializeComponent();
@@ -171,7 +173,10 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (ThoatVeTrangChu != null)
+            {
+                ThoatVeTrangChu(this, EventArgs.Empty);
+            }
         }
         private void TaiLaiDuLieu_SV()
         {

@@ -12,7 +12,7 @@ namespace QuanLyDiemSinhVien
 
     public partial class FormLogin : Form
     {
-
+        
         TaiKhoan_BUS taiKhoanBUS = new TaiKhoan_BUS();
         public FormLogin()
         {

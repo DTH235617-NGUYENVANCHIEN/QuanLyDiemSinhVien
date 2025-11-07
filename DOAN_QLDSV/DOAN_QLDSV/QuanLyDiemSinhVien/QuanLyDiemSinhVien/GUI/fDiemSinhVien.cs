@@ -16,6 +16,9 @@ namespace QuanLyDiemSinhVien.GUI
     public partial class fDiemSinhVien : Form
     {
         private readonly string MaGV_HienTai = CurrentUser.Username; // <<< THAY THẾ BẰNG  THỰC TẾ
+        //mở trang chủ khi bấm nút thoát 
+        public event EventHandler ThoatVeTrangChu;
+
 
         // Thay vì MaGV, ta dùng MaGV_HienTai để xác định sinh viên thuộc quyền quản lý
         SqlConnection conn = new SqlConnection();
@@ -594,7 +597,10 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (ThoatVeTrangChu != null)
+            {
+                ThoatVeTrangChu(this, EventArgs.Empty);
+            }
         }
 
         private void dgvDiem_CellContentClick(object sender, DataGridViewCellEventArgs e)

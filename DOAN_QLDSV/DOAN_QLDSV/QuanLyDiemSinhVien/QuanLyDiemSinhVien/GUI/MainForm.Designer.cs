@@ -410,7 +410,7 @@
             // 
             // panel1
             // 
-            panel1.BackColor = Color.MediumAquamarine;
+            panel1.BackColor = Color.FromArgb(128, 255, 128);
             panel1.Controls.Add(panel6);
             panel1.Controls.Add(panel4);
             panel1.Controls.Add(label1);
@@ -422,11 +422,11 @@
             // 
             // panel6
             // 
-            panel6.BackgroundImage = Properties.Resources.anhtruong3;
+            panel6.BackgroundImage = (Image)resources.GetObject("panel6.BackgroundImage");
             panel6.BackgroundImageLayout = ImageLayout.Zoom;
-            panel6.Location = new Point(4, 12);
+            panel6.Location = new Point(32, 12);
             panel6.Name = "panel6";
-            panel6.Size = new Size(222, 67);
+            panel6.Size = new Size(69, 67);
             panel6.TabIndex = 0;
             // 
             // panel4
@@ -443,17 +443,17 @@
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Font = new Font("Times New Roman", 20F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Times New Roman", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.Black;
-            label1.Location = new Point(290, 22);
+            label1.Location = new Point(260, 23);
             label1.Name = "label1";
-            label1.Size = new Size(410, 47);
+            label1.Size = new Size(435, 45);
             label1.TabIndex = 19;
             label1.Text = "Quản Lí Điểm Sinh Viên";
             // 
             // panel3
             // 
-            panel3.BackColor = Color.FromArgb(255, 224, 192);
+            panel3.BackColor = Color.Gold;
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(0, 91);
             panel3.Name = "panel3";

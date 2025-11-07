@@ -15,7 +15,11 @@ using System.Windows.Forms;
 namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fDoiMatKhau : Form
+
     {
+        //mở trang chủ khi bấm nút thoát 
+        public event EventHandler ThoatVeTrangChu;
+        public event EventHandler YeuCauDangXuat;
         private TaiKhoan_BUS bus_TaiKhoan = new TaiKhoan_BUS();
 
         public fDoiMatKhau()
@@ -56,8 +60,14 @@ namespace QuanLyDiemSinhVien.GUI
 
                 if (ketQua)
                 {
-                    MessageBox.Show("Đổi mật khẩu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+                    MessageBox.Show("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // XÓA DÒNG: this.Close();
+                    // THAY BẰNG: Bắn tín hiệu Yêu cầu Đăng xuất
+                    if (YeuCauDangXuat != null)
+                    {
+                        YeuCauDangXuat(this, EventArgs.Empty);
+                    }
                 }
                 else
                 {
@@ -73,13 +83,13 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (ThoatVeTrangChu != null)
+            {
+                ThoatVeTrangChu(this, EventArgs.Empty);
+            }
         }
 
-        private void fDoiMatKhau_Load(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }
 

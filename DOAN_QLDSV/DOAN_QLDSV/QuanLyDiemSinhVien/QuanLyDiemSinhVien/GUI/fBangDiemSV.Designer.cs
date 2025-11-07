@@ -60,8 +60,10 @@
             label9 = new Label();
             lbTB = new Label();
             panel1 = new Panel();
+            btnThoat = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvDiem).BeginInit();
             groupBox1.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // cbHocKy
@@ -230,7 +232,7 @@
             // btnLamMoi
             // 
             btnLamMoi.Anchor = AnchorStyles.Top;
-            btnLamMoi.Location = new Point(1204, 429);
+            btnLamMoi.Location = new Point(1207, 330);
             btnLamMoi.Name = "btnLamMoi";
             btnLamMoi.Size = new Size(124, 53);
             btnLamMoi.TabIndex = 55;
@@ -373,18 +375,30 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(192, 255, 192);
+            panel1.Controls.Add(btnThoat);
+            panel1.Controls.Add(btnLamMoi);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(1349, 519);
             panel1.TabIndex = 67;
             // 
+            // btnThoat
+            // 
+            btnThoat.Anchor = AnchorStyles.Top;
+            btnThoat.Location = new Point(1207, 428);
+            btnThoat.Name = "btnThoat";
+            btnThoat.Size = new Size(124, 53);
+            btnThoat.TabIndex = 56;
+            btnThoat.Text = "Thoát";
+            btnThoat.UseVisualStyleBackColor = true;
+            btnThoat.Click += btnThoat_Click;
+            // 
             // fBangDiemSV
             // 
             AutoScaleDimensions = new SizeF(13F, 27F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1349, 1050);
-            Controls.Add(btnLamMoi);
             Controls.Add(cbMonHoc);
             Controls.Add(cbNamHoc);
             Controls.Add(dgvDiem);
@@ -394,7 +408,6 @@
             Controls.Add(label2);
             Controls.Add(groupBox1);
             Controls.Add(panel1);
-            Enabled = false;
             Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4);
             Name = "fBangDiemSV";
@@ -403,6 +416,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvDiem).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -441,5 +455,6 @@
         private Label label9;
         private Label lbTB;
         private Panel panel1;
+        private Button btnThoat;
     }
 }

@@ -67,23 +67,28 @@ namespace QuanLyDiemSinhVien.GUI
             btnLuu.Enabled = !t;
         }
 
-        private void LoadSinhVien()
+        private void LoadSinhVien(string maKhoaCuaGV)
 
         {
-            // Tên đăng nhập của giáo viên hiện tại, ví dụ: "GV006"
-            string maGVHienTai = CurrentUser.Username;
+            string sqlSV;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
 
-            // THAY ĐỔI CÂU SQL:
-            // Lấy sinh viên thuộc LỚP mà giáo viên này làm Cố vấn (MaGV_CVHT)
-            // thay vì lấy từ bảng DIEM.
-            string sqlSV = @"SELECT S.MaSV, S.HoTen, S.MaLop 
-                             FROM SINHVIEN S
-                             JOIN LOP L ON S.MaLop = L.MaLop
-                             WHERE L.MaGV_CVHT = @MaGV
-                             ORDER BY S.HoTen";
-
-            SqlCommand cmd = new SqlCommand(sqlSV, conn);
-            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai); // @MaGV = "GV006"
+            if (maKhoaCuaGV == null) // Admin thấy tất cả
+            {
+                sqlSV = "SELECT MaSV, HoTen, MaLop FROM SINHVIEN ORDER BY HoTen";
+                cmd.CommandText = sqlSV;
+            }
+            else // Giáo viên chỉ thấy SV trong Khoa của mình
+            {
+                sqlSV = @"SELECT S.MaSV, S.HoTen, S.MaLop 
+                  FROM SINHVIEN S
+                  JOIN LOP L ON S.MaLop = L.MaLop
+                  WHERE L.MaKhoa = @MaKhoa
+                  ORDER BY S.HoTen";
+                cmd.CommandText = sqlSV;
+                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+            }
 
             SqlDataAdapter daSV = new SqlDataAdapter(cmd);
             DataTable dtSV = new DataTable();
@@ -96,78 +101,86 @@ namespace QuanLyDiemSinhVien.GUI
         }
 
 
-        private void LoadMonHoc(string maKhoa = null)
+        private void LoadMonHoc(string maKhoaCuaGV)
         {
             string sqlMH;
             SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
 
-            if (string.IsNullOrEmpty(maKhoa))
+            if (maKhoaCuaGV == null) // Admin thấy tất cả
             {
-                // Nếu không có khoa (lúc mới tải form), tải tất cả
-                sqlMH = @"SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH";
+                sqlMH = "SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH";
                 cmd.CommandText = sqlMH;
-                cmd.Connection = conn;
             }
-            else
+            else // Giáo viên chỉ thấy môn trong Khoa của mình
             {
-                // Nếu CÓ khoa, chỉ tải môn học của khoa đó
                 sqlMH = @"SELECT MaMH, TenMH 
                   FROM MONHOC 
                   WHERE MaKhoa = @MaKhoa 
                   ORDER BY TenMH";
                 cmd.CommandText = sqlMH;
-                cmd.Connection = conn;
-                cmd.Parameters.AddWithValue("@MaKhoa", maKhoa);
+                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
             }
 
             SqlDataAdapter daMH = new SqlDataAdapter(cmd);
             DataTable dtMH = new DataTable();
             daMH.Fill(dtMH);
 
+
             cbMonHoc.DataSource = dtMH;
             cbMonHoc.DisplayMember = "TenMH";
             cbMonHoc.ValueMember = "MaMH";
         }
 
-        private void LoadLop()
+        private void LoadLop(string maKhoaCuaGV)
         {
-            string maGVHienTai = CurrentUser.Username;
+            string sqlLop;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
 
-            // Logic mới: Tải LỚP mà giáo viên này làm CVHT
-            string sqlLop = @"SELECT MaLop, TenLop 
-                              FROM LOP 
-                              WHERE MaGV_CVHT = @MaGV
-                              ORDER BY TenLop";
-
-            SqlCommand cmd = new SqlCommand(sqlLop, conn);
-            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
+            if (maKhoaCuaGV == null) // Admin
+            {
+                sqlLop = "SELECT MaLop, TenLop FROM LOP ORDER BY TenLop";
+                cmd.CommandText = sqlLop;
+            }
+            else // Teacher
+            {
+                sqlLop = "SELECT MaLop, TenLop FROM LOP WHERE MaKhoa = @MaKhoa ORDER BY TenLop";
+                cmd.CommandText = sqlLop;
+                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+            }
 
             SqlDataAdapter daLop = new SqlDataAdapter(cmd);
             DataTable dtLop = new DataTable();
             daLop.Fill(dtLop);
-
+            // ... (gán DataSource) ...
             cbTenLop.DataSource = dtLop;
             cbTenLop.DisplayMember = "TenLop";
             cbTenLop.ValueMember = "MaLop";
         }
-        private void LoadKhoa()
+
+        private void LoadKhoa(string maKhoaCuaGV)
         {
-            string maGVHienTai = CurrentUser.Username;
+            string sqlKhoa;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
 
-            // Logic mới: Tải KHOA của LỚP mà giáo viên này làm CVHT
-            string sqlKhoa = @"SELECT DISTINCT K.MaKhoa, K.TenKhoa 
-                               FROM KHOA K
-                               JOIN LOP L ON K.MaKhoa = L.MaKhoa
-                               WHERE L.MaGV_CVHT = @MaGV
-                               ORDER BY K.TenKhoa";
-
-            SqlCommand cmd = new SqlCommand(sqlKhoa, conn);
-            cmd.Parameters.AddWithValue("@MaGV", maGVHienTai);
+            if (maKhoaCuaGV == null) // Admin
+            {
+                sqlKhoa = "SELECT MaKhoa, TenKhoa FROM KHOA ORDER BY TenKhoa";
+                cmd.CommandText = sqlKhoa;
+            }
+            else // Teacher
+            {
+                sqlKhoa = "SELECT MaKhoa, TenKhoa FROM KHOA WHERE MaKhoa = @MaKhoa ORDER BY TenKhoa";
+                cmd.CommandText = sqlKhoa;
+                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+            }
 
             SqlDataAdapter daKhoa = new SqlDataAdapter(cmd);
             DataTable dtKhoa = new DataTable();
             daKhoa.Fill(dtKhoa);
-
+            // ... (gán DataSource) ...
             cbTenKhoa.DataSource = dtKhoa;
             cbTenKhoa.DisplayMember = "TenKhoa";
             cbTenKhoa.ValueMember = "MaKhoa";
@@ -259,14 +272,7 @@ namespace QuanLyDiemSinhVien.GUI
             dataAdapter.Fill(data);
 
                 dgvDiem.AutoGenerateColumns = false;
-                dgvDiem.DataSource = data;
-
-            // Tải dữ liệu cho các ComboBox
-            LoadSinhVien();
-            LoadMonHoc();
-            LoadLop();
-            LoadKhoa();
-            LoadHK();
+            //dgvDiem.DataSource = data;
 
             // Xóa binding cũ
             cbTenSV.DataBindings.Clear();
@@ -275,20 +281,24 @@ namespace QuanLyDiemSinhVien.GUI
             txtNamhoc.DataBindings.Clear();
             txtDiemthanhphan.DataBindings.Clear();
             txtDiemthi.DataBindings.Clear();
+            cbTenLop.DataBindings.Clear();
+            cbTenKhoa.DataBindings.Clear();
 
-                // Thiết lập Data Binding mới
-                BindingSource bs = new BindingSource();
-                bs.DataSource = data;
-                dgvDiem.DataSource = bs;
+            // Thiết lập Data Binding mới
+            BindingSource bs = new BindingSource();
+            bs.DataSource = data;
+            dgvDiem.DataSource = bs;
 
             cbTenSV.DataBindings.Add("SelectedValue", bs, "MaSV", true, DataSourceUpdateMode.Never);
             cbMonHoc.DataBindings.Add("SelectedValue", bs, "MaMH", true, DataSourceUpdateMode.Never);
-            cbHocKy.DataBindings.Add("Text", bs, "HocKy", true, DataSourceUpdateMode.Never);
-            //cbTenLop.DataBindings.Add("SelectedValue", bs, "MaLop", true, DataSourceUpdateMode.Never); // Không dùng được vì MaLop không có trong DIEM
-            //cbTenKhoa.DataBindings.Add("SelectedValue", bs, "MaKhoa", true, DataSourceUpdateMode.Never); // Tương tự
+            cbHocKy.DataBindings.Add("SelectedValue", bs, "HocKy", true, DataSourceUpdateMode.Never);
             txtNamhoc.DataBindings.Add("Text", bs, "NamHoc", true, DataSourceUpdateMode.Never);
             txtDiemthanhphan.DataBindings.Add("Text", bs, "DiemThanhPhan", true, DataSourceUpdateMode.Never);
             txtDiemthi.DataBindings.Add("Text", bs, "DiemThi", true, DataSourceUpdateMode.Never);
+
+            // Hai dòng này cũng phải bind vào bs
+            cbTenLop.DataBindings.Add("SelectedValue", bs, "MaLop", true, DataSourceUpdateMode.Never);
+            cbTenKhoa.DataBindings.Add("SelectedValue", bs, "MaKhoa", true, DataSourceUpdateMode.Never);
         }
 
         
@@ -301,19 +311,53 @@ namespace QuanLyDiemSinhVien.GUI
         {
             try
             {
-                // Luôn gán lại ConnectionString trước khi mở để chắc chắn
                 if (conn.State == ConnectionState.Closed)
                 {
                     conn.ConnectionString = @"server=.; Database=db_QLDSV;Integrated Security=True";
                     conn.Open();
-                    LoadDiemData();
                 }
+
+                string maKhoaCuaGV = null; // Mặc định là null (cho Admin)
+
+                // --- BƯỚC 1: LẤY KHOA CỦA GIÁO VIÊN ---
+                if (CurrentUser.TenQuyen == "Teacher")
+                {
+                    try
+                    {
+                        // Truy vấn để lấy MaKhoa của giáo viên đang đăng nhập
+                        SqlCommand cmdKhoa = new SqlCommand("SELECT MaKhoa FROM GIAOVIEN WHERE MaGV = @MaGV", conn);
+                        cmdKhoa.Parameters.AddWithValue("@MaGV", CurrentUser.Username);
+                        object result = cmdKhoa.ExecuteScalar();
+                        if (result != null)
+                        {
+                            maKhoaCuaGV = result.ToString();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi không tìm thấy khoa của giáo viên: " + ex.Message);
+                    }
+                }
+
+                // --- BƯỚC 2: TẢI CÁC COMBOBOX ---
+                LoadSinhVien(maKhoaCuaGV); // Lọc SV theo khoa GV
+                LoadMonHoc(maKhoaCuaGV);   // Lọc Môn theo khoa GV (dựa vào CSDL MONHOC.MaKhoa)
+                LoadLop(maKhoaCuaGV);      // Lọc Lớp theo khoa GV
+                LoadKhoa(maKhoaCuaGV);     // Lọc Khoa (chỉ hiện khoa của GV)
+                LoadHK();                  // Tải Học kỳ (1, 2, 3)
+
+                // --- BƯỚC 3: TẢI BẢNG ĐIỂM (Lưới) ---
+                // Hàm này vẫn lọc theo MaGV trong bảng DIEM (để lưới trống là đúng)
+                LoadDiemData();
+
+                // Đặt về chế độ xem ban đầu
+                MoNut(true);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khởi động: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-           
+
         }
         private void btnThem_Click(object sender, EventArgs e)
         {
@@ -621,22 +665,19 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 string maSVChon = cbTenSV.SelectedValue.ToString();
 
-                // 1. Tìm Lớp/Khoa của SV (hàm này sẽ gán giá trị cho MaKhoa_Current)
-                // (Đảm bảo bạn dùng GetLopKhoa chứ không phải GetLopKhoaGiaoVien)
+                // 1. Tìm Lớp/Khoa của SV (hàm này sẽ gán giá trị cho biến MaKhoa_Current)
                 GetLopKhoa(maSVChon);
 
-                // 2. Lọc lại ComboBox Môn học dựa trên khoa của sinh viên
-                // (Đây là dòng code bị thiếu trong file của bạn)
+                // 2. Lọc lại ComboBox Môn học DỰA TRÊN KHOA CỦA SINH VIÊN
+                // (Sửa dòng này, chỉ truyền MaKhoa_Current vào)
                 LoadMonHoc(MaKhoa_Current);
             }
             else
             {
-                // Nếu không chọn SV nào, xóa trắng Lớp/Khoa và tải tất cả môn
+                // Nếu không chọn SV nào, xóa trắng Lớp/Khoa và Môn học
                 cbTenLop.SelectedIndex = -1;
                 cbTenKhoa.SelectedIndex = -1;
-
-                // (Đây cũng là dòng code bị thiếu)
-                LoadMonHoc(); // Tải tất cả môn học
+                LoadMonHoc(null); // Tải lại tất cả môn học (hoặc làm rỗng)
             }
         }
     }

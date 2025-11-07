@@ -22,7 +22,7 @@ namespace QuanLyDiemSinhVien
         }
 
 
-        private void btnLogin_Click_1(object sender, EventArgs e)
+        private async void btnLogin_Click_1(object sender, EventArgs e)
         {
             string tenDangNhap = txtTen.Text.Trim();
             string matKhau = txtPass.Text.Trim();
@@ -33,17 +33,29 @@ namespace QuanLyDiemSinhVien
                 return;
             }
 
-            // 1. Băm mật khẩu nhập vào
+            // 2. HIỂN THỊ LOADING VÀ VÔ HIỆU HÓA CONTROLS
+            panelLoading.Visible = true;
+            txtTen.Enabled = false;
+            txtPass.Enabled = false;
+            btnLogin.Enabled = false; // Tên nút đăng nhập của bạn
+            btnThoat.Enabled = false;
+
+            // Băm mật khẩu nhập vào
             string matKhauHashed = MaHoa.MaHoaSHA256(matKhau);
 
             try
             {
-                // 2. Gửi Tên đăng nhập VÀ Mật khẩu ĐÃ BĂM vào BUS
-                bool dangNhapThanhCong = taiKhoanBUS.KiemTraDangNhap(tenDangNhap, matKhauHashed);
+                // 3. CHẠY LOGIC KIỂM TRA TRÊN LUỒNG KHÁC (Bất đồng bộ)
+                bool dangNhapThanhCong = await Task.Run(() =>{
+                
+                    // Tác vụ nặng (kiểm tra DB) chạy ở đây
+                    return taiKhoanBUS.KiemTraDangNhap(tenDangNhap, matKhauHashed);
+                }); // <-- THÊM ");"
 
+                // 4. XỬ LÝ KẾT QUẢ SAU KHI HOÀN THÀNH
                 if (dangNhapThanhCong)
                 {
-                    MessageBox.Show("Đăng nhập thành công! Quyền của bạn là: " + CurrentUser.TenQuyen, "Thông báo");
+                    //MessageBox.Show("Đăng nhập thành công! Quyền của bạn là: " + CurrentUser.TenQuyen, "Thông báo");
 
                     this.Hide();
                     MainForm frmMain = new MainForm();
@@ -62,6 +74,15 @@ namespace QuanLyDiemSinhVien
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // 5. LUÔN LUÔN ẨN LOADING VÀ KÍCH HOẠT LẠI CONTROLS
+                panelLoading.Visible = false;
+                txtTen.Enabled = true;
+                txtPass.Enabled = true;
+                btnLogin.Enabled = true; // Tên nút đăng nhập của bạn
+                btnThoat.Enabled = true;
             }
         }
 

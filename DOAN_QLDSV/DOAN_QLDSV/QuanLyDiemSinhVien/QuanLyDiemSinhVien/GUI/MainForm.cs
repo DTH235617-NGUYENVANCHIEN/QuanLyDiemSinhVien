@@ -136,7 +136,7 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.Text = "Hệ thống quản lý - Chào: " + CurrentUser.Username;
+            this.Text = "Hệ thống quản lý - Chào: " + CurrentUser.Username +  "với quyền là: "+CurrentUser.TenQuyen;
 
             // PHÂN QUYỀN
             if (CurrentUser.TenQuyen != null && CurrentUser.TenQuyen == "Student")

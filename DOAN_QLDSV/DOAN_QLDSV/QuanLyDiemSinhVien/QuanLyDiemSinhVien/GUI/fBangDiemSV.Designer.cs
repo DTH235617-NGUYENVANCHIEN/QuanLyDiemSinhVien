@@ -76,7 +76,7 @@
             cbHocKy.Name = "cbHocKy";
             cbHocKy.Size = new Size(233, 35);
             cbHocKy.TabIndex = 3;
-            cbHocKy.SelectedIndexChanged += cbHocKy_SelectedIndexChanged_1;
+           
             // 
             // label4
             // 
@@ -217,7 +217,7 @@
             cbNamHoc.Name = "cbNamHoc";
             cbNamHoc.Size = new Size(223, 35);
             cbNamHoc.TabIndex = 53;
-            cbNamHoc.SelectedIndexChanged += cbNamHoc_SelectedIndexChanged_1;
+           
             // 
             // cbMonHoc
             // 

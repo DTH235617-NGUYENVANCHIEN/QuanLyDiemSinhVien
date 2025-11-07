@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuanLyDiemSinhVien.BLL;
+using QuanLyDiemSinhVien.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,35 +10,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using QuanLyDiemSinhVien.BLL;
 
 
 namespace QuanLyDiemSinhVien.GUI
 {
     public partial class fDiemSinhVien : Form
     {
-        private readonly string MaGV_HienTai = CurrentUser.Username; // <<< THAY THẾ BẰNG  THỰC TẾ
-        //mở trang chủ khi bấm nút thoát 
+        // Biến toàn cục và biến trạng thái
+        private readonly string MaGV_HienTai = CurrentUser.Username;
         public event EventHandler ThoatVeTrangChu;
 
-
-        // Thay vì MaGV, ta dùng MaGV_HienTai để xác định sinh viên thuộc quyền quản lý
-        SqlConnection conn = new SqlConnection();
+        // Xóa bỏ hoặc làm private string để không dùng biến conn toàn cục cho CSDL
+        // SqlConnection conn = new SqlConnection(); 
         private bool isAdding = false;
         private string MaSV_Cu = "";
         private string MaMH_Cu = "";
         private int HocKy_Cu = 0;
         private string NamHoc_Cu = "";
 
-        // Giữ lại các biến này để hiển thị thông tin khi chọn SV
         private string MaLop_Current = "";
         private string MaKhoa_Current = "";
+
         public fDiemSinhVien()
         {
             InitializeComponent();
             this.dgvDiem.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDiem_CellContentClick);
             this.cbTenSV.SelectedIndexChanged += new System.EventHandler(this.cbTenSV_SelectedIndexChanged);
+            this.btnLamlai.Click += new System.EventHandler(this.btnLamlai_Click);
         }
+
+        #region HÀM HỖ TRỢ CHUNG (TÍNH ĐIỂM, NÚT)
+
         private string TinhDiemChu(float diemTongKet)
         {
             if (diemTongKet >= 9.0) return "A";
@@ -48,312 +52,271 @@ namespace QuanLyDiemSinhVien.GUI
             if (diemTongKet >= 3.0) return "D";
             return "F";
         }
+
         private void MoNut(bool t)
         {
-            cbTenSV.Enabled = !t;
-            cbMonHoc.Enabled = !t;
-            cbHocKy.Enabled = !t;
+            // MỞ KHÓA TẤT CẢ FIELDS NHẬP LIỆU (nếu không phải chế độ xem)
+            bool isInputEnabled = !t;
 
+            cbTenSV.Enabled = isInputEnabled; cbMonHoc.Enabled = isInputEnabled; cbHocKy.Enabled = isInputEnabled;
+            txtNamhoc.Enabled = isInputEnabled; txtDiemthanhphan.Enabled = isInputEnabled; txtDiemthi.Enabled = isInputEnabled;
 
-            // Khóa các ô Lớp và Khoa (chỉ hiển thị, không cho sửa trực tiếp)
-            cbTenLop.Enabled = false;
-            cbTenKhoa.Enabled = false;
+            // Khóa các ô Lớp và Khoa (chỉ hiển thị)
+            cbTenLop.Enabled = false; cbTenKhoa.Enabled = false;
 
-            txtNamhoc.Enabled = !t;
-            txtDiemthanhphan.Enabled = !t;
-            txtDiemthi.Enabled = !t;
+            // Logic nút
+            btnThem.Enabled = t; btnXoa.Enabled = t; btnSua.Enabled = t;
+            btnThoat.Enabled = t; btnLuu.Enabled = !t; btnLamlai.Enabled = !t;
 
-            btnThem.Enabled = t;
-            btnXoa.Enabled = t;
-            btnSua.Enabled = t;
-            btnThoat.Enabled = t;
-            btnLuu.Enabled = !t;
+            // --- LOGIC PHÂN QUYỀN VÀ KHÓA CHẶT ---
+            bool isAdmin = (CurrentUser.TenQuyen == "Admin");
+
+            if (isAdmin)
+            {
+                // Khóa tất cả fields và ẩn nút CRUD cho Admin (Chế độ giám sát)
+                cbTenSV.Enabled = false; cbMonHoc.Enabled = false; cbHocKy.Enabled = false;
+                txtNamhoc.Enabled = false; txtDiemthanhphan.Enabled = false; txtDiemthi.Enabled = false;
+
+                btnThem.Visible = false; btnXoa.Visible = false; btnSua.Visible = false;
+                btnLuu.Visible = false; btnLamlai.Visible = false;
+            }
+            else
+            {
+                // Đảm bảo nút hiện lên cho Teacher
+                btnThem.Visible = true; btnXoa.Visible = true; btnSua.Visible = true;
+                btnLuu.Visible = true; btnLamlai.Visible = true;
+            }
+            btnThoat.Enabled = true;
+        }
+
+        #endregion
+
+        #region LOAD DỮ LIỆU ĐỒNG BỘ (SỬ DỤNG KetnoiSQL)
+
+        // Hàm này lấy mã khoa của GV (cần kết nối cục bộ)
+        private string GetMaKhoaCuaGV(string maGV)
+        {
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
+            {
+                conn.Open();
+                SqlCommand cmdKhoa = new SqlCommand("SELECT MaKhoa FROM GIAOVIEN WHERE MaGV = @MaGV", conn);
+                cmdKhoa.Parameters.AddWithValue("@MaGV", maGV);
+                object result = cmdKhoa.ExecuteScalar();
+                return result?.ToString();
+            }
         }
 
         private void LoadSinhVien(string maKhoaCuaGV)
-
         {
-            string sqlSV;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-
-            if (maKhoaCuaGV == null) // Admin thấy tất cả
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                sqlSV = "SELECT MaSV, HoTen, MaLop FROM SINHVIEN ORDER BY HoTen";
-                cmd.CommandText = sqlSV;
+                conn.Open();
+                string sqlSV = (maKhoaCuaGV == null)
+                    ? "SELECT MaSV, HoTen, MaLop FROM SINHVIEN ORDER BY HoTen"
+                    : "SELECT S.MaSV, S.HoTen, S.MaLop FROM SINHVIEN S JOIN LOP L ON S.MaLop = L.MaLop WHERE L.MaKhoa = @MaKhoa ORDER BY S.HoTen";
+
+                using (SqlCommand cmd = new SqlCommand(sqlSV, conn))
+                {
+                    if (maKhoaCuaGV != null) cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+                    SqlDataAdapter daSV = new SqlDataAdapter(cmd);
+                    DataTable dtSV = new DataTable();
+                    daSV.Fill(dtSV);
+
+                    cbTenSV.DataSource = dtSV;
+                    cbTenSV.DisplayMember = "HoTen";
+                    cbTenSV.ValueMember = "MaSV";
+                }
             }
-            else // Giáo viên chỉ thấy SV trong Khoa của mình
-            {
-                sqlSV = @"SELECT S.MaSV, S.HoTen, S.MaLop 
-                  FROM SINHVIEN S
-                  JOIN LOP L ON S.MaLop = L.MaLop
-                  WHERE L.MaKhoa = @MaKhoa
-                  ORDER BY S.HoTen";
-                cmd.CommandText = sqlSV;
-                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
-            }
-
-            SqlDataAdapter daSV = new SqlDataAdapter(cmd);
-            DataTable dtSV = new DataTable();
-            daSV.Fill(dtSV);
-
-            cbTenSV.DataSource = dtSV;
-            cbTenSV.DisplayMember = "HoTen";
-            cbTenSV.ValueMember = "MaSV";
-
         }
-
 
         private void LoadMonHoc(string maKhoaCuaGV)
         {
-            string sqlMH;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-
-            if (maKhoaCuaGV == null) // Admin thấy tất cả
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                sqlMH = "SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH";
-                cmd.CommandText = sqlMH;
+                conn.Open();
+                string sqlMH = (maKhoaCuaGV == null)
+                    ? "SELECT MaMH, TenMH FROM MONHOC ORDER BY TenMH"
+                    : "SELECT MaMH, TenMH FROM MONHOC WHERE MaKhoa = @MaKhoa ORDER BY TenMH";
+
+                using (SqlCommand cmd = new SqlCommand(sqlMH, conn))
+                {
+                    if (maKhoaCuaGV != null) cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+                    SqlDataAdapter daMH = new SqlDataAdapter(cmd);
+                    DataTable dtMH = new DataTable();
+                    daMH.Fill(dtMH);
+
+                    cbMonHoc.DataSource = dtMH;
+                    cbMonHoc.DisplayMember = "TenMH";
+                    cbMonHoc.ValueMember = "MaMH";
+                }
             }
-            else // Giáo viên chỉ thấy môn trong Khoa của mình
-            {
-                sqlMH = @"SELECT MaMH, TenMH 
-                  FROM MONHOC 
-                  WHERE MaKhoa = @MaKhoa 
-                  ORDER BY TenMH";
-                cmd.CommandText = sqlMH;
-                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
-            }
-
-            SqlDataAdapter daMH = new SqlDataAdapter(cmd);
-            DataTable dtMH = new DataTable();
-            daMH.Fill(dtMH);
-
-
-            cbMonHoc.DataSource = dtMH;
-            cbMonHoc.DisplayMember = "TenMH";
-            cbMonHoc.ValueMember = "MaMH";
         }
 
         private void LoadLop(string maKhoaCuaGV)
         {
-            string sqlLop;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-
-            if (maKhoaCuaGV == null) // Admin
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                sqlLop = "SELECT MaLop, TenLop FROM LOP ORDER BY TenLop";
-                cmd.CommandText = sqlLop;
-            }
-            else // Teacher
-            {
-                sqlLop = "SELECT MaLop, TenLop FROM LOP WHERE MaKhoa = @MaKhoa ORDER BY TenLop";
-                cmd.CommandText = sqlLop;
-                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
-            }
+                conn.Open();
+                string sqlLop = (maKhoaCuaGV == null)
+                    ? "SELECT MaLop, TenLop FROM LOP ORDER BY TenLop"
+                    : "SELECT MaLop, TenLop FROM LOP WHERE MaKhoa = @MaKhoa ORDER BY TenLop";
 
-            SqlDataAdapter daLop = new SqlDataAdapter(cmd);
-            DataTable dtLop = new DataTable();
-            daLop.Fill(dtLop);
-            // ... (gán DataSource) ...
-            cbTenLop.DataSource = dtLop;
-            cbTenLop.DisplayMember = "TenLop";
-            cbTenLop.ValueMember = "MaLop";
+                using (SqlCommand cmd = new SqlCommand(sqlLop, conn))
+                {
+                    if (maKhoaCuaGV != null) cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+                    SqlDataAdapter daLop = new SqlDataAdapter(cmd);
+                    DataTable dtLop = new DataTable();
+                    daLop.Fill(dtLop);
+
+                    cbTenLop.DataSource = dtLop;
+                    cbTenLop.DisplayMember = "TenLop";
+                    cbTenLop.ValueMember = "MaLop";
+                }
+            }
         }
 
         private void LoadKhoa(string maKhoaCuaGV)
         {
-            string sqlKhoa;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-
-            if (maKhoaCuaGV == null) // Admin
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                sqlKhoa = "SELECT MaKhoa, TenKhoa FROM KHOA ORDER BY TenKhoa";
-                cmd.CommandText = sqlKhoa;
-            }
-            else // Teacher
-            {
-                sqlKhoa = "SELECT MaKhoa, TenKhoa FROM KHOA WHERE MaKhoa = @MaKhoa ORDER BY TenKhoa";
-                cmd.CommandText = sqlKhoa;
-                cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
-            }
+                conn.Open();
+                string sqlKhoa = (maKhoaCuaGV == null)
+                    ? "SELECT MaKhoa, TenKhoa FROM KHOA ORDER BY TenKhoa"
+                    : "SELECT MaKhoa, TenKhoa FROM KHOA WHERE MaKhoa = @MaKhoa ORDER BY TenKhoa";
 
-            SqlDataAdapter daKhoa = new SqlDataAdapter(cmd);
-            DataTable dtKhoa = new DataTable();
-            daKhoa.Fill(dtKhoa);
-            // ... (gán DataSource) ...
-            cbTenKhoa.DataSource = dtKhoa;
-            cbTenKhoa.DisplayMember = "TenKhoa";
-            cbTenKhoa.ValueMember = "MaKhoa";
+                using (SqlCommand cmd = new SqlCommand(sqlKhoa, conn))
+                {
+                    if (maKhoaCuaGV != null) cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+                    SqlDataAdapter daKhoa = new SqlDataAdapter(cmd);
+                    DataTable dtKhoa = new DataTable();
+                    daKhoa.Fill(dtKhoa);
+
+                    cbTenKhoa.DataSource = dtKhoa;
+                    cbTenKhoa.DisplayMember = "TenKhoa";
+                    cbTenKhoa.ValueMember = "MaKhoa";
+                }
+            }
         }
+
         private void LoadHK()
         {
-            // Học kỳ là cố định (1, 2, 3), không cần truy vấn CSDL
             DataTable dtHK = new DataTable();
             dtHK.Columns.Add("HocKy", typeof(int));
-
-            dtHK.Rows.Add(1);
-            dtHK.Rows.Add(2);
-            dtHK.Rows.Add(3);
+            dtHK.Rows.Add(1); dtHK.Rows.Add(2); dtHK.Rows.Add(3);
 
             cbHocKy.DataSource = dtHK;
             cbHocKy.DisplayMember = "HocKy";
             cbHocKy.ValueMember = "HocKy";
         }
-        private void GetLopKhoaGiaoVien(string maSV)
+
+        private void GetLopKhoa(string maSV)
         {
-            MaLop_Current = "";
-            MaKhoa_Current = "";
+            MaLop_Current = ""; MaKhoa_Current = "";
 
-            if (string.IsNullOrEmpty(maSV))
+            if (string.IsNullOrEmpty(maSV)) { cbTenLop.SelectedIndex = -1; cbTenKhoa.SelectedIndex = -1; return; }
+
+            string sql = @"SELECT L.MaLop, K.MaKhoa FROM SINHVIEN S JOIN LOP L ON S.MaLop = L.MaLop
+                            JOIN KHOA K ON L.MaKhoa = K.MaKhoa WHERE S.MaSV = @MaSV";
+
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                cbTenLop.SelectedIndex = -1;
-                cbTenKhoa.SelectedIndex = -1;
-                return;
-            }
-
-            string sql = @"SELECT L.MaLop, K.MaKhoa
-                            FROM SINHVIEN S
-                            JOIN LOP L ON S.MaLop = L.MaLop
-                            JOIN KHOA K ON L.MaKhoa = K.MaKhoa
-                            WHERE S.MaSV = @MaSV";
-
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.Parameters.AddWithValue("@MaSV", maSV);
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue("@MaSV", maSV);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        MaLop_Current = reader["MaLop"].ToString();
-                        MaKhoa_Current = reader["MaKhoa"].ToString();
+                        if (reader.Read())
+                        {
+                            MaLop_Current = reader["MaLop"].ToString();
+                            MaKhoa_Current = reader["MaKhoa"].ToString();
+                        }
                     }
                 }
             }
 
-            // Hiển thị thông tin
             cbTenLop.SelectedValue = MaLop_Current;
             cbTenKhoa.SelectedValue = MaKhoa_Current;
-
-            // Nếu đang ở chế độ THÊM MỚI, đặt Giáo viên Môn học là Giáo viên Chủ nhiệm
         }
+
         private void LoadDiemData()
         {
-
-            string sqlDiem = @"SELECT D.MaSV, D.MaMH, D.HocKy, D.NamHoc, D.DiemThanhPhan, D.DiemThi, D.DiemTongKet, D.DiemChu,
-                              S.HoTen AS TenSinhVien, M.TenMH AS TenMonHoc, 
-                              K.TenKhoa, L.TenLop, L.MaLop, K.MaKhoa
-                       FROM DIEM D
-                       JOIN SINHVIEN S ON D.MaSV = S.MaSV
-                       JOIN MONHOC M ON D.MaMH = M.MaMH
-                       JOIN LOP L ON S.MaLop = L.MaLop
-                       JOIN KHOA K ON L.MaKhoa = K.MaKhoa
-                       LEFT JOIN GIAOVIEN G ON D.MaGV = G.MaGV";
-
-            SqlCommand cmd = new SqlCommand(sqlDiem, conn);
-
-            // --- PHÂN QUYỀN XEM ---
-            if (CurrentUser.TenQuyen == "Teacher")
+            using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
-                // 1. Thêm điều kiện lọc vào câu SQL
-                sqlDiem += " WHERE D.MaGV = @MaGV_HienTai";
+                conn.Open();
+                string sqlDiem = @"SELECT D.MaSV, D.MaMH, D.HocKy, D.NamHoc, D.DiemThanhPhan, D.DiemThi, D.DiemTongKet, D.DiemChu,
+                                      S.HoTen AS TenSinhVien, M.TenMH AS TenMonHoc, K.TenKhoa, L.TenLop, L.MaLop, K.MaKhoa
+                                FROM DIEM D JOIN SINHVIEN S ON D.MaSV = S.MaSV
+                                JOIN MONHOC M ON D.MaMH = M.MaMH JOIN LOP L ON S.MaLop = L.MaLop
+                                JOIN KHOA K ON L.MaKhoa = K.MaKhoa LEFT JOIN GIAOVIEN G ON D.MaGV = G.MaGV";
 
-                // 2. Cập nhật Command và truyền tham số
-                cmd.CommandText = sqlDiem; // Gán lại câu SQL đã có WHERE
-                cmd.Parameters.AddWithValue("@MaGV_HienTai", CurrentUser.Username); // Username = MaGV
+                string whereClause = "";
+                bool isTeacher = (CurrentUser.TenQuyen == "Teacher");
+
+                if (isTeacher) { whereClause = " WHERE D.MaGV = @MaGV_HienTai"; }
+
+                sqlDiem += whereClause;
+                sqlDiem += " ORDER BY D.NamHoc DESC, D.HocKy ASC, S.MaSV ASC, M.MaMH ASC";
+
+                using (SqlCommand cmd = new SqlCommand(sqlDiem, conn))
+                {
+                    if (isTeacher) { cmd.Parameters.AddWithValue("@MaGV_HienTai", CurrentUser.Username); }
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                    DataTable data = new DataTable();
+                    dataAdapter.Fill(data);
+
+                    dgvDiem.AutoGenerateColumns = false;
+                    BindingSource bs = new BindingSource();
+                    bs.DataSource = data;
+                    dgvDiem.DataSource = bs;
+
+                    // Data Binding UI
+                    cbTenSV.DataBindings.Clear(); cbMonHoc.DataBindings.Clear(); cbHocKy.DataBindings.Clear();
+                    txtNamhoc.DataBindings.Clear(); txtDiemthanhphan.DataBindings.Clear(); txtDiemthi.DataBindings.Clear();
+                    cbTenLop.DataBindings.Clear(); cbTenKhoa.DataBindings.Clear();
+
+                    cbTenSV.DataBindings.Add("SelectedValue", bs, "MaSV", true, DataSourceUpdateMode.Never);
+                    cbMonHoc.DataBindings.Add("SelectedValue", bs, "MaMH", true, DataSourceUpdateMode.Never);
+                    cbHocKy.DataBindings.Add("SelectedValue", bs, "HocKy", true, DataSourceUpdateMode.Never);
+                    txtNamhoc.DataBindings.Add("Text", bs, "NamHoc", true, DataSourceUpdateMode.Never);
+                    txtDiemthanhphan.DataBindings.Add("Text", bs, "DiemThanhPhan", true, DataSourceUpdateMode.Never);
+                    txtDiemthi.DataBindings.Add("Text", bs, "DiemThi", true, DataSourceUpdateMode.Never);
+                    cbTenLop.DataBindings.Add("SelectedValue", bs, "MaLop", true, DataSourceUpdateMode.Never);
+                    cbTenKhoa.DataBindings.Add("SelectedValue", bs, "MaKhoa", true, DataSourceUpdateMode.Never);
+                }
             }
-            // ----------------------
-
-            sqlDiem += " ORDER BY D.NamHoc DESC, D.HocKy ASC, S.MaSV ASC, M.MaMH ASC";
-            cmd.CommandText = sqlDiem; // Gán lại câu SQL cuối cùng
-
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-
-            DataTable data = new DataTable();
-            dataAdapter.Fill(data);
-
-                dgvDiem.AutoGenerateColumns = false;
-            //dgvDiem.DataSource = data;
-
-            // Xóa binding cũ
-            cbTenSV.DataBindings.Clear();
-            cbMonHoc.DataBindings.Clear();
-            cbHocKy.DataBindings.Clear();
-            txtNamhoc.DataBindings.Clear();
-            txtDiemthanhphan.DataBindings.Clear();
-            txtDiemthi.DataBindings.Clear();
-            cbTenLop.DataBindings.Clear();
-            cbTenKhoa.DataBindings.Clear();
-
-            // Thiết lập Data Binding mới
-            BindingSource bs = new BindingSource();
-            bs.DataSource = data;
-            dgvDiem.DataSource = bs;
-
-            cbTenSV.DataBindings.Add("SelectedValue", bs, "MaSV", true, DataSourceUpdateMode.Never);
-            cbMonHoc.DataBindings.Add("SelectedValue", bs, "MaMH", true, DataSourceUpdateMode.Never);
-            cbHocKy.DataBindings.Add("SelectedValue", bs, "HocKy", true, DataSourceUpdateMode.Never);
-            txtNamhoc.DataBindings.Add("Text", bs, "NamHoc", true, DataSourceUpdateMode.Never);
-            txtDiemthanhphan.DataBindings.Add("Text", bs, "DiemThanhPhan", true, DataSourceUpdateMode.Never);
-            txtDiemthi.DataBindings.Add("Text", bs, "DiemThi", true, DataSourceUpdateMode.Never);
-
-            // Hai dòng này cũng phải bind vào bs
-            cbTenLop.DataBindings.Add("SelectedValue", bs, "MaLop", true, DataSourceUpdateMode.Never);
-            cbTenKhoa.DataBindings.Add("SelectedValue", bs, "MaKhoa", true, DataSourceUpdateMode.Never);
         }
 
-        
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
+
+
+
 
         private void fDiemSinhVien_Load(object sender, EventArgs e)
         {
+
+            string maKhoaCuaGV = null;
+
+            if (CurrentUser.TenQuyen == "Teacher")
+            {
+                try
+                {
+                    maKhoaCuaGV = GetMaKhoaCuaGV(CurrentUser.Username);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi không tìm thấy khoa của giáo viên: " + ex.Message);
+                }
+            }
+
             try
             {
-                if (conn.State == ConnectionState.Closed)
-                {
-                    conn.ConnectionString = @"server=.; Database=db_QLDSV;Integrated Security=True";
-                    conn.Open();
-                }
-
-                string maKhoaCuaGV = null; // Mặc định là null (cho Admin)
-
-                // --- BƯỚC 1: LẤY KHOA CỦA GIÁO VIÊN ---
-                if (CurrentUser.TenQuyen == "Teacher")
-                {
-                    try
-                    {
-                        // Truy vấn để lấy MaKhoa của giáo viên đang đăng nhập
-                        SqlCommand cmdKhoa = new SqlCommand("SELECT MaKhoa FROM GIAOVIEN WHERE MaGV = @MaGV", conn);
-                        cmdKhoa.Parameters.AddWithValue("@MaGV", CurrentUser.Username);
-                        object result = cmdKhoa.ExecuteScalar();
-                        if (result != null)
-                        {
-                            maKhoaCuaGV = result.ToString();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Lỗi không tìm thấy khoa của giáo viên: " + ex.Message);
-                    }
-                }
-
-                // --- BƯỚC 2: TẢI CÁC COMBOBOX ---
-                LoadSinhVien(maKhoaCuaGV); // Lọc SV theo khoa GV
-                LoadMonHoc(maKhoaCuaGV);   // Lọc Môn theo khoa GV (dựa vào CSDL MONHOC.MaKhoa)
-                LoadLop(maKhoaCuaGV);      // Lọc Lớp theo khoa GV
-                LoadKhoa(maKhoaCuaGV);     // Lọc Khoa (chỉ hiện khoa của GV)
-                LoadHK();                  // Tải Học kỳ (1, 2, 3)
-
-                // --- BƯỚC 3: TẢI BẢNG ĐIỂM (Lưới) ---
-                // Hàm này vẫn lọc theo MaGV trong bảng DIEM (để lưới trống là đúng)
+                LoadSinhVien(maKhoaCuaGV);
+                LoadMonHoc(maKhoaCuaGV);
+                LoadLop(maKhoaCuaGV);
+                LoadKhoa(maKhoaCuaGV);
+                LoadHK();
                 LoadDiemData();
-
-                // Đặt về chế độ xem ban đầu
                 MoNut(true);
             }
             catch (Exception ex)
@@ -367,12 +330,8 @@ namespace QuanLyDiemSinhVien.GUI
             isAdding = true;
             MoNut(false);
 
-            cbTenSV.SelectedIndex = -1;
-            cbMonHoc.SelectedIndex = -1;
-            cbHocKy.Text = "";
-            txtNamhoc.Text = "";
-            txtDiemthanhphan.Text = "";
-            txtDiemthi.Text = "";
+            cbTenSV.SelectedIndex = -1; cbMonHoc.SelectedIndex = -1; cbHocKy.Text = "";
+            txtNamhoc.Text = ""; txtDiemthanhphan.Text = ""; txtDiemthi.Text = "";
 
             cbTenSV.Focus();
 
@@ -380,23 +339,15 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            // Kiểm tra xem có dòng nào đang được chọn và có dữ liệu không
             if (dgvDiem.CurrentRow == null || dgvDiem.CurrentRow.DataBoundItem == null)
             {
-                MessageBox.Show("Vui lòng chọn dòng điểm cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("Vui lòng chọn dòng điểm cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
             }
 
-            // Lấy dữ liệu gốc từ dòng hiện tại (ép kiểu về DataRowView)
             DataRowView drv = (DataRowView)dgvDiem.CurrentRow.DataBoundItem;
+            string maSV = drv["MaSV"].ToString(); string maMH = drv["MaMH"].ToString();
+            int hocKy = int.Parse(drv["HocKy"].ToString()); string namHoc = drv["NamHoc"].ToString();
 
-            // Lấy thông tin khóa chính từ nguồn dữ liệu (không phụ thuộc vào cột trên lưới)
-            string maSV = drv["MaSV"].ToString();
-            string maMH = drv["MaMH"].ToString();
-            int hocKy = int.Parse(drv["HocKy"].ToString());
-            string namHoc = drv["NamHoc"].ToString();
-
-            // Hiển thị thông báo xác nhận
             string info = $"SV: {maSV} | MH: {maMH} | HK: {hocKy} | NH: {namHoc}";
             DialogResult confirm = MessageBox.Show($"Bạn có chắc chắn muốn xóa điểm này?\n\n{info}", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -404,21 +355,20 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 try
                 {
-                    string deleteSql = @"DELETE FROM DIEM 
-                                 WHERE MaSV = @MaSV AND MaMH = @MaMH AND HocKy = @HocKy AND NamHoc = @NamHoc";
+                    string deleteSql = @"DELETE FROM DIEM WHERE MaSV = @MaSV AND MaMH = @MaMH AND HocKy = @HocKy AND NamHoc = @NamHoc";
 
+                    using (SqlConnection conn = KetnoiSQL.GetConnection())
                     using (SqlCommand cmd = new SqlCommand(deleteSql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@MaSV", maSV);
-                        cmd.Parameters.AddWithValue("@MaMH", maMH);
-                        cmd.Parameters.AddWithValue("@HocKy", hocKy);
-                        cmd.Parameters.AddWithValue("@NamHoc", namHoc);
+                        conn.Open();
+                        cmd.Parameters.AddWithValue("@MaSV", maSV); cmd.Parameters.AddWithValue("@MaMH", maMH);
+                        cmd.Parameters.AddWithValue("@HocKy", hocKy); cmd.Parameters.AddWithValue("@NamHoc", namHoc);
 
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Xóa điểm thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
-                    LoadDiemData(); // Tải lại dữ liệu sau khi xóa
+                    LoadDiemData();
                 }
                 catch (Exception ex)
                 {
@@ -429,169 +379,125 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            isAdding = false; // Thiết lập trạng thái Sửa
-            MoNut(false); // Mở các control nhập liệu
+            isAdding = false;
+            MoNut(false); // Mở khóa tất cả (bao gồm khóa chính)
 
-            // KHÓA CÁC TRƯỜNG KHÓA CHÍNH KHI SỬA
-            cbTenSV.Enabled = false;
-            cbMonHoc.Enabled = false;
-            cbHocKy.Enabled = false;
-            txtNamhoc.Enabled = false;
-
-            // LƯU KHÓA CHÍNH CŨ
-            if (dgvDiem.CurrentRow.DataBoundItem is DataRowView drv)
+            // BƯỚC ĐỒNG BỘ DATA BINDING
+            BindingSource bs = dgvDiem.DataSource as BindingSource;
+            if (dgvDiem.CurrentRow != null && bs != null)
             {
-                MaSV_Cu = drv["MaSV"].ToString();
-                MaMH_Cu = drv["MaMH"].ToString();
-                HocKy_Cu = int.Parse(drv["HocKy"].ToString());
-                NamHoc_Cu = drv["NamHoc"].ToString();
+                bs.Position = dgvDiem.CurrentRow.Index; // Buộc UI cập nhật
+
+                DataRowView drv = bs.Current as DataRowView;
+                if (drv != null)
+                {
+                    // LƯU KHÓA CHÍNH CŨ
+                    MaSV_Cu = drv["MaSV"].ToString(); MaMH_Cu = drv["MaMH"].ToString();
+                    HocKy_Cu = int.Parse(drv["HocKy"].ToString()); NamHoc_Cu = drv["NamHoc"].ToString();
+
+                    // CẬP NHẬT COMBOBOX LỌC
+                    GetLopKhoa(MaSV_Cu);
+                    LoadMonHoc(MaKhoa_Current);
+                }
             }
+
+            // KHÓA LẠI CÁC TRƯỜNG KHÓA CHÍNH KHI SỬA
+            cbTenSV.Enabled = false; cbMonHoc.Enabled = false; cbHocKy.Enabled = false; txtNamhoc.Enabled = false;
+
+            txtDiemthanhphan.Focus();
         }
-        
+
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            string maSV = cbTenSV.SelectedValue?.ToString();
-            string maMH = cbMonHoc.SelectedValue?.ToString();
-            string hocKyText = cbHocKy.Text.Trim();
-            string namHoc = txtNamhoc.Text.Trim();
-            string diemThanhPhanText = txtDiemthanhphan.Text.Trim();
-            string diemThiText = txtDiemthi.Text.Trim();
-
+            string maSV = cbTenSV.SelectedValue?.ToString(); string maMH = cbMonHoc.SelectedValue?.ToString();
+            string hocKyText = cbHocKy.Text.Trim(); string namHoc = txtNamhoc.Text.Trim();
+            string diemThanhPhanText = txtDiemthanhphan.Text.Trim(); string diemThiText = txtDiemthi.Text.Trim();
             float diemTP, diemThi;
 
-            // BƯỚC 1: KIỂM TRA DỮ LIỆU (Giữ nguyên)
             if (string.IsNullOrEmpty(maSV) || string.IsNullOrEmpty(maMH) || string.IsNullOrEmpty(hocKyText) || string.IsNullOrEmpty(namHoc))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ Tên Sinh viên, Môn học, Học kỳ và Năm học!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            { MessageBox.Show("Vui lòng nhập đầy đủ Tên Sinh viên, Môn học, Học kỳ và Năm học!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             if (!int.TryParse(hocKyText, out int hocKy) || hocKy < 1 || hocKy > 3)
-            {
-                MessageBox.Show("Học kỳ phải là số nguyên 1, 2 hoặc 3!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cbHocKy.Focus();
-                return;
-            }
+            { MessageBox.Show("Học kỳ phải là số nguyên 1, 2 hoặc 3!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); cbHocKy.Focus(); return; }
             if (!System.Text.RegularExpressions.Regex.IsMatch(namHoc, @"^\d{4}$"))
-            {
-                MessageBox.Show("Năm học phải là số nguyên có 4 chữ số (ví dụ: 2024)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtNamhoc.Focus();
-                return;
-            }
+            { MessageBox.Show("Năm học phải là số nguyên có 4 chữ số (ví dụ: 2024)!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); txtNamhoc.Focus(); return; }
             if (!float.TryParse(diemThanhPhanText, out diemTP) || diemTP < 0 || diemTP > 10 ||
                 !float.TryParse(diemThiText, out diemThi) || diemThi < 0 || diemThi > 10)
-            {
-                MessageBox.Show("Điểm thành phần và Điểm thi phải là số từ 0 đến 10!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            { MessageBox.Show("Điểm thành phần và Điểm thi phải là số từ 0 đến 10!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
-            // BƯỚC 2: TÍNH ĐIỂM TỔNG KẾT VÀ ĐIỂM CHỮ (Giữ nguyên)
             float diemTongKet = (float)Math.Round((diemTP * 0.3 + diemThi * 0.7), 2);
             string diemChu = TinhDiemChu(diemTongKet);
+            string maGV_ToSave = (CurrentUser.TenQuyen == "Teacher") ? CurrentUser.Username : null;
 
-            string maGV_ToSave = null;
-
-            if (CurrentUser.TenQuyen == "Teacher")
-            {
-                // Nếu là GV, bắt buộc lưu mã của chính họ (Username = MaGV)
-                maGV_ToSave = CurrentUser.Username;
-            }
-
-            // BƯỚC 3: THỰC THI THÊM/SỬA
             try
             {
-                if (isAdding) // THÊM MỚI
+                using (SqlConnection conn = KetnoiSQL.GetConnection())
                 {
-                    // Thêm trường MaGV_HienTai
-                    string sqlThem = @"INSERT INTO DIEM(MaSV, MaMH, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemChu, MaGV) 
-                                         VALUES(@MaSV, @MaMH, @HocKy, @NamHoc, @DiemThanhPhan, @DiemThi, @DiemChu, @MaGV)";
+                    conn.Open();
+                    if (isAdding) // THÊM MỚI
+                    {
+                        string sqlThem = @"INSERT INTO DIEM(MaSV, MaMH, HocKy, NamHoc, DiemThanhPhan ,DiemThi, DiemChu, MaGV) 
+                                           VALUES(@MaSV, @MaMH, @HocKy, @NamHoc, @DiemThanhPhan, @DiemThi, @DiemChu, @MaGV)";
 
-                    SqlCommand cmd = new SqlCommand(sqlThem, conn);
-                    cmd.Parameters.AddWithValue("@MaSV", maSV);
-                    cmd.Parameters.AddWithValue("@MaMH", maMH);
-                    cmd.Parameters.AddWithValue("@HocKy", hocKy);
-                    cmd.Parameters.AddWithValue("@NamHoc", namHoc);
-                    cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP);
-                    cmd.Parameters.AddWithValue("@DiemThi", diemThi);
-                    // Cần thêm DiemTongKet vào INSERT
-                    
-                    cmd.Parameters.AddWithValue("@DiemChu", diemChu);
-                    cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Thêm điểm mới thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else // SỬA ĐIỂM
-                {
-                    // Không cần update MaGV vì MaGV là một phần của khóa chính logic
-                    string sqlSua = @"UPDATE DIEM 
-                                         SET DiemThanhPhan = @DiemThanhPhan, 
-                                             DiemThi = @DiemThi, 
-                                             
-                                             DiemChu = @DiemChu
-                                         WHERE MaSV = @MaSV_Cu AND MaMH = @MaMH_Cu AND HocKy = @HocKy_Cu AND NamHoc = @NamHoc_Cu";
+                        using (SqlCommand cmd = new SqlCommand(sqlThem, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@MaSV", maSV); cmd.Parameters.AddWithValue("@MaMH", maMH);
+                            cmd.Parameters.AddWithValue("@HocKy", hocKy); cmd.Parameters.AddWithValue("@NamHoc", namHoc);
+                            cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP); cmd.Parameters.AddWithValue("@DiemThi", diemThi);
+                           
+                            cmd.Parameters.AddWithValue("@DiemChu", diemChu);
+                            cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Thêm điểm mới thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else // SỬA ĐIỂM
+                    {
+                        // Sửa: Bỏ DiemTongKet khỏi SET
+                        string sqlSua = @"UPDATE DIEM SET DiemThanhPhan = @DiemThanhPhan, DiemThi = @DiemThi, DiemChu = @DiemChu
+                                          WHERE MaSV = @MaSV_Cu AND MaMH = @MaMH_Cu AND HocKy = @HocKy_Cu AND NamHoc = @NamHoc_Cu";
 
-                    SqlCommand cmd = new SqlCommand(sqlSua, conn);
-                    cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP);
-                    cmd.Parameters.AddWithValue("@DiemThi", diemThi);
-            
-                    cmd.Parameters.AddWithValue("@DiemChu", diemChu);
-                    cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
-                    // Khóa chính cũ để xác định dòng cần sửa
-                    cmd.Parameters.AddWithValue("@MaSV_Cu", MaSV_Cu);
-                    cmd.Parameters.AddWithValue("@MaMH_Cu", MaMH_Cu);
-                    cmd.Parameters.AddWithValue("@HocKy_Cu", HocKy_Cu);
-                    cmd.Parameters.AddWithValue("@NamHoc_Cu", NamHoc_Cu);
+                        using (SqlCommand cmd = new SqlCommand(sqlSua, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP); cmd.Parameters.AddWithValue("@DiemThi", diemThi);
+                            
+                            cmd.Parameters.AddWithValue("@DiemChu", diemChu);
 
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cmd.Parameters.AddWithValue("@MaSV_Cu", MaSV_Cu); cmd.Parameters.AddWithValue("@MaMH_Cu", MaMH_Cu);
+                            cmd.Parameters.AddWithValue("@HocKy_Cu", HocKy_Cu); cmd.Parameters.AddWithValue("@NamHoc_Cu", NamHoc_Cu);
+
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Cập nhật điểm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
                 }
 
-                // BƯỚC 4: HOÀN TẤT
-                MoNut(true); // Chuyển về chế độ xem
-                LoadDiemData(); // Tải lại Grid
-
+                MoNut(true);
+                LoadDiemData(); // Tải lại dữ liệu sau khi sửa/thêm
             }
             catch (SqlException ex)
             {
                 if (ex.Number == 2627 && isAdding)
-                {
-                    MessageBox.Show("Mục điểm này (SV, MH, HK, NH) đã tồn tại! Vui lòng chọn Sửa hoặc kiểm tra lại.", "Lỗi Trùng Lặp", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                { MessageBox.Show("Mục điểm này (SV, MH, HK, NH) đã tồn tại! Vui lòng chọn Sửa hoặc kiểm tra lại.", "Lỗi Trùng Lặp", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 else
-                {
-                    MessageBox.Show("Lỗi CSDL: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                { MessageBox.Show("Lỗi CSDL: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
             catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            { MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
+
+        
 
         private void btnLamlai_Click(object sender, EventArgs e)
         {
             isAdding = false;
 
-            // 2. Xóa trắng toàn bộ các ô nhập liệu
-            cbTenSV.SelectedIndex = -1;
-            cbMonHoc.SelectedIndex = -1;
-            cbHocKy.SelectedIndex = -1;
-            // cbHocKy.Text = ""; // Nếu cbHocKy là DropDown thì dùng .Text = "", nếu là DropDownList thì dùng .SelectedIndex = -1
+            cbTenSV.SelectedIndex = -1; cbMonHoc.SelectedIndex = -1; cbHocKy.SelectedIndex = -1;
+            txtNamhoc.Clear(); txtDiemthanhphan.Clear(); txtDiemthi.Clear();
 
-            txtNamhoc.Clear();
-            txtDiemthanhphan.Clear();
-            txtDiemthi.Clear();
+            MaSV_Cu = ""; MaMH_Cu = ""; HocKy_Cu = 0; NamHoc_Cu = "";
 
-            // 3. Xóa các biến lưu khóa chính cũ (để chắc chắn không bị nhầm lẫn khi sửa lần sau)
-            MaSV_Cu = "";
-            MaMH_Cu = "";
-            HocKy_Cu = 0;
-            NamHoc_Cu = "";
-
-            // 4. Quay về trạng thái xem ban đầu (Khóa ô nhập, hiện nút Thêm/Sửa/Xóa)
             MoNut(true);
-
-            // 5. (Tùy chọn) Bỏ chọn dòng hiện tại trên lưới để giao diện sạch hơn
             dgvDiem.ClearSelection();
         }
 
@@ -604,21 +510,16 @@ namespace QuanLyDiemSinhVien.GUI
         }
 
         private void dgvDiem_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
+        {// Mục đích: Lấy dữ liệu của dòng đang chọn trên lưới và hiển thị lên controls
             if (isAdding) return;
 
             if (e.RowIndex >= 0)
             {
                 if (dgvDiem.Rows[e.RowIndex].DataBoundItem is DataRowView drv)
                 {
-                    // Lấy giá trị trực tiếp từ DataRowView.
-                    // Cách này KHÔNG CẦN cột "MaSV", "MaMH"... phải hiện trên lưới.
-                    MaSV_Cu = drv["MaSV"].ToString();
-                    MaMH_Cu = drv["MaMH"].ToString();
-                    int.TryParse(drv["HocKy"].ToString(), out HocKy_Cu);
-                    NamHoc_Cu = drv["NamHoc"].ToString();
+                    MaSV_Cu = drv["MaSV"].ToString(); MaMH_Cu = drv["MaMH"].ToString();
+                    int.TryParse(drv["HocKy"].ToString(), out HocKy_Cu); NamHoc_Cu = drv["NamHoc"].ToString();
 
-                    // Cập nhật các ComboBox Lớp/Khoa theo sinh viên vừa chọn
                     if (!string.IsNullOrEmpty(MaSV_Cu))
                     {
                         GetLopKhoa(MaSV_Cu);
@@ -627,64 +528,34 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-        private void GetLopKhoa(string maSV_Cu)
-        {
-            MaLop_Current = "";   // <--- Thêm ;
-            MaKhoa_Current = "";  // <--- Thêm ;
 
-            // Kiểm tra nếu maSV_Cu rỗng (đổi từ maSV trong hàm gốc)
-            if (string.IsNullOrEmpty(maSV_Cu))
-            {
-                cbTenLop.SelectedIndex = -1;
-                cbTenKhoa.SelectedIndex = -1;
-                return;
-            }
-
-            string sql = @"SELECT L.MaLop, K.MaKhoa
-                             FROM SINHVIEN S
-                             JOIN LOP L ON S.MaLop = L.MaLop
-                             JOIN KHOA K ON L.MaKhoa = K.MaKhoa
-                             WHERE S.MaSV = @MaSV";
-
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                // Truyền maSV_Cu vào tham số @MaSV
-                cmd.Parameters.AddWithValue("@MaSV", maSV_Cu);
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        MaLop_Current = reader["MaLop"].ToString();
-                        MaKhoa_Current = reader["MaKhoa"].ToString();
-                    }
-                }
-            }
-
-            // Hiển thị thông tin lên ComboBox
-            cbTenLop.SelectedValue = MaLop_Current;
-            cbTenKhoa.SelectedValue = MaKhoa_Current;
-        }
 
         private void cbTenSV_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {// Mục đích: 
+         // 1. Khi người dùng chọn SV MỚI từ ComboBox (thường ở chế độ THÊM),
+         // 2. Cập nhật Lớp/Khoa của SV đó,
+         // 3. Lọc danh sách Môn học theo Khoa đó.
+
             if (cbTenSV.SelectedValue != null && cbTenSV.SelectedValue != DBNull.Value)
             {
                 string maSVChon = cbTenSV.SelectedValue.ToString();
 
-                // 1. Tìm Lớp/Khoa của SV (hàm này sẽ gán giá trị cho biến MaKhoa_Current)
                 GetLopKhoa(maSVChon);
 
-                // 2. Lọc lại ComboBox Môn học DỰA TRÊN KHOA CỦA SINH VIÊN
-                // (Sửa dòng này, chỉ truyền MaKhoa_Current vào)
                 LoadMonHoc(MaKhoa_Current);
             }
             else
             {
-                // Nếu không chọn SV nào, xóa trắng Lớp/Khoa và Môn học
-                cbTenLop.SelectedIndex = -1;
-                cbTenKhoa.SelectedIndex = -1;
-                LoadMonHoc(null); // Tải lại tất cả môn học (hoặc làm rỗng)
+                cbTenLop.SelectedIndex = -1; cbTenKhoa.SelectedIndex = -1;
+                LoadMonHoc(null);
             }
+
         }
+        #endregion
     }
 }
+
+
+
+
+

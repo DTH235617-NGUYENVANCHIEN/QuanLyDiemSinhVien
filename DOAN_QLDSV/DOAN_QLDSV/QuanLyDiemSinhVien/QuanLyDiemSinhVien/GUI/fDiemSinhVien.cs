@@ -18,6 +18,7 @@ namespace QuanLyDiemSinhVien.GUI
     {
         // Biến toàn cục và biến trạng thái
         private readonly string MaGV_HienTai = CurrentUser.Username;
+
         public event EventHandler ThoatVeTrangChu;
 
         // Xóa bỏ hoặc làm private string để không dùng biến conn toàn cục cho CSDL
@@ -106,26 +107,39 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-        private void LoadSinhVien(string maKhoaCuaGV)
+        private void LoadSinhVien(string maGV) // LỌC SINH VIÊN THEO MÃ GV (CVHT)
         {
             using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
                 conn.Open();
-                string sqlSV = (maKhoaCuaGV == null)
-                    ? "SELECT MaSV, HoTen, MaLop FROM SINHVIEN ORDER BY HoTen"
-                    : "SELECT S.MaSV, S.HoTen, S.MaLop FROM SINHVIEN S JOIN LOP L ON S.MaLop = L.MaLop WHERE L.MaKhoa = @MaKhoa ORDER BY S.HoTen";
+                string sqlSV;
+                SqlCommand cmd;
 
-                using (SqlCommand cmd = new SqlCommand(sqlSV, conn))
+                if (maGV == null) // Admin: Chọn tất cả sinh viên
                 {
-                    if (maKhoaCuaGV != null) cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
-                    SqlDataAdapter daSV = new SqlDataAdapter(cmd);
-                    DataTable dtSV = new DataTable();
-                    daSV.Fill(dtSV);
-
-                    cbTenSV.DataSource = dtSV;
-                    cbTenSV.DisplayMember = "HoTen";
-                    cbTenSV.ValueMember = "MaSV";
+                    sqlSV = "SELECT MaSV, HoTen, MaLop FROM SINHVIEN ORDER BY HoTen";
+                    cmd = new SqlCommand(sqlSV, conn);
                 }
+                else // Teacher: Lọc sinh viên theo MaGV_CVHT
+                {
+                    sqlSV = @"
+                SELECT S.MaSV, S.HoTen, S.MaLop 
+                FROM SINHVIEN S 
+                JOIN LOP L ON S.MaLop = L.MaLop 
+                WHERE L.MaGV_CVHT = @MaGV 
+                ORDER BY S.HoTen";
+
+                    cmd = new SqlCommand(sqlSV, conn);
+                    cmd.Parameters.AddWithValue("@MaGV", maGV);
+                }
+
+                SqlDataAdapter daSV = new SqlDataAdapter(cmd);
+                DataTable dtSV = new DataTable();
+                daSV.Fill(dtSV);
+
+                cbTenSV.DataSource = dtSV;
+                cbTenSV.DisplayMember = "HoTen";
+                cbTenSV.ValueMember = "MaSV";
             }
         }
 
@@ -152,26 +166,44 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-        private void LoadLop(string maKhoaCuaGV)
+        private void LoadLop(string maGV, string maKhoaCuaGV)
         {
             using (SqlConnection conn = KetnoiSQL.GetConnection())
             {
                 conn.Open();
-                string sqlLop = (maKhoaCuaGV == null)
-                    ? "SELECT MaLop, TenLop FROM LOP ORDER BY TenLop"
-                    : "SELECT MaLop, TenLop FROM LOP WHERE MaKhoa = @MaKhoa ORDER BY TenLop";
+                string sqlLop;
+                SqlCommand cmd;
 
-                using (SqlCommand cmd = new SqlCommand(sqlLop, conn))
+                if (maGV == null) // ADMIN: Lấy tất cả lớp thuộc Khoa (nếu có) hoặc tất cả
                 {
-                    if (maKhoaCuaGV != null) cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
-                    SqlDataAdapter daLop = new SqlDataAdapter(cmd);
-                    DataTable dtLop = new DataTable();
-                    daLop.Fill(dtLop);
-
-                    cbTenLop.DataSource = dtLop;
-                    cbTenLop.DisplayMember = "TenLop";
-                    cbTenLop.ValueMember = "MaLop";
+                    if (maKhoaCuaGV == null)
+                    {
+                        // Admin (Xem tất cả)
+                        sqlLop = "SELECT MaLop, TenLop FROM LOP ORDER BY TenLop";
+                        cmd = new SqlCommand(sqlLop, conn);
+                    }
+                    else
+                    {
+                        // Admin (Nếu muốn xem theo Khoa cụ thể)
+                        sqlLop = "SELECT MaLop, TenLop FROM LOP WHERE MaKhoa = @MaKhoa ORDER BY TenLop";
+                        cmd = new SqlCommand(sqlLop, conn);
+                        cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+                    }
                 }
+                else // TEACHER: Lọc theo Mã GV_CVHT VÀ Mã Khoa (Lớp mà GV phụ trách VÀ thuộc Khoa)
+                {
+                    // Sử dụng MaGV_CVHT để lọc ra các lớp mà GV này là chủ nhiệm.
+                    sqlLop = "SELECT MaLop, TenLop FROM LOP WHERE MaGV_CVHT = @MaGV AND MaKhoa = @MaKhoa ORDER BY TenLop";
+
+                    cmd = new SqlCommand(sqlLop, conn);
+                    cmd.Parameters.AddWithValue("@MaGV", maGV);
+                    cmd.Parameters.AddWithValue("@MaKhoa", maKhoaCuaGV);
+                }
+
+                SqlDataAdapter daLop = new SqlDataAdapter(cmd);
+                DataTable dtLop = new DataTable(); daLop.Fill(dtLop);
+
+                cbTenLop.DataSource = dtLop; cbTenLop.DisplayMember = "TenLop"; cbTenLop.ValueMember = "MaLop";
             }
         }
 
@@ -294,7 +326,7 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void fDiemSinhVien_Load(object sender, EventArgs e)
         {
-
+            string maGVHienTai = (CurrentUser.TenQuyen == "Teacher") ? CurrentUser.Username : null;
             string maKhoaCuaGV = null;
 
             if (CurrentUser.TenQuyen == "Teacher")
@@ -310,11 +342,12 @@ namespace QuanLyDiemSinhVien.GUI
             }
 
             try
-            {
-                LoadSinhVien(maKhoaCuaGV);
+            {   LoadKhoa(maKhoaCuaGV);
+                LoadLop(maGVHienTai, maKhoaCuaGV);
+                LoadSinhVien(maGVHienTai);
                 LoadMonHoc(maKhoaCuaGV);
-                LoadLop(maKhoaCuaGV);
-                LoadKhoa(maKhoaCuaGV);
+                
+              
                 LoadHK();
                 LoadDiemData();
                 MoNut(true);

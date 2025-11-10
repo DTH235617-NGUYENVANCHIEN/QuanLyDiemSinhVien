@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fDiemSinhVien));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
@@ -40,6 +41,14 @@
             DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
             panel2 = new Panel();
+            groupBox1 = new GroupBox();
+            label11 = new Label();
+            label10 = new Label();
+            label9 = new Label();
+            lblKetQuaThongKe = new Label();
+            btnThongKe = new Button();
+            txtTimKiemTen = new TextBox();
+            btnTimKiem = new Button();
             label8 = new Label();
             cbTenLop = new ComboBox();
             cbTenKhoa = new ComboBox();
@@ -74,12 +83,14 @@
             TenKhoa = new DataGridViewTextBoxColumn();
             TenLop = new DataGridViewTextBoxColumn();
             panel2.SuspendLayout();
+            groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDiem).BeginInit();
             SuspendLayout();
             // 
             // panel2
             // 
             panel2.BackColor = Color.FromArgb(192, 255, 192);
+            panel2.Controls.Add(groupBox1);
             panel2.Controls.Add(label8);
             panel2.Controls.Add(cbTenLop);
             panel2.Controls.Add(cbTenKhoa);
@@ -105,14 +116,102 @@
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1924, 208);
+            panel2.Size = new Size(1924, 277);
             panel2.TabIndex = 2;
+            // 
+            // groupBox1
+            // 
+            groupBox1.BackColor = Color.White;
+            groupBox1.Controls.Add(label11);
+            groupBox1.Controls.Add(label10);
+            groupBox1.Controls.Add(label9);
+            groupBox1.Controls.Add(lblKetQuaThongKe);
+            groupBox1.Controls.Add(btnThongKe);
+            groupBox1.Controls.Add(txtTimKiemTen);
+            groupBox1.Controls.Add(btnTimKiem);
+            groupBox1.Location = new Point(1289, 25);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(452, 235);
+            groupBox1.TabIndex = 46;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Các công cụ có liên quan";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            label11.Location = new Point(205, 184);
+            label11.Name = "label11";
+            label11.Size = new Size(49, 32);
+            label11.TabIndex = 49;
+            label11.Text = ". . .";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            label10.Location = new Point(205, 152);
+            label10.Name = "label10";
+            label10.Size = new Size(49, 32);
+            label10.TabIndex = 48;
+            label10.Text = ". . .";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            label9.Location = new Point(205, 120);
+            label9.Name = "label9";
+            label9.Size = new Size(49, 32);
+            label9.TabIndex = 47;
+            label9.Text = ". . .";
+            // 
+            // lblKetQuaThongKe
+            // 
+            lblKetQuaThongKe.AutoSize = true;
+            lblKetQuaThongKe.Location = new Point(137, 93);
+            lblKetQuaThongKe.Name = "lblKetQuaThongKe";
+            lblKetQuaThongKe.Size = new Size(100, 27);
+            lblKetQuaThongKe.TabIndex = 46;
+            lblKetQuaThongKe.Text = "Điểm TB";
+            // 
+            // btnThongKe
+            // 
+            btnThongKe.BackColor = Color.FromArgb(255, 255, 192);
+            btnThongKe.Location = new Point(6, 89);
+            btnThongKe.Name = "btnThongKe";
+            btnThongKe.Size = new Size(125, 35);
+            btnThongKe.TabIndex = 45;
+            btnThongKe.Text = "Thống kê";
+            btnThongKe.UseVisualStyleBackColor = false;
+            btnThongKe.Click += btnThongKe_Click;
+            // 
+            // txtTimKiemTen
+            // 
+            txtTimKiemTen.BackColor = Color.FromArgb(255, 255, 192);
+            txtTimKiemTen.Location = new Point(49, 33);
+            txtTimKiemTen.Name = "txtTimKiemTen";
+            txtTimKiemTen.Size = new Size(357, 35);
+            txtTimKiemTen.TabIndex = 43;
+            txtTimKiemTen.TextChanged += txtTimKiemTen_TextChanged;
+            // 
+            // btnTimKiem
+            // 
+            btnTimKiem.BackColor = Color.FromArgb(255, 255, 192);
+            btnTimKiem.BackgroundImage = (Image)resources.GetObject("btnTimKiem.BackgroundImage");
+            btnTimKiem.BackgroundImageLayout = ImageLayout.Zoom;
+            btnTimKiem.Location = new Point(6, 33);
+            btnTimKiem.Name = "btnTimKiem";
+            btnTimKiem.Size = new Size(37, 35);
+            btnTimKiem.TabIndex = 44;
+            btnTimKiem.UseVisualStyleBackColor = false;
+            btnTimKiem.Click += btnTimKiem_Click;
             // 
             // label8
             // 
             label8.Anchor = AnchorStyles.Top;
             label8.AutoSize = true;
-            label8.Location = new Point(628, 153);
+            label8.Location = new Point(566, 153);
             label8.Name = "label8";
             label8.Size = new Size(101, 27);
             label8.TabIndex = 41;
@@ -122,25 +221,25 @@
             // 
             cbTenLop.Anchor = AnchorStyles.Top;
             cbTenLop.FormattingEnabled = true;
-            cbTenLop.Location = new Point(747, 153);
+            cbTenLop.Location = new Point(685, 153);
             cbTenLop.Name = "cbTenLop";
-            cbTenLop.Size = new Size(300, 35);
+            cbTenLop.Size = new Size(249, 35);
             cbTenLop.TabIndex = 40;
             // 
             // cbTenKhoa
             // 
             cbTenKhoa.Anchor = AnchorStyles.Top;
             cbTenKhoa.FormattingEnabled = true;
-            cbTenKhoa.Location = new Point(747, 25);
+            cbTenKhoa.Location = new Point(685, 25);
             cbTenKhoa.Name = "cbTenKhoa";
-            cbTenKhoa.Size = new Size(300, 35);
+            cbTenKhoa.Size = new Size(249, 35);
             cbTenKhoa.TabIndex = 39;
             // 
             // label7
             // 
             label7.Anchor = AnchorStyles.Top;
             label7.AutoSize = true;
-            label7.Location = new Point(628, 25);
+            label7.Location = new Point(566, 25);
             label7.Name = "label7";
             label7.Size = new Size(113, 27);
             label7.TabIndex = 38;
@@ -152,7 +251,7 @@
             cbTenSV.FormattingEnabled = true;
             cbTenSV.Location = new Point(303, 25);
             cbTenSV.Name = "cbTenSV";
-            cbTenSV.Size = new Size(268, 35);
+            cbTenSV.Size = new Size(241, 35);
             cbTenSV.TabIndex = 37;
             cbTenSV.SelectedIndexChanged += cbTenSV_SelectedIndexChanged;
             // 
@@ -160,15 +259,15 @@
             // 
             cbMonHoc.Anchor = AnchorStyles.Top;
             cbMonHoc.FormattingEnabled = true;
-            cbMonHoc.Location = new Point(747, 89);
+            cbMonHoc.Location = new Point(685, 89);
             cbMonHoc.Name = "cbMonHoc";
-            cbMonHoc.Size = new Size(300, 35);
+            cbMonHoc.Size = new Size(249, 35);
             cbMonHoc.TabIndex = 36;
             // 
             // btnLamlai
             // 
             btnLamlai.Anchor = AnchorStyles.Top;
-            btnLamlai.Location = new Point(1445, 151);
+            btnLamlai.Location = new Point(963, 153);
             btnLamlai.Margin = new Padding(4, 3, 4, 3);
             btnLamlai.Name = "btnLamlai";
             btnLamlai.Size = new Size(146, 37);
@@ -181,17 +280,17 @@
             // txtDiemthi
             // 
             txtDiemthi.Anchor = AnchorStyles.Top;
-            txtDiemthi.Location = new Point(1263, 89);
+            txtDiemthi.Location = new Point(685, 212);
             txtDiemthi.Name = "txtDiemthi";
-            txtDiemthi.Size = new Size(166, 35);
+            txtDiemthi.Size = new Size(249, 35);
             txtDiemthi.TabIndex = 34;
             // 
             // txtDiemthanhphan
             // 
             txtDiemthanhphan.Anchor = AnchorStyles.Top;
-            txtDiemthanhphan.Location = new Point(1263, 25);
+            txtDiemthanhphan.Location = new Point(339, 217);
             txtDiemthanhphan.Name = "txtDiemthanhphan";
-            txtDiemthanhphan.Size = new Size(166, 35);
+            txtDiemthanhphan.Size = new Size(205, 35);
             txtDiemthanhphan.TabIndex = 33;
             // 
             // txtNamhoc
@@ -199,7 +298,7 @@
             txtNamhoc.Anchor = AnchorStyles.Top;
             txtNamhoc.Location = new Point(303, 89);
             txtNamhoc.Name = "txtNamhoc";
-            txtNamhoc.Size = new Size(268, 35);
+            txtNamhoc.Size = new Size(241, 35);
             txtNamhoc.TabIndex = 32;
             // 
             // cbHocKy
@@ -208,14 +307,14 @@
             cbHocKy.FormattingEnabled = true;
             cbHocKy.Location = new Point(303, 153);
             cbHocKy.Name = "cbHocKy";
-            cbHocKy.Size = new Size(268, 35);
+            cbHocKy.Size = new Size(241, 35);
             cbHocKy.TabIndex = 31;
             // 
             // label6
             // 
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Location = new Point(1074, 89);
+            label6.Location = new Point(566, 220);
             label6.Name = "label6";
             label6.Size = new Size(101, 27);
             label6.TabIndex = 27;
@@ -225,7 +324,7 @@
             // 
             label5.Anchor = AnchorStyles.Top;
             label5.AutoSize = true;
-            label5.Location = new Point(1074, 25);
+            label5.Location = new Point(150, 220);
             label5.Name = "label5";
             label5.Size = new Size(183, 27);
             label5.TabIndex = 26;
@@ -255,7 +354,7 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(628, 89);
+            label2.Location = new Point(566, 89);
             label2.Name = "label2";
             label2.Size = new Size(104, 27);
             label2.TabIndex = 23;
@@ -274,7 +373,7 @@
             // btnThoat
             // 
             btnThoat.Anchor = AnchorStyles.Top;
-            btnThoat.Location = new Point(1627, 153);
+            btnThoat.Location = new Point(1136, 151);
             btnThoat.Margin = new Padding(4, 3, 4, 3);
             btnThoat.Name = "btnThoat";
             btnThoat.Size = new Size(146, 37);
@@ -287,7 +386,7 @@
             // btnLuu
             // 
             btnLuu.Anchor = AnchorStyles.Top;
-            btnLuu.Location = new Point(1627, 87);
+            btnLuu.Location = new Point(1136, 89);
             btnLuu.Margin = new Padding(4, 3, 4, 3);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(146, 37);
@@ -300,7 +399,7 @@
             // btnSua
             // 
             btnSua.Anchor = AnchorStyles.Top;
-            btnSua.Location = new Point(1445, 89);
+            btnSua.Location = new Point(963, 87);
             btnSua.Margin = new Padding(4, 3, 4, 3);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(146, 37);
@@ -313,7 +412,7 @@
             // btnXoa
             // 
             btnXoa.Anchor = AnchorStyles.Top;
-            btnXoa.Location = new Point(1627, 25);
+            btnXoa.Location = new Point(1136, 25);
             btnXoa.Margin = new Padding(4, 3, 4, 3);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(146, 37);
@@ -326,7 +425,7 @@
             // btnThem
             // 
             btnThem.Anchor = AnchorStyles.Top;
-            btnThem.Location = new Point(1445, 25);
+            btnThem.Location = new Point(963, 25);
             btnThem.Margin = new Padding(4, 3, 4, 3);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(146, 37);
@@ -354,7 +453,7 @@
             dgvDiem.Columns.AddRange(new DataGridViewColumn[] { TenSinhVien, TenMonHoc, HocKy, NamHoc, DiemThanhPhan, DiemThi, DiemTongKet, DiemChu, TenKhoa, TenLop });
             dgvDiem.Dock = DockStyle.Fill;
             dgvDiem.GridColor = Color.FromArgb(0, 64, 0);
-            dgvDiem.Location = new Point(0, 208);
+            dgvDiem.Location = new Point(0, 277);
             dgvDiem.MultiSelect = false;
             dgvDiem.Name = "dgvDiem";
             dgvDiem.ReadOnly = true;
@@ -362,7 +461,7 @@
             dgvDiem.RowHeadersWidth = 62;
             dgvDiem.RowTemplate.Height = 30;
             dgvDiem.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDiem.Size = new Size(1924, 327);
+            dgvDiem.Size = new Size(1924, 258);
             dgvDiem.TabIndex = 2;
             dgvDiem.TabStop = false;
             dgvDiem.CellContentClick += dgvDiem_CellContentClick;
@@ -498,6 +597,8 @@
             Load += fDiemSinhVien_Load;
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDiem).EndInit();
             ResumeLayout(false);
         }
@@ -538,5 +639,13 @@
         private DataGridViewTextBoxColumn DiemChu;
         private DataGridViewTextBoxColumn TenKhoa;
         private DataGridViewTextBoxColumn TenLop;
+        private TextBox txtTimKiemTen;
+        private Button btnTimKiem;
+        private GroupBox groupBox1;
+        private Button btnThongKe;
+        private Label lblKetQuaThongKe;
+        private Label label11;
+        private Label label10;
+        private Label label9;
     }
 }

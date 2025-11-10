@@ -117,6 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnTimKiem.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29m
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAF5SURBVDhPhZIxa8JQFIXff8rUrXRu5+LW6Q5ScCgZ
+        CoKiUCGTUBze5BSopVNKhlJEdBCHQJc6FOLQguDkJurQnnJekkdMpBU+vN5z75f3VKW1VikVrXWotUYK
+        a/ZMDuAoqtfrkdZgMEAcx8herNljxpniohV0u92K7/vYbreYfv1AR4Bo4PYJpseMM8VFK/A8L5zP55h+
+        fuN1YQ+A/jiRMONMcdEK2u02drudeXLzOYEnyE7BjDPFRSuo1+vYbDZGkKcRAHcvMBlniotW4LpuOJvN
+        MF7s8fgORMsE/w0YfuzBjDPFRSuo1WqVTqeD1WqFcZxchbBmjxlnREfqGKparZIW7zmZTLBerw2s07ub
+        /0XxycQIRCSjIiKhiCCFNXuIoshIHNGjkqBozXN1P00GRdAIlgaHP08uLy3lufSG5l05MjpvBEbA7yeT
+        MC8t5bloBrZWjkB0dCA5vfH/Fpy5Dwefj0lKS3lOrvulXl7yr8ARbVGO5GFImr96wMJ3iwPEPQAAAABJ
+        RU5ErkJggg==
+</value>
+  </data>
   <metadata name="TenSinhVien.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

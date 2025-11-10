@@ -342,12 +342,13 @@ namespace QuanLyDiemSinhVien.GUI
             }
 
             try
-            {   LoadKhoa(maKhoaCuaGV);
+            {
+                LoadKhoa(maKhoaCuaGV);
                 LoadLop(maGVHienTai, maKhoaCuaGV);
                 LoadSinhVien(maGVHienTai);
                 LoadMonHoc(maKhoaCuaGV);
-                
-              
+
+
                 LoadHK();
                 LoadDiemData();
                 MoNut(true);
@@ -356,6 +357,8 @@ namespace QuanLyDiemSinhVien.GUI
             {
                 MessageBox.Show("Lỗi khởi động: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            //sự kiện tìm kiếm
+            txtTimKiemTen.Visible = false;
 
         }
         private void btnThem_Click(object sender, EventArgs e)
@@ -402,6 +405,7 @@ namespace QuanLyDiemSinhVien.GUI
                     }
 
                     LoadDiemData();
+                    CapNhatThongKe();
                 }
                 catch (Exception ex)
                 {
@@ -477,7 +481,7 @@ namespace QuanLyDiemSinhVien.GUI
                             cmd.Parameters.AddWithValue("@MaSV", maSV); cmd.Parameters.AddWithValue("@MaMH", maMH);
                             cmd.Parameters.AddWithValue("@HocKy", hocKy); cmd.Parameters.AddWithValue("@NamHoc", namHoc);
                             cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP); cmd.Parameters.AddWithValue("@DiemThi", diemThi);
-                           
+
                             cmd.Parameters.AddWithValue("@DiemChu", diemChu);
                             cmd.Parameters.AddWithValue("@MaGV", string.IsNullOrEmpty(maGV_ToSave) ? (object)DBNull.Value : maGV_ToSave);
                             cmd.ExecuteNonQuery();
@@ -493,7 +497,7 @@ namespace QuanLyDiemSinhVien.GUI
                         using (SqlCommand cmd = new SqlCommand(sqlSua, conn))
                         {
                             cmd.Parameters.AddWithValue("@DiemThanhPhan", diemTP); cmd.Parameters.AddWithValue("@DiemThi", diemThi);
-                            
+
                             cmd.Parameters.AddWithValue("@DiemChu", diemChu);
 
                             cmd.Parameters.AddWithValue("@MaSV_Cu", MaSV_Cu); cmd.Parameters.AddWithValue("@MaMH_Cu", MaMH_Cu);
@@ -507,6 +511,7 @@ namespace QuanLyDiemSinhVien.GUI
 
                 MoNut(true);
                 LoadDiemData(); // Tải lại dữ liệu sau khi sửa/thêm
+                CapNhatThongKe();
             }
             catch (SqlException ex)
             {
@@ -519,7 +524,7 @@ namespace QuanLyDiemSinhVien.GUI
             { MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
-        
+
 
         private void btnLamlai_Click(object sender, EventArgs e)
         {
@@ -585,6 +590,94 @@ namespace QuanLyDiemSinhVien.GUI
 
         }
         #endregion
+
+        private void btnTimKiem_Click(object sender, EventArgs e)
+        {
+            // Chuyển đổi trạng thái ẩn/hiện của ô text
+            txtTimKiemTen.Visible = !txtTimKiemTen.Visible;
+
+            if (txtTimKiemTen.Visible)
+            {
+                // Nếu vừa hiện ra, chuyển con trỏ chuột vào đó để gõ ngay
+                txtTimKiemTen.Focus();
+            }
+            else
+            {
+                // Nếu vừa ẩn đi, xóa chữ và xóa bộ lọc
+                txtTimKiemTen.Text = "";
+                // Dòng txtTimKiemTen.Text = "" sẽ tự động kích hoạt 
+                // sự kiện TextChanged ở dưới và xóa bộ lọc
+            }
+        }
+
+
+
+        private void txtTimKiemTen_TextChanged(object sender, EventArgs e)
+        {
+            // Lấy BindingSource mà dgvDiem đang dùng
+            BindingSource bs = dgvDiem.DataSource as BindingSource;
+
+            if (bs != null)
+            {
+                // Lấy nội dung gõ vào, xử lý ký tự đặc biệt '
+                string tenFilter = txtTimKiemTen.Text.Replace("'", "''");
+
+                // Áp dụng bộ lọc vào BindingSource
+                // "TenSinhVien" là tên cột HoTen đã đặt trong câu SQL
+                bs.Filter = $"TenSinhVien LIKE '%{tenFilter}%'";
+                CapNhatThongKe();
+            }
+        }
+        private void CapNhatThongKe()
+        {
+            // 1. Kiểm tra xem có dữ liệu không
+            if (dgvDiem.Rows.Count == 0)
+            {
+                lblKetQuaThongKe.Text = "Không có dữ liệu.";
+                lblKetQuaThongKe.Visible = true;
+                return;
+            }
+
+            double tongDiem = 0.0;
+            int soLuong = 0;
+
+            // 2. Duyệt qua các dòng trong DataGridView
+            foreach (DataGridViewRow row in dgvDiem.Rows)
+            {
+                // 3. CHỈ TÍNH NẾU DÒNG ĐANG HIỂN THỊ (tôn trọng bộ lọc)
+                if (row.Visible)
+                {
+                    // 4. Lấy giá trị từ ô "DiemTongKet"
+                    // (Hãy chắc chắn (Name) của cột là "DiemTongKet")
+                    if (row.Cells["DiemTongKet"].Value != null &&
+                        double.TryParse(row.Cells["DiemTongKet"].Value.ToString(), out double diem))
+                    {
+                        tongDiem += diem;
+                        soLuong++;
+                    }
+                }
+            }
+
+            // 5. Hiển thị kết quả
+            if (soLuong > 0)
+            {
+                double diemTB = tongDiem / soLuong;
+                lblKetQuaThongKe.Text = $"Điểm TB ({soLuong} sinh viên): {diemTB:F2}";
+                lblKetQuaThongKe.Visible = true;
+            }
+            else
+            {
+                lblKetQuaThongKe.Text = "Không có sinh viên.";
+                lblKetQuaThongKe.Visible = true;
+            }
+        }
+
+        private void btnThongKe_Click(object sender, EventArgs e)
+        {
+            CapNhatThongKe();
+        }
+
+      
     }
 }
 

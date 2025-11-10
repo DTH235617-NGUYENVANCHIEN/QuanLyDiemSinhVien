@@ -91,7 +91,7 @@ namespace QuanLyDiemSinhVien.GUI
             fQuanLyTaiKhoan f = new fQuanLyTaiKhoan();
             f.ThoatVeTrangChu += new EventHandler(f_ThoatVeTrangChu);
             OpenChildForm(f);
-        } 
+        }
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult kq = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -136,7 +136,7 @@ namespace QuanLyDiemSinhVien.GUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.Text = "Hệ thống quản lý - Chào: " + CurrentUser.Username +  " với quyền  " + CurrentUser.TenQuyen;
+            this.Text = "Hệ thống quản lý - Chào: " + CurrentUser.Username + " với quyền  " + CurrentUser.TenQuyen;
 
             // PHÂN QUYỀN
             if (CurrentUser.TenQuyen != null && CurrentUser.TenQuyen == "Student")
@@ -195,12 +195,12 @@ namespace QuanLyDiemSinhVien.GUI
                 btnXemDiem.Visible = false;
             }
             // --- KHỞI TẠO MENU MANAGER ---
-             // 1. Tạo một danh sách chứa tất cả các nút
+            // 1. Tạo một danh sách chứa tất cả các nút
             List<Button> menuButtons = new List<Button>()
             {
                 // (Thêm tất cả các nút menu của bạn vào đây)
                 btnQLTaikhoan,
-                btnQLKhoa,      
+                btnQLKhoa,
                 btnQLGV,
                 btnQLLop,
                 btnQLSV,
@@ -314,10 +314,49 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-       
-      
-  
+        private void hướngDẫnSửDụngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Dùng \n để xuống dòng
+            // Dùng \t để thụt đầu dòng (tạo tab)
+            string noiDung = "";
+            noiDung += "HƯỚNG DẪN SỬ DỤNG PHẦN MỀM\n";
+            noiDung += "--------------------------------------------------\n\n";
 
+            noiDung += "1. Quản lý Điểm:\n";
+            noiDung += "\t- Thêm: Nhấn nút 'Thêm', nhập đầy đủ thông tin và nhấn 'Lưu'.\n";
+            noiDung += "\t- Sửa: Chọn 1 dòng điểm, nhấn 'Sửa', thay đổi điểm và nhấn 'Lưu'.\n";
+            noiDung += "\t- Xóa: Chọn 1 dòng điểm và nhấn 'Xóa'.\n\n";
 
+            noiDung += "2. Tìm kiếm & Thống kê:\n";
+            noiDung += "\t- Bấm nút kính lúp để hiện ô tìm kiếm theo tên.\n";
+            noiDung += "\t- Bấm 'Thống kê TB' để xem các chỉ số của dữ liệu đang hiển thị.";
+
+            // Hiển thị MessageBox
+            MessageBox.Show(noiDung, "Hướng dẫn sử dụng", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
+        private void thôngTinPhầnMềnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Tạo nội dung tin nhắn
+            string tenPhanMem = "Chương trình Quản lý Điểm Sinh viên";
+            string phienBan = "Phiên bản 1.0";
+            string tacGia = "Nhóm thực hiện: Nhóm 03 - Tổ 1";
+
+            // Ghép các dòng lại (dùng \n để xuống dòng)
+            string thongTin = $"{tenPhanMem}\n{phienBan}\n\n{tacGia}";
+
+            // Hiển thị MessageBox
+            MessageBox.Show(thongTin, "Thông tin phần mềm", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void liênHệToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string thongTin = "Mọi chi tiết xin liên hệ:\n" +
+                      "Email: [doan@gmail.com]\n" +
+                      "SĐT: [090099090]";
+
+            MessageBox.Show(thongTin, "Liên hệ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

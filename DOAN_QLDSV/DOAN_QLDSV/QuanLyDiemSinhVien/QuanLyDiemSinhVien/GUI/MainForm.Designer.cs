@@ -55,6 +55,7 @@
             trợGiúpToolStripMenuItem = new ToolStripMenuItem();
             hướngDẫnSửDụngToolStripMenuItem = new ToolStripMenuItem();
             thôngTinPhầnMềnToolStripMenuItem = new ToolStripMenuItem();
+            liênHệToolStripMenuItem = new ToolStripMenuItem();
             btnQLDSV = new Button();
             btnXemDiem = new Button();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -323,7 +324,7 @@
             // 
             // trợGiúpToolStripMenuItem
             // 
-            trợGiúpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hướngDẫnSửDụngToolStripMenuItem, thôngTinPhầnMềnToolStripMenuItem });
+            trợGiúpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { hướngDẫnSửDụngToolStripMenuItem, thôngTinPhầnMềnToolStripMenuItem, liênHệToolStripMenuItem });
             trợGiúpToolStripMenuItem.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             trợGiúpToolStripMenuItem.ForeColor = Color.Black;
             trợGiúpToolStripMenuItem.Image = Properties.Resources.help_16;
@@ -338,6 +339,7 @@
             hướngDẫnSửDụngToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F1;
             hướngDẫnSửDụngToolStripMenuItem.Size = new Size(394, 36);
             hướngDẫnSửDụngToolStripMenuItem.Text = "&Hướng dẫn sử dụng";
+            hướngDẫnSửDụngToolStripMenuItem.Click += hướngDẫnSửDụngToolStripMenuItem_Click;
             // 
             // thôngTinPhầnMềnToolStripMenuItem
             // 
@@ -346,6 +348,15 @@
             thôngTinPhầnMềnToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F2;
             thôngTinPhầnMềnToolStripMenuItem.Size = new Size(394, 36);
             thôngTinPhầnMềnToolStripMenuItem.Text = "Thông tin &phần mền";
+            thôngTinPhầnMềnToolStripMenuItem.Click += thôngTinPhầnMềnToolStripMenuItem_Click;
+            // 
+            // liênHệToolStripMenuItem
+            // 
+            liênHệToolStripMenuItem.Image = (Image)resources.GetObject("liênHệToolStripMenuItem.Image");
+            liênHệToolStripMenuItem.Name = "liênHệToolStripMenuItem";
+            liênHệToolStripMenuItem.Size = new Size(394, 36);
+            liênHệToolStripMenuItem.Text = "Liên hệ";
+            liênHệToolStripMenuItem.Click += liênHệToolStripMenuItem_Click;
             // 
             // btnQLDSV
             // 
@@ -537,5 +548,6 @@
         private Panel panel4;
         private Panel palForm;
         private Panel panel6;
+        private ToolStripMenuItem liênHệToolStripMenuItem;
     }
 }

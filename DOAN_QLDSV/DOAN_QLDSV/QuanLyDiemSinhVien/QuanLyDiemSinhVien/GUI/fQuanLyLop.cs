@@ -36,9 +36,7 @@ namespace QuanLyDiemSinhVien.GUI
             txtMalop.Text = "";
             txtTenlop.Text = "";
             // THAY BẰNG DÒNG NÀY:
-            cboLoaikhoa.SelectedIndex = -1; // Set về không chọn gì
-                                            // Dòng trên sẽ tự động kích hoạt sự kiện ở Bước 3
-                                            // và làm cho cobGiaovien (ComboBox giáo viên) tự động bị xóa theo.
+            cboLoaikhoa.SelectedIndex = -1; 
             MoNut(false);
         }
         private void btnSua_Click(object sender, EventArgs e)

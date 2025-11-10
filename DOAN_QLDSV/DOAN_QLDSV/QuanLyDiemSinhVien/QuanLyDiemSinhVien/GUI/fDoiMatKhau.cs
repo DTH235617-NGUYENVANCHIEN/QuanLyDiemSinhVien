@@ -89,7 +89,10 @@ namespace QuanLyDiemSinhVien.GUI
             }
         }
 
-       
+        private void fDoiMatKhau_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

@@ -148,6 +148,7 @@
             Name = "fDoiMatKhau";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Đổi Mật Khẩu";
+            Load += fDoiMatKhau_Load;
             ResumeLayout(false);
             PerformLayout();
         }
